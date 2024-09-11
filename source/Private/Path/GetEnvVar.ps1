@@ -1,7 +1,32 @@
-function Get-EnvVar 
+function GetEnvVar
 {
+    <#
+    .SYNOPSIS
+        Get Environment variable value.
+
+    .DESCRIPTION
+        Get Environment variable value. To see more details, check out the .NOTES section for link.
+
+    .PARAMETER Name
+        The variable name to look for.
+
+    .PARAMETER User
+        get variable from user scope (persistent)
+
+    .PARAMETER Machine
+        get variable from machine scope (persistent)
+
+    .PARAMETER Current
+        (default=true) get variable from current process scope
+
+    .EXAMPLE
+        PS C:\> $machinepath = getenvvar "PATH" -machine
+
+    .NOTES
+        Site: https://github.com/qbikez/ps-pathutils/tree/master
+    #>
     [CmdletBinding()]
-    param 
+    param
     (
         [Parameter(Mandatory = $true)]
         [System.String]
@@ -45,6 +70,6 @@ function Get-EnvVar
     {
         $p = @()
     }
-    
+
     return $p
 }

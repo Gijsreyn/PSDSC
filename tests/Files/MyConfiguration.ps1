@@ -4,10 +4,10 @@ configuration MyConfiguration {
     {
         Environment CreatePathEnvironmentVariable
         {
-            Name = 'TestPathEnvironmentVariable'
-            Value = 'TestValue'
+            Name   = 'TestPathEnvironmentVariable'
+            Value  = 'TestValue'
             Ensure = 'Present'
-            Path = $true
+            Path   = $true
             Target = @('Process')
         }
     }

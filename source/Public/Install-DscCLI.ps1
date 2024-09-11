@@ -1,5 +1,31 @@
 function Install-DscCLI
 {
+    <#
+    .SYNOPSIS
+        Install DSC CLI (Windows only).
+
+    .DESCRIPTION
+        The function Install-DscCLI installs Desired State Configuration version 3 executablle.
+
+    .PARAMETER Version
+        The version to be installed.
+
+    .PARAMETER Force
+        This switch will force DSC to be installed, even if another installation is already in place.
+
+    .EXAMPLE
+        PS C:\> Install-DscCli
+
+        Install the latest version of DSC
+
+    .EXAMPLE
+        PS C:\> Install-DscCli -Version '3.0.0-preview.9' -Force
+
+        Install preview.9 version of DSC and forces the installation
+
+    .NOTES
+        For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
+    #>
     [CmdletBinding()]
     param (
         [Parameter()]
@@ -15,7 +41,7 @@ function Install-DscCLI
     # TODO: if WinGet package is present, use WinGet for Windows
     Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
 
-    $dscInstalled = Test-Dsc
+    $dscInstalled = TestDsc
 
     if (-not $IsWindows)
     {
@@ -67,7 +93,7 @@ function Install-DscCLI
         } while ((Get-Item $installerPath).Length -lt $asset.size)
 
         # expand the installer to directory
-        $elevated = Test-Administrator
+        $elevated = TestAdministrator
         $exePath = if ($elevated)
         {
             "$env:ProgramFiles\DSC"
@@ -82,17 +108,17 @@ function Install-DscCLI
 
         if ($elevated)
         {
-            $exePath | Add-ToPath -Persistent:$true
+            $exePath | AddToPath -Persistent:$true
         }
         else
         {
             # TODO: check when user is assigned to throw a warning when multiple environment variables are present e.g. DSC_RESOURCE_PATH
-            $exePath | Add-ToPath -User
+            $exePath | AddToPath -User
         }
 
-        if (Test-Dsc)
+        if (TestDsc)
         {
-            $dsc = Get-DscVersion
+            $dsc = GetDscVersion
             Write-Verbose -Message "DSC successfully installed with version $dsc"
         }
     }

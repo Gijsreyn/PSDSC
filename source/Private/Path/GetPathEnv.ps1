@@ -1,5 +1,30 @@
-function Get-PathEnv
+function GetPathEnv
 {
+    <#
+    .SYNOPSIS
+        Gets PATH env variable
+
+    .DESCRIPTION
+        Gets PATH env variable. To see more details, check out the .NOTES section for link.
+
+    .PARAMETER User
+        Get the value from user scope
+
+    .PARAMETER Machine
+        (default) Get the value from machine scope
+
+    .PARAMETER Current
+        Get the value from process scope
+
+    .PARAMETER All
+        Return values for each scope
+
+    .EXAMPLE
+        PS C:\> $p = GetPathEnv -Machine
+
+    .NOTES
+        Site: https://github.com/qbikez/ps-pathutils/tree/master
+    #>
     [CmdLetBinding(DefaultParameterSetName = "scoped")]
     param
     (
@@ -8,31 +33,31 @@ function Get-PathEnv
         [System.Boolean]
         $User,
 
-        [Parameter(ParameterSetName = "scoped")] 
+        [Parameter(ParameterSetName = "scoped")]
         [System.Management.Automation.SwitchParameter]
         [System.Boolean]
-        $Machine, 
+        $Machine,
 
         [Alias("process")]
         [Parameter(ParameterSetName = "scoped")]
         [System.Management.Automation.SwitchParameter]
         [System.Boolean]
-        $Current, 
+        $Current,
 
         [Parameter(ParameterSetName = "all")]
         [System.Management.Automation.SwitchParameter]
         [System.Boolean]
         $All
     )
-     
+
     $scopespecified = $user.IsPresent -or $machine.IsPresent -or $current.IsPresent
     $path = @()
-    $userpath = get-envvar "PATH" -user 
+    $userpath = getenvvar "PATH" -user
     if ($user)
     {
         $path += $userpath
     }
-    $machinepath = get-envvar "PATH" -machine
+    $machinepath = getenvvar "PATH" -machine
     if ($machine -or !$scopespecified)
     {
         $path += $machinepath
@@ -41,12 +66,12 @@ function Get-PathEnv
     {
         $current = $true
     }
-    $currentPath = get-envvar "PATH" -current
+    $currentPath = getenvvar "PATH" -current
     if ($current)
     {
         $path = $currentPath
     }
-        
+
     if ($all)
     {
         $h = @{
@@ -57,15 +82,15 @@ function Get-PathEnv
         return @(
             "`r`n USER",
             " -----------",
-            $h.user, 
+            $h.user,
             "`r`n MACHINE",
             " -----------",
-            $h.machine, 
+            $h.machine,
             "`r`n PROCESS",
             " -----------",
             $h.process
         )
     }
-        
+
     return $path
 }

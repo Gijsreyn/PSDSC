@@ -1,45 +1,73 @@
-function Add-ToPath
+function AddToPath
 {
+    <#
+    .SYNOPSIS
+        Adds the specified path to PATH env variable
+
+    .DESCRIPTION
+        Assumes that paths on PATH are separated by `;`
+
+    .PARAMETER Path
+        path to add to the list.
+
+    .PARAMETER Persistent
+        save the variable in machine scope.
+
+    .PARAMETER First
+        preppend the value instead of appending.
+
+    .PARAMETER User
+        save to user scope. use only when needed.
+
+    .EXAMPLE
+        PS C:\> $exePath | AddToPath -Persistent:$true
+
+    .NOTES
+        Site: https://github.com/qbikez/ps-pathutils/tree/master
+    #>
     [CmdletBinding()]
     param
     (
         [Parameter(ValueFromPipeline = $true, mandatory = $true)]
         [System.String]
-        $Path, 
-        
+        $Path,
+
         [Alias("p")]
         [System.Boolean]
         [switch]
-        $Persistent, 
-        
+        $Persistent,
+
         [switch]
         [System.Boolean]
         $First,
-        
+
         [System.Management.Automation.SwitchParameter]
         [System.Boolean]
         $User
-    ) 
-    
+    )
+
     process
-    { 
-        if ($null -eq $path) { throw [System.ArgumentNullException]"path" }
+    {
+        if ($null -eq $path)
+        {
+            throw [System.ArgumentNullException]"path"
+        }
         if ($User)
         {
-            $p = Get-PathEnv -User
+            $p = GetPathEnv -User
         }
         elseif ($persistent)
         {
-            $p = Get-PathEnv -Machine
+            $p = GetPathEnv -Machine
         }
         else
         {
-            $p = Get-PathEnv -Current
+            $p = GetPathEnv -Current
         }
         $p = $p | ForEach-Object { $_.trimend("\") }
         $p = @($p)
-        $paths = @($path) 
-        $paths | ForEach-Object { 
+        $paths = @($path)
+        $paths | ForEach-Object {
             $path = $_.trimend("\")
             Write-Verbose "adding $path to PATH"
             if ($first)
@@ -57,20 +85,20 @@ function Add-ToPath
                 }
             }
         }
-        
+
         if ($User)
         {
             Write-Verbose "saving user PATH and adding to current proc"
             [System.Environment]::SetEnvironmentVariable("PATH", [string]::Join(";", $p), [System.EnvironmentVariableTarget]::User);
             #add also to process PATH
-            Add-ToPath $path -persistent:$false -first:$first
+            AddToPath $path -persistent:$false -first:$first
         }
         elseif ($persistent)
-        {            
+        {
             write-Verbose "Saving to global machine PATH variable"
             [System.Environment]::SetEnvironmentVariable("PATH", [string]::Join(";", $p), [System.EnvironmentVariableTarget]::Machine);
             #add also to process PATH
-            Add-ToPath $path -persistent:$false -first:$first
+            AddToPath $path -persistent:$false -first:$first
         }
         else
         {
