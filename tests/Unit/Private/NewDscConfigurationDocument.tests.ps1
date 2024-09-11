@@ -1,4 +1,5 @@
 BeforeAll {
+    # TODO: PSDesiredStateConfiguration module should be present
     $script:moduleName = 'PSDSC'
 
     # If the module is not found, run the build task 'noop'.

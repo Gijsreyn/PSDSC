@@ -84,5 +84,4 @@ function ConvertTo-DscJson
         Write-Verbose ("Ended: {0}" -f $MyInvocation.MyCommand.Name)
         return $inputObject
     }
-
 }
