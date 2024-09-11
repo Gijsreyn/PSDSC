@@ -1,5 +1,29 @@
-function Get-GithubReleaseVersion
+function GetGithubReleaseVersion
 {
+    <#
+    .SYNOPSIS
+        Get GitHub release version using API.
+
+    .DESCRIPTION
+        The function GetGithubReleaseVersion gets a GitHub release using the API.
+
+    .PARAMETER Organization
+        The organization name to look for.
+
+    .PARAMETER Repository
+        The repository name to look for in the organization.
+
+    .PARAMETER Latest
+        Switch to grab latest version if available.
+
+    .EXAMPLE
+        PS C:\> GetGitHubReleaseVersion -Organization PowerShell -Repository DSC
+
+        Returns a list of available versions for DSC repository
+
+    .NOTES
+        For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
+    #>
     [CmdletBinding()]
     [OutputType([System.String])]
     param(

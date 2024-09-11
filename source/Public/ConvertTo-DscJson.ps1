@@ -2,13 +2,13 @@ function ConvertTo-DscJson
 {
     <#
     .SYNOPSIS
-        Convert DSC Configuration (v1/v2) Document to JSON
+        Convert DSC Configuration (v1/v2) Document to JSON.
 
     .DESCRIPTION
-        The function ConvertTo-DscJson converts a DSC Configuration Document (v1/v2) to JSON
+        The function ConvertTo-DscJson converts a DSC Configuration Document (v1/v2) to JSON.
 
     .PARAMETER Path
-        The file path to a valid DSC Configuration Document
+        The file path to a valid DSC Configuration Document.
 
     .EXAMPLE
         PS C:\> $path = 'myConfig.ps1'
@@ -69,10 +69,20 @@ function ConvertTo-DscJson
         $Path
     )
 
-    Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
+    begin
+    {
+        Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
+    }
 
-    $inputObject = New-DscConfigurationDocument -Path $Path
+    process
+    {
+        $inputObject = NewDscConfigurationDocument -Path $Path
+    }
 
-    return $inputObject
+    end
+    {
+        Write-Verbose ("Ended: {0}" -f $MyInvocation.MyCommand.Name)
+        return $inputObject
+    }
 
 }

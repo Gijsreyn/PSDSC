@@ -2,13 +2,13 @@ function ConvertTo-DscYaml
 {
     <#
     .SYNOPSIS
-        Convert DSC Configuration (v1/v2) Document to YAML
+        Convert DSC Configuration (v1/v2) Document to YAML.
 
     .DESCRIPTION
-        The function ConvertTo-DscYaml converts a DSC Configuration Document (v1/v2) to YAML
+        The function ConvertTo-DscYaml converts a DSC Configuration Document (v1/v2) to YAML.
 
     .PARAMETER Path
-        The file path to a valid DSC Configuration Document
+        The file path to a valid DSC Configuration Document.
 
     .EXAMPLE
         PS C:\> $path = 'myConfig.ps1'
@@ -58,9 +58,19 @@ function ConvertTo-DscYaml
         $Path
     )
 
-    Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
+    begin
+    {
+        Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
+    }
 
-    $inputObject = New-DscConfigurationDocument -Path $Path -Format Yaml
+    process
+    {
+        $inputObject = NewDscConfigurationDocument -Path $Path -Format Yaml
+    }
 
-    return $inputObject
+    end
+    {
+        Write-Verbose ("Ended: {0}" -f $MyInvocation.MyCommand.Name)
+        return $inputObject
+    }
 }
