@@ -17,6 +17,7 @@ function GetDscInputArgument
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
     #>
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', '', Justification = 'Output object not needed.')]
     param
     (
         [Parameter(Mandatory = $false)]
@@ -54,7 +55,7 @@ function GetDscInputArgument
 
                 $out = StartNetProcessObject -Process $process
 
-                if ($out.ExitCode -ne 0)
+                if ($out.ExitCode -eq 0)
                 {
                     try
                     {
@@ -80,6 +81,7 @@ function GetDscInputArgument
 
                         $exampleCode += ($hash | ConvertTo-Json -Compress)
 
+                        Write-Debug -Message ("Adding resource input data for '{0}'" -f $ctx.type)
                         $inputObject | Add-Member -NotePropertyName resourceInput -TypeName NoteProperty -NotePropertyValue @($exampleCode) -Force
                     }
                     catch

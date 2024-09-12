@@ -26,6 +26,7 @@ function GetEnvVar
         Site: https://github.com/qbikez/ps-pathutils/tree/master
     #>
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '', Justification = 'Not my store.')]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -33,15 +34,12 @@ function GetEnvVar
         $Name,
 
         [System.Management.Automation.SwitchParameter]
-        [System.Boolean]
         $User,
 
         [System.Management.Automation.SwitchParameter]
-        [System.Boolean]
         $Machine,
 
         [System.Management.Automation.SwitchParameter]
-        [System.Boolean]
         $Current
     )
 
@@ -62,7 +60,7 @@ function GetEnvVar
     {
         $val = invoke-expression "`$env:$name"
     }
-    if ($val -ne $null)
+    if ($null -ne $val)
     {
         $p = $val.Split(';')
     }

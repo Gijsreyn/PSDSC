@@ -25,6 +25,7 @@ function Invoke-DscResourceCommand
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
     #>
     [CmdletBinding(SupportsShouldProcess)]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Required for down-level function(s).')]
     param
     (
         [Parameter(Mandatory = $true)]
@@ -51,7 +52,7 @@ function Invoke-DscResourceCommand
 
         # get the bound parameters without common
         $boundParameters = GetBoundParameters -BoundParameters $PSBoundParameters
-        Write-Verbose ($r | ConvertTo-Json | Out-String)
+        Write-Verbose ($boundParameters | ConvertTo-Json | Out-String)
     }
 
     process
@@ -72,7 +73,7 @@ function Invoke-DscResourceCommand
             }
             default
             {
-                $inputObject = @{}
+                # not implemented
             }
         }
     }

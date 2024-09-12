@@ -26,6 +26,7 @@ function AddToPath
         Site: https://github.com/qbikez/ps-pathutils/tree/master
     #>
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidMultipleTypeAttributes', '', Justification = 'Not my store.')]
     param
     (
         [Parameter(ValueFromPipeline = $true, mandatory = $true)]

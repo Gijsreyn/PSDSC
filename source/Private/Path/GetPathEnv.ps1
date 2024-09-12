@@ -25,28 +25,26 @@ function GetPathEnv
     .NOTES
         Site: https://github.com/qbikez/ps-pathutils/tree/master
     #>
+
     [CmdLetBinding(DefaultParameterSetName = "scoped")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', '', Justification = 'Not my store.')]
     param
     (
         [Parameter(ParameterSetName = "scoped")]
         [System.Management.Automation.SwitchParameter]
-        [System.Boolean]
         $User,
 
         [Parameter(ParameterSetName = "scoped")]
         [System.Management.Automation.SwitchParameter]
-        [System.Boolean]
         $Machine,
 
         [Alias("process")]
         [Parameter(ParameterSetName = "scoped")]
         [System.Management.Automation.SwitchParameter]
-        [System.Boolean]
         $Current,
 
         [Parameter(ParameterSetName = "all")]
         [System.Management.Automation.SwitchParameter]
-        [System.Boolean]
         $All
     )
 
