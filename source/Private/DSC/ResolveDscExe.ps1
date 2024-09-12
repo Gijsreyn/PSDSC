@@ -28,7 +28,7 @@ function ResolveDscExe
     Param
     (
         [Parameter(Mandatory = $false)]
-        [ValidateNotNullOrEmpty()]
+        [AllowNull()]
         [System.IO.FileInfo]
         $Path,
 
