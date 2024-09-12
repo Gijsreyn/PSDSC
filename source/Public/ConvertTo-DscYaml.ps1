@@ -15,7 +15,7 @@ function ConvertTo-DscYaml
         PS C:\> ConvertTo-DscYaml -Path $path
 
     .INPUTS
-        Input a valid DSC Configuration Document.
+        Input a valid DSC Configuration Document
 
         configuration MyConfiguration {
             Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -33,7 +33,7 @@ function ConvertTo-DscYaml
         }
 
     .OUTPUTS
-        Returns a YAML string.
+        Returns a YAML string
         $schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json
         resources:
             name: MyConfiguration

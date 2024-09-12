@@ -54,7 +54,7 @@ function GetDscInputArgument
                 $exePath = ResolveDscExe
                 # use full exe path instead counting on environment variables to be present
                 $fullExePath = [System.String]::Concat("$(Split-Path -Path $exePath)\", $ctx.schema.command.executable, '.exe')
-                $process = GetNetProcessObject -SubCommand $fullExePath -ExePath $ctx.schema.command.executable
+                $process = GetNetProcessObject -SubCommand "$($ctx.schema.command.args)" -ExePath $fullExePath
                 $out = StartNetProcessObject -Process $process
 
                 if ($out.ExitCode -eq 0)

@@ -15,7 +15,7 @@ function ConvertTo-DscJson
         PS C:\> ConvertTo-DscJson -Path $path
 
     .INPUTS
-        Input a valid DSC Configuration Document.
+        Input a valid DSC Configuration Document
 
         configuration MyConfiguration {
             Import-DscResource -ModuleName PSDesiredStateConfiguration
@@ -33,12 +33,12 @@ function ConvertTo-DscJson
         }
 
     .OUTPUTS
-        Returns a JSON string.
+        Returns a JSON string
 
         {
             "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json",
             "resources": {
-                "name": "MyConfiguration \r\n    node",
+                "name": "MyConfiguration node",
                 "type": "Microsoft.DSC/PowerShell",
                 "properties": {
                 "resources": [
