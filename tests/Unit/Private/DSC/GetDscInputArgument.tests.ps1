@@ -54,7 +54,7 @@ Describe 'GetDscInputArgument' {
                 New-Item -Path $script:manifestPath -Name 'fakeManifest.dsc.resource.json' -Value '@{}' -ItemType File -Force
             }
             AfterAll {
-                Remove-Item -Path (Join-Path $script:manifestPath 'fakeManifest.dsc.resource.json') -Force
+                # Remove-Item -Path (Join-Path $script:manifestPath 'fakeManifest.dsc.resource.json') -Force
             }
             InModuleScope -ScriptBlock {
                 Mock Write-Warning {}

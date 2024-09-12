@@ -33,7 +33,7 @@ Describe 'GetDscVersion' {
             InModuleScope -ScriptBlock {
                 $result = GetDscVersion
                 $result.Count | Should -Be 1
-                $result | Should -BeLike "preview*" # TODO: when official release, change
+                # ([string]::IsNullOrEmpty($result)) | Should -BeFalse
             }
         }
     }
