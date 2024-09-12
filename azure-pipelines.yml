@@ -106,7 +106,7 @@ stages:
               targetPath: "$(Build.SourcesDirectory)/$(buildFolderName)"
 
           - task: PowerShell@2
-            name: test
+            name: install
             displayName: "Install DSC"
             inputs:
               filePath: "./build.ps1"
