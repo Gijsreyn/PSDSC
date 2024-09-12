@@ -2,7 +2,7 @@ function Invoke-DscResourceCommand
 {
     <#
     .SYNOPSIS
-        Invoke DSC version 3 resource using it's CLI.
+        Invoke DSC version 3 resource using the command-line utility
 
     .DESCRIPTION
         The function Invoke-DscResourceCommand invokes Desired State Configuration version 3 resources calling the executable.
@@ -35,7 +35,7 @@ function Invoke-DscResourceCommand
         $ResourceName,
 
         [Parameter(Mandatory = $false)]
-        [ValidateSet('Get', 'Set', 'Test')]
+        [ValidateSet('Get', 'Set', 'Test', 'Delete')]
         [System.String]
         $Operation = 'Get',
 
@@ -73,7 +73,7 @@ function Invoke-DscResourceCommand
             }
             default
             {
-                # not implemented
+                # TODO: Add list and delete operation
             }
         }
     }

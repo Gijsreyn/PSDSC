@@ -107,6 +107,14 @@ stages:
 
           - task: PowerShell@2
             name: test
+            displayName: "Install DSC"
+            inputs:
+              filePath: "./build.ps1"
+              arguments: "-tasks PSDSC.Install"
+              pwsh: true
+
+          - task: PowerShell@2
+            name: test
             displayName: "Run Tests"
             inputs:
               filePath: "./build.ps1"
