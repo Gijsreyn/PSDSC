@@ -198,26 +198,26 @@ stages:
               artifactName: $(buildArtifactName)
               targetPath: "$(Build.SourcesDirectory)/$(buildArtifactName)"
 
-          - task: DownloadPipelineArtifact@2
-            displayName: "Download Test Artifact macOS"
-            inputs:
-              buildType: "current"
-              artifactName: "CodeCoverageMacOS"
-              targetPath: "$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)"
+          # - task: DownloadPipelineArtifact@2
+          #   displayName: "Download Test Artifact macOS"
+          #   inputs:
+          #     buildType: "current"
+          #     artifactName: "CodeCoverageMacOS"
+          #     targetPath: "$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)"
 
-          - task: DownloadPipelineArtifact@2
-            displayName: "Download Test Artifact Linux"
-            inputs:
-              buildType: "current"
-              artifactName: "CodeCoverageLinux"
-              targetPath: "$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)"
+          # - task: DownloadPipelineArtifact@2
+          #   displayName: "Download Test Artifact Linux"
+          #   inputs:
+          #     buildType: "current"
+          #     artifactName: "CodeCoverageLinux"
+          #     targetPath: "$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)"
 
-          - task: DownloadPipelineArtifact@2
-            displayName: "Download Test Artifact Windows (PS 5.1)"
-            inputs:
-              buildType: "current"
-              artifactName: "CodeCoverageWinPS51"
-              targetPath: "$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)"
+          # - task: DownloadPipelineArtifact@2
+          #   displayName: "Download Test Artifact Windows (PS 5.1)"
+          #   inputs:
+          #     buildType: "current"
+          #     artifactName: "CodeCoverageWinPS51"
+          #     targetPath: "$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)"
 
           - task: DownloadPipelineArtifact@2
             displayName: "Download Test Artifact Windows (PS7)"
