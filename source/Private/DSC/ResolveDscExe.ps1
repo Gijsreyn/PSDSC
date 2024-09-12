@@ -58,6 +58,7 @@ function ResolveDscExe
 
             if (-not $Path)
             {
+                # used for pipeline info
                 $Path = Join-Path -Path $env:ProgramFiles 'DSC' 'dsc.exe'
             }
         }
