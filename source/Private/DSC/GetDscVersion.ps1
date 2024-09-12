@@ -45,8 +45,8 @@ function GetDscVersion
 
     if (TestDsc)
     {
-        # TODO: Use Start-Process or GetNetProcessObject
-        $version = (dsc --version).Split("-")[-1]
+        $process = GetNetProcessObject -SubCommand '--version'
+        $version = ((StartNetProcessObject -Process $process).Output -split "-")[-1]
         return $version
     }
     else

@@ -51,8 +51,10 @@ function GetDscInputArgument
             if (-not $ctx.kind -and $ctx.schema.command)
             {
                 # expect to be command-based DSC resource, also known as Resource kind
-                $process = GetNetProcessObject -SubCommand "$($ctx.schema.command.args)" -ExePath $ctx.schema.command.executable
-
+                $exePath = ResolveDscExe
+                # use full exe path instead counting on environment variables to be present
+                $fullExePath = [System.String]::Concat("$(Split-Path -Path $exePath)\", $ctx.schema.command.executable, '.exe')
+                $process = GetNetProcessObject -SubCommand $fullExePath -ExePath $ctx.schema.command.executable
                 $out = StartNetProcessObject -Process $process
 
                 if ($out.ExitCode -eq 0)
