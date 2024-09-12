@@ -62,7 +62,7 @@ function GetEnvVar
     }
     if ($null -ne $val)
     {
-        $p = $val.Split(';')
+        $p = $val -Split ";"
     }
     else
     {

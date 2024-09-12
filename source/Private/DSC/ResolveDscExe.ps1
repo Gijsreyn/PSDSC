@@ -53,8 +53,13 @@ function ResolveDscExe
 
         if (-not $Path)
         {
-            # try globally
+            # try globally and default installation when elevated
             $Path = (Get-Command dsc -ErrorAction SilentlyContinue).Source
+
+            if (-not $Path)
+            {
+                $Path = Join-Path -Path $env:ProgramFiles 'DSC' 'dsc.exe'
+            }
         }
 
         if (-not (Test-Path $Path -ErrorAction SilentlyContinue))
