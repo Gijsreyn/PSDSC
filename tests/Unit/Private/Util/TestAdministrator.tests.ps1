@@ -23,10 +23,10 @@ AfterAll {
 
 Describe 'TestAdministrator' {
     Context 'Is administrator' {
-        It 'Should return false because we are running as administrator' {
+        It 'Should return true because we are running as administrator' -Skip:(!$env:TF_Build) {
             InModuleScope -ScriptBlock {
                 $result = TestAdministrator
-                $result | Should -BeFalse
+                $result | Should -BeTrue
             }
         }
     }
