@@ -23,7 +23,7 @@ AfterAll {
 
 Describe 'TestDsc' {
     Context 'Test if DSC is installed' {
-        It 'Should return true because dsc is installed' {
+        It 'Should return true because dsc is installed' -Skip:($env:TF_Build) {
             InModuleScope -ScriptBlock {
                 $result = TestDsc
                 $result | Should -BeTrue
