@@ -112,7 +112,6 @@ function Install-DscCLI
         }
         else
         {
-            # TODO: check when user is assigned to throw a warning when multiple environment variables are present e.g. DSC_RESOURCE_PATH
             $exePath | AddToPath -User
         }
 

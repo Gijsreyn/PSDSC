@@ -100,7 +100,7 @@ function GetEnvironmentVariable
         {
             if (!$Expanded)
             {
-                $AllEnvironmentVariables = Get-Item -Path (Get-EnvironmentPath -Scope $Scope)
+                $AllEnvironmentVariables = Get-Item -Path (GetEnvironmentPath -Scope $Scope)
                 $GetterType = $AllEnvironmentVariables.GetValueKind($Name)
             }
             else

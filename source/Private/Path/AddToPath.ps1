@@ -34,12 +34,10 @@ function AddToPath
         $Path,
 
         [Alias("p")]
-        [System.Boolean]
-        [switch]
+        [System.Management.Automation.SwitchParameter]
         $Persistent,
 
-        [switch]
-        [System.Boolean]
+        [System.Management.Automation.SwitchParameter]
         $First,
 
         [System.Management.Automation.SwitchParameter]
@@ -96,7 +94,7 @@ function AddToPath
         }
         elseif ($persistent)
         {
-            write-Verbose "Saving to global machine PATH variable"
+            Write-Verbose "Saving to global machine PATH variable"
             [System.Environment]::SetEnvironmentVariable("PATH", [string]::Join(";", $p), [System.EnvironmentVariableTarget]::Machine);
             #add also to process PATH
             AddToPath $path -persistent:$false -first:$first
