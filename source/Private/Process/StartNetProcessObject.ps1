@@ -49,7 +49,7 @@ function StartNetProcessObject
             Executable = $Process.StartInfo.FileName
             Arguments  = $Process.StartInfo.Arguments
             ExitCode   = $Process.ExitCode
-            Output     = $standardOutput
+            Output     = ($standardOutput -replace "`n", "")
             Error      = $standardError
         })
 
