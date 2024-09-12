@@ -52,14 +52,14 @@ Describe 'Invoke-DscResourceCommand' {
     Context 'Runs all SET operations' {
         #region Set
         It 'Should invoke the set operation on dsc using hashtable' -Skip:(!$IsWindows) {
-            $resourceInput = @{keyPath = 'HKCU\Microsoft' }
+            $resourceInput = @{keyPath = 'HKCU' }
             $res = Invoke-DscResourceCommand -ResourceName Microsoft.Windows/Registry -Operation Set -ResourceInput $resourceInput
 
             $res.ExitCode | Should -Be 0
             ($res.Output | ConvertFrom-Json).changedProperties | Should -BeNullOrEmpty
         }
         It 'Should invoke the set operation on dsc using JSON' -Skip:(!$IsWindows) {
-            $resourceInput = '{"keyPath":"HKCU\\Microsoft"}'
+            $resourceInput = '{"keyPath":"HKCU"}'
             $res = Invoke-DscResourceCommand -ResourceName Microsoft.Windows/Registry -Operation Set -ResourceInput $resourceInput
 
             $res.ExitCode | Should -Be 0
@@ -83,14 +83,14 @@ Describe 'Invoke-DscResourceCommand' {
     Context 'Runs all TEST operations' {
         #region Test
         It 'Should invoke the test operation on dsc using hashtable' -Skip:(!$IsWindows) {
-            $resourceInput = @{keyPath = 'HKCU\Microsoft' }
+            $resourceInput = @{keyPath = 'HKCU' }
             $res = Invoke-DscResourceCommand -ResourceName Microsoft.Windows/Registry -Operation Test -ResourceInput $resourceInput
 
             $res.ExitCode | Should -Be 0
             ($res.Output | ConvertFrom-Json).inDesiredState | Should -BeTrue
         }
         It 'Should invoke the test operation on dsc using JSON' -Skip:(!$IsWindows) {
-            $resourceInput = '{"keyPath":"HKCU\\Microsoft"}'
+            $resourceInput = '{"keyPath":"HKCU"}'
             $res = Invoke-DscResourceCommand -ResourceName Microsoft.Windows/Registry -Operation Test -ResourceInput $resourceInput
 
             $res.ExitCode | Should -Be 0

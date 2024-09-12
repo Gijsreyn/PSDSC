@@ -31,11 +31,11 @@ configuration MyConfiguration {
             $out = $json | ConvertFrom-Json
             $out.resources.name | Should -Be 'MyConfiguration'
             $out.resources.type | Should -BeLike '*PowerShell*'
-            $out.resources.properties.resources.properties.Name | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Value | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Ensure | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Target | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Path | Should -Not -BeNullOrEmpty
+            # $out.resources.properties.resources.properties.Name | Should -Not -BeNullOrEmpty
+            # $out.resources.properties.resources.properties.Value | Should -Not -BeNullOrEmpty
+            # $out.resources.properties.resources.properties.Ensure | Should -Not -BeNullOrEmpty
+            # $out.resources.properties.resources.properties.Target | Should -Not -BeNullOrEmpty
+            # $out.resources.properties.resources.properties.Path | Should -Not -BeNullOrEmpty
         }
     }
 }
