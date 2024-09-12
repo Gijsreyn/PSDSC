@@ -33,9 +33,15 @@ function StartNetProcessObject
     Write-Debug -Message ("Starting '{0}' with arguments: [{1}]" -f $Process.StartInfo.FileName, $Process.StartInfo.Arguments)
     $Process.Start() | Out-Null
 
+    $output = [System.Collections.Generic.List[string]]::new()
+
     if ($Process.StartInfo.RedirectStandardOutput)
     {
-        $standardOutput = $Process.StandardOutput.ReadToEnd()
+        while ($null -ne ($line = $Process.StandardOutput.ReadLine()))
+        {
+            Write-Debug "Adding: $line"
+            $output.Add($line)
+        }
     }
 
     if ($Process.StartInfo.RedirectStandardError)
@@ -49,7 +55,7 @@ function StartNetProcessObject
             Executable = $Process.StartInfo.FileName
             Arguments  = $Process.StartInfo.Arguments
             ExitCode   = $Process.ExitCode
-            Output     = ($standardOutput -replace "`n", "")
+            Output     = $output
             Error      = $standardError
         })
 
