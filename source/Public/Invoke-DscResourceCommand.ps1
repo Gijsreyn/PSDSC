@@ -35,7 +35,7 @@ function Invoke-DscResourceCommand
         $ResourceName,
 
         [Parameter(Mandatory = $false)]
-        [ValidateSet('Get', 'Set', 'Test', 'Delete')]
+        [ValidateSet('List', 'Get', 'Set', 'Test', 'Delete', 'Export')]
         [System.String]
         $Operation = 'Get',
 

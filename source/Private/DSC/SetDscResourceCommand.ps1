@@ -51,7 +51,7 @@ function SetDscResourceCommand
         $process = GetNetProcessObject -SubCommand $commandName.SubCommand.ToString()
 
         # start the process
-        if ($PSCmdlet.ShouldProcess("Executing: '{0}'"))
+        if ($PSCmdlet.ShouldProcess(("'{0}' with input: [{1}]" -f $ResourceName, $resourceInput)))
         {
             $inputObject = StartNetProcessObject -Process $process
         }
