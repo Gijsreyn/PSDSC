@@ -34,7 +34,7 @@ function TestDscResourceCommand
 
     begin
     {
-        $commandName = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name -IncludeCommand
+        $commandName = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
 
         # add the resource
         AddDscResource -Sb $commandName.SubCommand -ResourceName $ResourceName

@@ -6,7 +6,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-DscResourceCommand
+# Invoke-PsDscResource
 
 ## SYNOPSIS
 Invoke DSC version 3 resource using the command-line utility
@@ -14,18 +14,18 @@ Invoke DSC version 3 resource using the command-line utility
 ## SYNTAX
 
 ```
-Invoke-DscResourceCommand [-ResourceName] <String> [[-Operation] <String>] [[-ResourceInput] <Object>]
+Invoke-PsDscResource [-ResourceName] <String> [[-Operation] <String>] [[-ResourceInput] <Object>]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The function Invoke-DscResourceCommand invokes Desired State Configuration version 3 resources calling the executable.
+The function Invoke-PsDscResource invokes Desired State Configuration version 3 resources calling the executable.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-DscResourceCommand -ResourceName Microsoft.Windows/RebootPending
+Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending
 ```
 
 Execute Microsoft.Windows/RebootPending resource on Windows system to check if there is a pending reboot

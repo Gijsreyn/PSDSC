@@ -1,5 +1,22 @@
 function ReadDscSchema
 {
+    <#
+    .SYNOPSIS
+        Read DSC schema information.
+
+    .DESCRIPTION
+        The function ReadDscSchema reads the DSC schema information and builds the resource input required.
+
+    .PARAMETER Schema
+        The schema information to read.
+
+    .EXAMPLE
+        PS C:\> $ctx = (Get-Content "$env:ProgramFiles\DSC\registry.dsc.resource.json" | ConvertFrom-Json)
+        PS C:\> ReadDscSchema -Schema $ctx.schema
+
+    .NOTES
+        For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
+    #>
     [CmdletBinding()]
     param
     (
