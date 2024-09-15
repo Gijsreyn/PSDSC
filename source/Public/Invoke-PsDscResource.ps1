@@ -35,7 +35,7 @@ function Invoke-PsDscResource
         $ResourceName,
 
         [Parameter(Mandatory = $false)]
-        [ValidateSet('List', 'Get', 'Set', 'Test', 'Delete', 'Export')]
+        [ValidateSet('Get', 'Set', 'Test', 'Delete')]
         [System.String]
         $Operation = 'Get',
 
@@ -70,6 +70,10 @@ function Invoke-PsDscResource
             'Test'
             {
                 $inputobject = TestDscResourceCommand @boundParameters
+            }
+            'Delete'
+            {
+                $inputobject = RemoveDscResourceCommand @boundParameters
             }
             default
             {
