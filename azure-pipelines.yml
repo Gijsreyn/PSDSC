@@ -227,13 +227,13 @@ stages:
               targetPath: "$(Build.SourcesDirectory)/$(buildFolderName)/$(testResultFolderName)"
 
           # Make sure to update build.yaml to support these tasks, then uncomment these tasks:
-          - task: PowerShell@2
-            name: merge
-            displayName: "Merge Code Coverage files"
-            inputs:
-              filePath: "./build.ps1"
-              arguments: "-tasks merge"
-              pwsh: true
+          # - task: PowerShell@2
+          #   name: merge
+          #   displayName: "Merge Code Coverage files"
+          #   inputs:
+          #     filePath: "./build.ps1"
+          #     arguments: "-tasks merge"
+          #     pwsh: true
           - task: PublishCodeCoverageResults@1
             displayName: "Publish Azure Code Coverage"
             inputs:

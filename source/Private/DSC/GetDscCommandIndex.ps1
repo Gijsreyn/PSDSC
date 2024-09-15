@@ -59,6 +59,11 @@ function GetDscCommandIndex
                 SubCommand = 'resource delete'
             }
         }
+        'FindDscResourceCommand'   = @{
+            'preview.9' = @{
+                SubCommand = 'resource list'
+            }
+        }
     }
 
     $keyData = $cmdData.$CommandName.$Version

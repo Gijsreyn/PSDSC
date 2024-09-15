@@ -37,7 +37,7 @@ function Invoke-PsDscResource
         [Parameter(Mandatory = $false)]
         [ValidateSet('Get', 'Set', 'Test', 'Delete')]
         [System.String]
-        $Operation = 'Get',
+        $Operation,
 
         [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [ArgumentCompleter([DscResourceInputCompleter])]
@@ -77,7 +77,7 @@ function Invoke-PsDscResource
             }
             default
             {
-                # TODO: Add list and delete operation
+                $inputObject = FindDscResourceCommand @boundParameters
             }
         }
     }
