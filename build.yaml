@@ -98,8 +98,8 @@ Pester:
   #  - TestQuality
   Tag:
   CodeCoverageThreshold: 20 # Set to 0 to bypass
-  #CodeCoverageOutputFile: JaCoCo_$OsShortName.xml
-  #CodeCoverageOutputFileEncoding: ascii
+  CodeCoverageOutputFile: JaCoCo_coverage.xml
+  CodeCoverageOutputFileEncoding: ascii
   # Use this if code coverage should be merged from several pipeline test jobs.
   # Any existing keys above should be replaced. See also CodeCoverage below.
   # CodeCoverageOutputFile is the file that is created for each pipeline test job.
