@@ -17,7 +17,7 @@ function Invoke-PsDscResource
         The resource input to provide. Supports JSON, path and PowerShell scripts.
 
     .EXAMPLE
-        PS C:\> Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending
+        PS C:\> Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending -Operation Get
 
         Execute Microsoft.Windows/RebootPending resource on Windows system to check if there is a pending reboot
 
