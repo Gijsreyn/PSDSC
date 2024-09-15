@@ -25,7 +25,7 @@ The function Invoke-PsDscResource invokes Desired State Configuration version 3 
 
 ### EXAMPLE 1
 ```
-Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending
+Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending -Operation Get
 ```
 
 Execute Microsoft.Windows/RebootPending resource on Windows system to check if there is a pending reboot
