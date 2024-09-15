@@ -39,19 +39,24 @@ function GetDscCommandIndex
     $version = ((StartNetProcessObject -Process $versionProc).Output.Trim() -split "-") | Select-Object -Last 1
 
     $cmdData = @{
-        'GetDscResourceCommand'  = @{
+        'GetDscResourceCommand'    = @{
             'preview.9' = @{
                 SubCommand = 'resource get'
             }
         }
-        'SetDscResourceCommand'  = @{
+        'SetDscResourceCommand'    = @{
             'preview.9' = @{
                 SubCommand = 'resource set'
             }
         }
-        'TestDscResourceCommand' = @{
+        'TestDscResourceCommand'   = @{
             'preview.9' = @{
                 SubCommand = 'resource test'
+            }
+        }
+        'DeleteDscResourceCommand' = @{
+            'preview.9' = @{
+                SubCommand = 'resource delete'
             }
         }
     }
