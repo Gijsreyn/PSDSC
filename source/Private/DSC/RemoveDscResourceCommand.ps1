@@ -1,11 +1,11 @@
-function DeleteDscResourceCommand
+function RemoveDscResourceCommand
 {
     <#
     .SYNOPSIS
         Run delete operation against DSC resource
 
     .DESCRIPTION
-        The function DeleteDscResourceCommand deletes a DSC resource
+        The function RemoveDscResourceCommand deletes a DSC resource
 
     .PARAMETER ResourceName
         The resource name to delete against.
@@ -14,7 +14,7 @@ function DeleteDscResourceCommand
         The resource input to provide. Supports JSON, path and PowerShell scripts.
 
     .EXAMPLE
-        PS C:\> DeleteDscResourceCommand -ResourceName Microsoft.Windows/Registry -ResourceInput @{keyPath = 'HKCU\1'}
+        PS C:\> RemoveDscResourceCommand -ResourceName Microsoft.Windows/Registry -ResourceInput @{keyPath = 'HKCU\1'}
 
     .NOTES
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.

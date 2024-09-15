@@ -54,7 +54,7 @@ function GetDscCommandIndex
                 SubCommand = 'resource test'
             }
         }
-        'DeleteDscResourceCommand' = @{
+        'RemoveDscResourceCommand' = @{
             'preview.9' = @{
                 SubCommand = 'resource delete'
             }
