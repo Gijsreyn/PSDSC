@@ -9,7 +9,7 @@ The current list of commands implemented in the module:
 - [ConvertTo-DscJson](./docs/en-US/ConvertTo-DscJson.md)
 - [ConvertTo-DscYaml](./docs/en-US/ConvertTo-DscYaml.md)
 - [Install-DscCli](./docs/en-US/Install-DscCLI.md)
-- [Invoke-DscResourceCommand](./docs/en-US/Invoke-DscResourceCommand.md)
+- [Invoke-PsDscResource](./docs/en-US/Invoke-PsDscResource.md)
 
 ## Installation
 

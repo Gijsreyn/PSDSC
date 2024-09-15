@@ -1,15 +1,15 @@
-class ManifestFile
+class ResourceManifest
 {
     [System.String] $type
     [System.String] $description
     [System.Version] $version
     [System.Array] $resourceInput
 
-    ManifestFile ()
+    ResourceManifest ()
     {
     }
 
-    ManifestFile ([string] $type, [string] $description, [version] $version)
+    ResourceManifest ([string] $type, [string] $description, [version] $version)
     {
         $this.type = $type
         $this.description = $description

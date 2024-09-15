@@ -30,11 +30,7 @@ function GetDscCommandIndex
     (
         [Parameter(Mandatory = $false)]
         [System.String]
-        $CommandName,
-
-        [Parameter(Mandatory = $false)]
-        [System.Management.Automation.SwitchParameter]
-        $IncludeCommand
+        $CommandName
     )
 
     # TODO: When version information is available, we can get it using Get-Item and use ResolveDscExe
@@ -62,14 +58,14 @@ function GetDscCommandIndex
 
     $keyData = $cmdData.$CommandName.$Version
 
-    if ($IncludeCommand)
+    if (-not $keyData)
     {
-        $subCommand = [System.Text.StringBuilder]::new($keyData.SubCommand)
+        Throw "Command '$CommandName' not implemented."
     }
 
     Write-Verbose -Message "Selected data for '$CommandName'"
     return ([PSCustomObject]@{
             Name       = $keyData
-            SubCommand = $subCommand
+            SubCommand = ([System.Text.StringBuilder]::new($keyData.SubCommand))
         })
 }
