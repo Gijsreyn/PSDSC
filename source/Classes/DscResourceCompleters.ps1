@@ -27,6 +27,10 @@ class DscResourceCompleter : System.Management.Automation.IArgumentCompleter
                 $obj = [System.Management.Automation.CompletionResult]::new($CompletionText, $ListItemText, $ResultType, $Tooltip)
                 $list.add($obj)
             }
+
+            # section to include PSTypes data
+            $psTypes = ReadDscPsAdapterSchema -ReturnTypeInfo
+            $psTypes | ForEach-Object { $list.Add($_) }
             return $list
         }
         else
