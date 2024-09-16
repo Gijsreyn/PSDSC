@@ -46,20 +46,33 @@ function ReadDscRequiredKey
                 Write-Verbose -Message ("Reading file: '{0}'" -f $manifest.Name)
                 $ctx = Get-Content $manifest | ConvertFrom-Json -ErrorAction SilentlyContinue
 
-                $inputObject = [ResourceManifest]::new($ctx.type, $ctx.description, $ctx.version)
-
                 # expect to be command-based
                 if (-not $ctx.kind -and $ctx.schema)
                 {
+                    # initialize
+                    $inputObject = [ResourceManifest]::new($ctx.type, $ctx.description, $ctx.version)
+
                     # grab both embedded and schema key using ReadDscSchema
                     $resourceInput = ReadDscSchema -Schema $ctx.schema
 
                     $inputObject.resourceInput = $resourceInput
 
+                    Write-Verbose -Message "Adding '$($inputObject.type)'"
                     $objectBag.Add($inputObject)
                 }
 
-                # TODO: add apters
+                if ($ctx.kind -eq 'Adapter' -and $ctx.type -in @('Microsoft.DSC/PowerShell', 'Microsoft.Windows/WindowsPowerShell'))
+                {
+                    $cacheRefresh = ReadDscPsAdapterSchema
+
+                    if ($cacheRefresh)
+                    {
+                        $cacheRefresh | ForEach-Object {
+                            $m = [ResourceManifest]::new($_.Type, $_.Description, $_.Version, $_.ResourceInput)
+                            $objectBag.Add($m)
+                        }
+                    }
+                }
             }
             catch
             {
