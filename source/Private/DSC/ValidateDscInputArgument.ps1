@@ -77,10 +77,8 @@ function ValidateDscInputArgument
         {
             ".yaml"
             {
-                if (TestYamlModule)
-                {
-                    $stringIn = " --path $ResourceInput"
-                }
+                $stringIn = " --path $ResourceInput"
+
             }
             ".json"
             {
