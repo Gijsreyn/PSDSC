@@ -15,4 +15,12 @@ class ResourceManifest
         $this.description = $description
         $this.version = $version
     }
+
+    ResourceManifest ([string] $type, [string] $description, [version] $version, [array] $resourceInput)
+    {
+        $this.type = $type
+        $this.description = $description
+        $this.version = $version
+        $this.resourceInput = $resourceInput
+    }
 }
