@@ -34,13 +34,9 @@ function TestDscResourceCommand
 
     begin
     {
-        $commandName = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
+        $commandData = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
 
-        # add the resource
-        AddDscResource -Sb $commandName.SubCommand -ResourceName $ResourceName
-
-        # validate input
-        ValidateDscInputArgument -Sb $commandName.SubCommand -ResourceInput $ResourceInput
+        $arguments = BuildDscInput -SubCommand $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -ResourceName $ResourceName
 
         # TODO: we can still make a call to the resource manifest and see if input is required
     }
@@ -48,11 +44,12 @@ function TestDscResourceCommand
     process
     {
         # get the System.Diagnostics.Process object
-        $process = GetNetProcessObject -SubCommand $commandName.SubCommand.ToString()
+        $process = GetNetProcessObject -SubCommand $arguments
 
         # start the process
         $inputObject = StartNetProcessObject -Process $process
     }
+
     end
     {
         # return

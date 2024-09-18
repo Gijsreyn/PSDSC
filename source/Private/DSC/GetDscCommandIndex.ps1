@@ -41,27 +41,47 @@ function GetDscCommandIndex
     $cmdData = @{
         'GetDscResourceCommand'    = @{
             'preview.9' = @{
-                SubCommand = 'resource get'
+                SubCommand = @('resource', 'get')
             }
         }
         'SetDscResourceCommand'    = @{
             'preview.9' = @{
-                SubCommand = 'resource set'
+                SubCommand = @('resource', 'set')
             }
         }
         'TestDscResourceCommand'   = @{
             'preview.9' = @{
-                SubCommand = 'resource test'
+                SubCommand = @('resource', 'test')
             }
         }
         'RemoveDscResourceCommand' = @{
             'preview.9' = @{
-                SubCommand = 'resource delete'
+                SubCommand = @('resource', 'delete')
             }
         }
         'FindDscResourceCommand'   = @{
             'preview.9' = @{
-                SubCommand = 'resource list'
+                SubCommand = @('resource', 'list')
+            }
+        }
+        'GetDscConfigCommand'      = @{
+            'preview.9' = @{
+                SubCommand = @('config', 'get')
+            }
+        }
+        'SetDscConfigCommand'      = @{
+            'preview.9' = @{
+                SubCommand = @('config', 'set')
+            }
+        }
+        'TestDscConfigCommand'     = @{
+            'preview.9' = @{
+                SubCommand = @('config', 'test')
+            }
+        }
+        'RemoveDscConfigCommand'   = @{
+            'preview.9' = @{
+                SubCommand = @('config', 'delete')
             }
         }
     }
@@ -70,12 +90,12 @@ function GetDscCommandIndex
 
     if (-not $keyData)
     {
-        Throw "Command '$CommandName' not implemented."
+        Throw "Command '$CommandName' not implemented for version: $version."
     }
 
     Write-Verbose -Message "Selected data for '$CommandName'"
     return ([PSCustomObject]@{
-            Name       = $keyData
-            SubCommand = ([System.Text.StringBuilder]::new($keyData.SubCommand))
+            Command   = $keyData.SubCommand[0]
+            Operation = $keyData.SubCommand[1]
         })
 }
