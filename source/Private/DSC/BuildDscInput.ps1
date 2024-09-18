@@ -65,6 +65,7 @@ function BuildDscInput
             $stringIn = $null
             $converted = $false
 
+            # TODO: resource input should also handle .ps1 config v1/v2 documents
             if (-not [string]::IsNullOrEmpty($ResourceInput))
             {
                 $type = $ResourceInput.GetType().Name
