@@ -1,20 +1,20 @@
-function GetDscResourceCommand
+function SetDscConfigCommand
 {
     <#
     .SYNOPSIS
-        Run get operation against DSC resource
+        Run set config against DSC resource
 
     .DESCRIPTION
-        The function GetDscResourceCommand gets a DSC resource
-
-    .PARAMETER ResourceName
-        The resource name to get against.
+        The function SetDscResourceCommand sets a DSC config
 
     .PARAMETER ResourceInput
         The resource input to provide. Supports JSON, path and PowerShell scripts.
 
+    .PARAMETER Parameter
+        Optionally, the parameter input to provide.
+
     .EXAMPLE
-        PS C:\> GetDscResourceCommand -ResourceName Microsoft.Windows/Registry -ResourceInput @{keyPath = 'HKCU\Microsoft'}
+         PS C:\> SetDscConfigCommand -ResourceInput myconfig.dsc.config.yaml -Parameter myconfig.dsc.config.parameters.yaml
 
     .NOTES
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
@@ -22,23 +22,24 @@ function GetDscResourceCommand
     [CmdletBinding()]
     param
     (
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $ResourceName,
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [AllowNull()]
+        [object]
+        $ResourceInput,
 
         [Parameter(Mandatory = $false)]
         [AllowNull()]
         [object]
-        $ResourceInput
+        $Parameter
     )
 
     begin
     {
+        # collect the command from index
         $commandData = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
 
-        $arguments = BuildDscInput -SubCommand $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -ResourceName $ResourceName
-
-        # TODO: we can still make a call to the resource manifest and see if input is required
+        # build the input string for arguments
+        $arguments = BuildDscInput -SubCommand $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -Parameter $Parameter
     }
 
     process
@@ -49,6 +50,7 @@ function GetDscResourceCommand
         # start the process
         $inputObject = StartNetProcessObject -Process $process
     }
+
     end
     {
         # return

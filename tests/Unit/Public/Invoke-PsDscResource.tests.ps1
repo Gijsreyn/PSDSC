@@ -109,4 +109,13 @@ Describe 'Invoke-PsDscResource' {
             ($res.Output | ConvertFrom-Json).inDesiredState | Should -BeTrue
         }
     }
+
+    Context 'Run LIST operations' {
+        #region Test
+        It 'Should invoke the list operation on dsc' -Skip:(!$IsWindows) {
+            $res = Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry
+
+            $res.ExitCode | Should -Be 0
+        }
+    }
 }
