@@ -38,49 +38,50 @@ function GetDscCommandIndex
     $versionProc = GetNetProcessObject
     $version = ((StartNetProcessObject -Process $versionProc).Output.Trim() -split "-") | Select-Object -Last 1
 
+    # TODO: can add without version later
     $cmdData = @{
         'GetDscResourceCommand'    = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('resource', 'get')
             }
         }
         'SetDscResourceCommand'    = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('resource', 'set')
             }
         }
         'TestDscResourceCommand'   = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('resource', 'test')
             }
         }
         'RemoveDscResourceCommand' = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('resource', 'delete')
             }
         }
         'FindDscResourceCommand'   = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('resource', 'list')
             }
         }
         'GetDscConfigCommand'      = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('config', 'get')
             }
         }
         'SetDscConfigCommand'      = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('config', 'set')
             }
         }
         'TestDscConfigCommand'     = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('config', 'test')
             }
         }
         'RemoveDscConfigCommand'   = @{
-            'preview.9' = @{
+            'preview.10' = @{
                 SubCommand = @('config', 'delete')
             }
         }
