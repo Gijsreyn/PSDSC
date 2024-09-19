@@ -28,7 +28,7 @@ function FindDscResourceCommand
     {
         $commandData = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
 
-        $arguments = BuildDscInput -SubCommand $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -ResourceName $ResourceName
+        $arguments = BuildDscInput -Command $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -ResourceName $ResourceName
 
         # TODO: we can still make a call to the resource manifest and see if input is required
     }
@@ -36,7 +36,7 @@ function FindDscResourceCommand
     process
     {
         # get the System.Diagnostics.Process object
-        $process = GetNetProcessObject -SubCommand $arguments
+        $process = GetNetProcessObject -Arguments $arguments
 
         # start the process
         $inputObject = StartNetProcessObject -Process $process
