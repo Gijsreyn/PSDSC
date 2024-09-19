@@ -39,13 +39,13 @@ function SetDscConfigCommand
         $commandData = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
 
         # build the input string for arguments
-        $arguments = BuildDscInput -SubCommand $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -Parameter $Parameter
+        $arguments = BuildDscInput -Command $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -Parameter $Parameter
     }
 
     process
     {
         # get the System.Diagnostics.Process object
-        $process = GetNetProcessObject -SubCommand $arguments
+        $process = GetNetProcessObject -Arguments $arguments
 
         # start the process
         $inputObject = StartNetProcessObject -Process $process

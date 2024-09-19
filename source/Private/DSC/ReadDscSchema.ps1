@@ -63,7 +63,7 @@ function ReadDscSchema
             $exePath = ResolveDscExe
             # use full exe path instead counting on environment variables to be present
             $fullExePath = [System.String]::Concat("$(Split-Path -Path $exePath)\", $ctx.schema.command.executable, '.exe')
-            $process = GetNetProcessObject -SubCommand "$($ctx.schema.command.args)" -ExePath $fullExePath
+            $process = GetNetProcessObject -Arguments "$($ctx.schema.command.args)" -ExePath $fullExePath
             $out = StartNetProcessObject -Process $process
 
             if ($out.ExitCode -eq 0)

@@ -35,7 +35,7 @@ Describe 'BuildDscInput' {
           keyPath: "HKCU"
         '
                 Set-Content -Path $yamlPath -Value $content -ErrorAction SilentlyContinue
-                $res = BuildDscInput -SubCommand config -Operation Get -ResourceInput $yamlPath
+                $res = BuildDscInput -Command config -Operation get -ResourceInput $yamlPath
                 $res | Should -BeExactly "config get --path $yamlPath"
             }
         }
@@ -48,21 +48,7 @@ Describe 'BuildDscInput' {
 keyPath: "HKCU"
 '
                 Set-Content -Path $yamlParameterFile -Value $content
-
-                # $config = @{
-                #     '$schema' = 'https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json'
-                #     resources = @(
-                #         @{
-                #             name       = 'Using registry'
-                #             type       = 'Microsoft.Windows/Registry'
-                #             properties = @{
-                #                 keyPath = 'HKCU'
-                #             }
-                #         }
-                #     )
-                # }
-                $res = BuildDscInput -SubCommand config -Operation Get -ResourceInput $yamlPath -Parameter $yamlParameterFile
-                # $data = ($config | ConvertTo-Json -Depth 10 -Compress | ConvertTo-Json) -replace "\\\\", "\" | Out-String
+                $res = BuildDscInput -Command config -Operation get -ResourceInput $yamlPath -Parameter $yamlParameterFile
                 $res | Should -BeExactly "config --parameters-file $yamlParameterFile get --path $yamlPath"
             }
         }
@@ -84,7 +70,7 @@ keyPath: "HKCU"
                     )
                 }
 
-                $res = BuildDscInput -SubCommand config -Operation Get -ResourceInput $config
+                $res = BuildDscInput -Command config -Operation get -ResourceInput $config
                 $res | Should -BeLike "config get --document *"
             }
         }
@@ -113,7 +99,7 @@ keyPath: "HKCU"
 
                 $json = ($parameter | ConvertTo-Json -Depth 10 -Compress | ConvertTo-Json)
 
-                $res = BuildDscInput -SubCommand config -Operation Get -ResourceInput $config -Parameter $parameter
+                $res = BuildDscInput -Command config -Operation get -ResourceInput $config -Parameter $parameter
                 $res | Should -BeLike "config --parameters $json get --document *"
             }
         }
@@ -139,14 +125,15 @@ keyPath: "HKCU"
   ]
 }
 '@
-
                 $parameter = @{parameters = @{keyPath = 'HKCU' } }
 
                 $json = ($parameter | ConvertTo-Json -Depth 10 -Compress | ConvertTo-Json)
 
-                $res = BuildDscInput -SubCommand config -Operation Get -ResourceInput $json -Parameter $parameter
+                $res = BuildDscInput -Command config -Operation get -ResourceInput $json -Parameter $parameter
                 $res | Should -BeLike "config --parameters $json get --document *"
             }
         }
     }
 }
+
+# TODO: write test for YAML
