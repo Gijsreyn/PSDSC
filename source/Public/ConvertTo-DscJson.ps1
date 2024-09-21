@@ -10,6 +10,9 @@ function ConvertTo-DscJson
     .PARAMETER Path
         The file path to a valid DSC Configuration Document.
 
+    .PARAMETER Content
+        The content to a valid DSC Configuration Document.
+
     .EXAMPLE
         PS C:\> $path = 'myConfig.ps1'
         PS C:\> ConvertTo-DscJson -Path $path
@@ -60,13 +63,30 @@ function ConvertTo-DscJson
             }
         }
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = 'Path')]
     [OutputType([System.String])]
-    Param
+    param
     (
-        [Parameter(ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $true,
+            ParameterSetName = 'Path')]
+        [ValidateScript({
+                if (-Not ($_ | Test-Path) )
+                {
+                    throw "File or folder does not exist"
+                }
+                if (-Not ($_ | Test-Path -PathType Leaf) )
+                {
+                    throw "The Path argument must be a file. Folder paths are not allowed."
+                }
+                return $true
+            })]
         [System.String]
-        $Path
+        $Path,
+
+        [Parameter(Mandatory = $true,
+            ParameterSetName = 'Content')]
+        [System.String]
+        $Content
     )
 
     begin
@@ -76,12 +96,12 @@ function ConvertTo-DscJson
 
     process
     {
-        $inputObject = NewDscConfigurationDocument -Path $Path
+        $configurationDocument = BuildDscConfigDocument @PSBoundParameters
     }
 
     end
     {
         Write-Verbose ("Ended: {0}" -f $MyInvocation.MyCommand.Name)
-        return $inputObject
+        return ($configurationDocument | ConvertTo-Json -Depth 10)
     }
 }
