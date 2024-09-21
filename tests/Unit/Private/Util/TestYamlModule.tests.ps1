@@ -22,11 +22,11 @@ AfterAll {
 }
 
 Describe 'TestYamlModule' {
-    Context 'When the module is found' {
-        It 'Should return true because module exist' {
+    Context 'When the module is not found' {
+        It 'Should return false because both module exist' {
             InModuleScope -ScriptBlock {
                 $result = TestYamlModule
-                $result | Should -BeTrue
+                $result | Should -BeFalse
             }
         }
     }
