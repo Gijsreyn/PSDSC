@@ -26,23 +26,22 @@ function FindDscResourceCommand
 
     begin
     {
-        $commandName = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
+        $commandData = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
+
+        $arguments = BuildDscInput -Command $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -ResourceName $ResourceName
+
+        # TODO: we can still make a call to the resource manifest and see if input is required
     }
 
     process
     {
-        # simply add adapter as we dont need filtering, let it throw if it is not found
-        if ($PSBoundParameters.ContainsKey('ResourceName') -and ($ResourceName))
-        {
-            $commandName.SubCommand.Append(" --adapter $ResourceName") | Out-Null
-        }
-
         # get the System.Diagnostics.Process object
-        $process = GetNetProcessObject -SubCommand $commandName.SubCommand.ToString()
+        $process = GetNetProcessObject -Arguments $arguments
 
         # start the process
         $inputObject = StartNetProcessObject -Process $process
     }
+
     end
     {
         # return

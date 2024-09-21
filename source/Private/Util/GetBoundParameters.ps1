@@ -10,8 +10,11 @@ function GetBoundParameters
     .PARAMETER BoundParameters
         The bound parameters to check
 
+    .PARAMETER GoodKeys
+        The good keys to check in bound parameters
+
     .EXAMPLE
-        PS C:\> GetBoundParameters -BoundParameters $PSBoundParameters
+        PS C:\> GetBoundParameters -BoundParameters $PSBoundParameters -GoodKeys @("ResourceName", "ResourceInput")
 
 
     .NOTES
@@ -22,10 +25,11 @@ function GetBoundParameters
     Param (
         [AllowNull()]
         [object]
-        $BoundParameters
-    )
+        $BoundParameters,
 
-    $GoodKeys = @("ResourceName", "ResourceInput")
+        [System.Array]
+        $GoodKeys
+    )
 
     $ConfigurationHelper = @{}
 

@@ -38,30 +38,51 @@ function GetDscCommandIndex
     $versionProc = GetNetProcessObject
     $version = ((StartNetProcessObject -Process $versionProc).Output.Trim() -split "-") | Select-Object -Last 1
 
+    # TODO: can add without version later
     $cmdData = @{
         'GetDscResourceCommand'    = @{
-            'preview.9' = @{
-                SubCommand = 'resource get'
+            'preview.10' = @{
+                SubCommand = @('resource', 'get')
             }
         }
         'SetDscResourceCommand'    = @{
-            'preview.9' = @{
-                SubCommand = 'resource set'
+            'preview.10' = @{
+                SubCommand = @('resource', 'set')
             }
         }
         'TestDscResourceCommand'   = @{
-            'preview.9' = @{
-                SubCommand = 'resource test'
+            'preview.10' = @{
+                SubCommand = @('resource', 'test')
             }
         }
         'RemoveDscResourceCommand' = @{
-            'preview.9' = @{
-                SubCommand = 'resource delete'
+            'preview.10' = @{
+                SubCommand = @('resource', 'delete')
             }
         }
         'FindDscResourceCommand'   = @{
-            'preview.9' = @{
-                SubCommand = 'resource list'
+            'preview.10' = @{
+                SubCommand = @('resource', 'list')
+            }
+        }
+        'GetDscConfigCommand'      = @{
+            'preview.10' = @{
+                SubCommand = @('config', 'get')
+            }
+        }
+        'SetDscConfigCommand'      = @{
+            'preview.10' = @{
+                SubCommand = @('config', 'set')
+            }
+        }
+        'TestDscConfigCommand'     = @{
+            'preview.10' = @{
+                SubCommand = @('config', 'test')
+            }
+        }
+        'RemoveDscConfigCommand'   = @{
+            'preview.10' = @{
+                SubCommand = @('config', 'delete')
             }
         }
     }
@@ -70,12 +91,12 @@ function GetDscCommandIndex
 
     if (-not $keyData)
     {
-        Throw "Command '$CommandName' not implemented."
+        Throw "Command '$CommandName' not implemented for version: $version."
     }
 
     Write-Verbose -Message "Selected data for '$CommandName'"
     return ([PSCustomObject]@{
-            Name       = $keyData
-            SubCommand = ([System.Text.StringBuilder]::new($keyData.SubCommand))
+            Command   = $keyData.SubCommand[0]
+            Operation = $keyData.SubCommand[1]
         })
 }

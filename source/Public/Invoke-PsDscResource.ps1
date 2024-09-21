@@ -14,7 +14,7 @@ function Invoke-PsDscResource
         The operation capability to execute e.g. 'Set'.
 
     .PARAMETER ResourceInput
-        The resource input to provide. Supports JSON, path and PowerShell scripts.
+        The resource input to provide. Supports JSON, YAML path and PowerShell hash table.
 
     .EXAMPLE
         PS C:\> Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending -Operation Get
@@ -51,7 +51,8 @@ function Invoke-PsDscResource
         Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
 
         # get the bound parameters without common
-        $boundParameters = GetBoundParameters -BoundParameters $PSBoundParameters
+        $boundParameters = GetBoundParameters -BoundParameters $PSBoundParameters @("ResourceName", "ResourceInput")
+
         Write-Verbose ($boundParameters | ConvertTo-Json | Out-String)
     }
 
