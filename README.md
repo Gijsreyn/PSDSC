@@ -2,9 +2,9 @@
 
 This is the repository for the PowerShell Desired State Configuration (DSC) Version 3 Module. You might think, why another PowerShell module for DSC? We already have the [PSDesiredStateConfiguration](https://learn.microsoft.com/nl-nl/powershell/module/psdesiredstateconfiguration/?view=dsc-2.0).
 
-DSC version 3 is no longer PowerShell. Instead, the engine is written in Rust. The output produced by the build is a command-line utility (CLI) called `dsc.exe`. This community project was created to enable the same features the CLI provides, only using PowerShell as the program.
+DSC version 3 is no longer only PowerShell. Instead, the engine is written in Rust. Building the project from GitHub, produces a command-line utility (CLI): `dsc.exe`. This community project was created to enable the same features the CLI provides, only using PowerShell as the tool for invoking `dsc.exe`.
 
-PowerShell also adds features and helps you familiarize yourself with the cmdlets wrapped around the _"commands"_ under the hood. While following the approved verbs and following the creation of recognizable PowerShell commands, you should be able to see everything using the common parameters.
+PowerShell also adds features and helps you familiarize yourself with the cmdlets wrapped around the _commands_ under the hood. While following the approved verbs and following the creation of recognizable PowerShell commands, you should be able to see everything using the common parameters, for example `-Debug` or `-Verbose` parameter.
 
 The current list of commands implemented in the module:
 

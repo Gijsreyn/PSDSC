@@ -1,20 +1,20 @@
-function TestDscResourceCommand
+function TestDscConfigCommand
 {
     <#
     .SYNOPSIS
-        Run test operation against DSC resource
+        Run test config against DSC resource
 
     .DESCRIPTION
-        The function TestDscResourceCommand tests a DSC resource
-
-    .PARAMETER ResourceName
-        The resource name to test against.
+        The function TestDscResourceCommand tests a DSC config
 
     .PARAMETER ResourceInput
         The resource input to provide. Supports JSON, path and PowerShell scripts.
 
+    .PARAMETER Parameter
+        Optionally, the parameter input to provide.
+
     .EXAMPLE
-        PS C:\> TestDscResourceCommand -ResourceName Microsoft.Windows/Registry -ResourceInput @{keyPath = 'HKCU\Microsoft'}
+         PS C:\> TestDscConfigCommand -ResourceInput myconfig.dsc.config.yaml -Parameter myconfig.dsc.config.parameters.yaml
 
     .NOTES
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
@@ -22,23 +22,24 @@ function TestDscResourceCommand
     [CmdletBinding()]
     param
     (
-        [Parameter(Mandatory = $true)]
-        [System.String]
-        $ResourceName,
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [AllowNull()]
+        [object]
+        $ResourceInput,
 
         [Parameter(Mandatory = $false)]
         [AllowNull()]
         [object]
-        $ResourceInput
+        $Parameter
     )
 
     begin
     {
+        # collect the command from index
         $commandData = GetDscCommandIndex -CommandName $MyInvocation.MyCommand.Name
 
-        $arguments = BuildDscInput -Command $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -ResourceName $ResourceName
-
-        # TODO: we can still make a call to the resource manifest and see if input is required
+        # build the input string for arguments
+        $arguments = BuildDscInput -Command $commandData.Command -Operation $commandData.Operation -ResourceInput $ResourceInput -Parameter $Parameter
     }
 
     process
