@@ -92,7 +92,7 @@ function BuildDscConfigDocument
     # TODO: get schema information from GitHub
     $configurationDocument = [ordered]@{
         "`$schema" = "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json"
-        resources  = $configurationDocument
+        resources  = @($configurationDocument)
     }
 
     return $configurationDocument

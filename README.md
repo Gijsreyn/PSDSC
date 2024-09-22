@@ -23,6 +23,62 @@ The module works on PowerShell 7+ and was tested on Windows. To install the modu
 Install-PSResource -Name PSDSC -TrustRepository -Repository PSGallery
 ```
 
+> [!NOTE]
+> `Microsoft.PowerShell.PSResourceGet` is included since PowerShell 7.4 Preview 5. If you get _The term 'Install-PSResource' is not recognized as the name of a cmdlet, function, script file, or operable program error message, please update your PowerShell version to the latest version.
+
+## Usage examples
+
+The PSDSC module is not difficult to operate, as it hooks directly into `dsc.exe`. While JSON is the primary driver, `dsc.exe` supports JSON and YAML as input. Under the hood, it is always converted to JSON. PSDSC extends more capabilities, by also supporting PowerShell objects based on `hashtable` object and a single `-ResourceInput` parameter. You don't have to worry about if the input is a `.json` file or `@{}` PowerShell input object. PSDSC translates the input to the relevant options.
+
+PowerShell v7+ is required.
+
+```powershell
+# start by installing 'dsc.exe' using Install-DscCli
+Install-DscCli
+
+# if you have an existing configuration document as such
+# MyConfiguration.ps1
+configuration MyConfiguration {
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Node localhost
+    {
+        Environment CreatePathEnvironmentVariable
+        {
+            Name = 'TestPathEnvironmentVariable'
+            Value = 'TestValue'
+            Ensure = 'Present'
+            Path = $true
+            Target = @('Process')
+        }
+    }
+}
+
+# you can use the ConvertTo-DscJson 
+$resourceInput = ConvertTo-DscJson -Path MyConfiguration.ps1
+
+# call dsc config get
+$r = $resourceInput | Invoke-PsDscConfig -Operation Get
+
+# return build arguments
+$r.Arguments
+
+# when working with resource, tab-completion kicks in on resources known to 'dsc.exe'
+Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry -Operation Get -ResourceInput '{"keyPath":"<keyPath>"}' #or
+Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry -Operation Get -ResourceInput '{"_exist":"<_exist>","_metadata":"<_metadata>","valueName":"<valueName>","keyPath":"<keyPath>","valueData":"<valueData>"}'
+
+# powershell adapter works also when cache is available from powershell.resource.ps1
+Invoke-PsDscResource -ResourceName Microsoft.WinGet.DSC/WinGetPackage -ResourceInput '{"Id":"<string>"}'
+```
+
+## Support
+
+PSDSC targets PowerShell 7+, meaning it should run cross-platform. However, most commands implemented in the module are tested on Windows. The module aims to provide features and assistance in:
+
+- Tab-completion on resources
+- Build configuration documents from PowerShell v1/2 DSC Documents
+- Support multiple input possibilities
+- Familiarize yourself with new DSC concepts
+
 ## Contributing
 
 Thank you for considering contributing to our project! All types of contributions are welcome, including bug reports, feature suggestions, and code improvements. Please follow the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines below to ensure a smooth contribution process.

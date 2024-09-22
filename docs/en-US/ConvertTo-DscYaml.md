@@ -13,8 +13,14 @@ Convert DSC Configuration (v1/v2) Document to YAML.
 
 ## SYNTAX
 
+### Path (Default)
 ```
-ConvertTo-DscYaml [[-Path] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ConvertTo-DscYaml -Path <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+### Content
+```
+ConvertTo-DscYaml -Content <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -30,18 +36,33 @@ PS C:\> ConvertTo-DscYaml -Path $path
 
 ## PARAMETERS
 
+### -Content
+The content to a valid DSC Configuration Document.
+
+```yaml
+Type: String
+Parameter Sets: Content
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Path
 The file path to a valid DSC Configuration Document.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Path
 Aliases:
 
-Required: False
-Position: 1
+Required: True
+Position: Named
 Default value: None
-Accept pipeline input: True (ByValue)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -66,46 +87,38 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### Input a valid DSC Configuration Document
-
-```powershell
 configuration MyConfiguration {
-     Import-DscResource -ModuleName PSDesiredStateConfiguration
-     Node localhost
-     {
-         Environment CreatePathEnvironmentVariable
-         {
-             Name = 'TestPathEnvironmentVariable'
-             Value = 'TestValue'
-             Ensure = 'Present'
-             Path = $true
-             Target = @('Process')
-         }
-     }
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Node localhost
+    {
+        Environment CreatePathEnvironmentVariable
+        {
+            Name = 'TestPathEnvironmentVariable'
+            Value = 'TestValue'
+            Ensure = 'Present'
+            Path = $true
+            Target = @('Process')
+        }
+    }
 }
-```
-
 ## OUTPUTS
 
 ### Returns a YAML string
-
-```yaml
 $schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json
 resources:
-     name: MyConfiguration
-     type: Microsoft.DSC/PowerShell
-     properties:
-         resources:
-         - name: CreatePathEnvironmentVariable
-         type: PSDscResources/Environment
-         properties:
-             Value: TestValue
-             Path: true
-             Name: TestPathEnvironmentVariable
-             Ensure: Present
-             Target:
-             - Process
-```
-
+    name: MyConfiguration
+    type: Microsoft.DSC/PowerShell
+    properties:
+        resources:
+        - name: CreatePathEnvironmentVariable
+        type: PSDscResources/Environment
+        properties:
+            Value: TestValue
+            Path: true
+            Name: TestPathEnvironmentVariable
+            Ensure: Present
+            Target:
+            - Process
 ## NOTES
 
 ## RELATED LINKS
