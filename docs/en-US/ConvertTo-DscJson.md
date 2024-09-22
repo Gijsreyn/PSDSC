@@ -13,8 +13,14 @@ Convert DSC Configuration (v1/v2) Document to JSON.
 
 ## SYNTAX
 
+### Path (Default)
 ```
-ConvertTo-DscJson [[-Path] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ConvertTo-DscJson -Path <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+### Content
+```
+ConvertTo-DscJson -Content <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,26 +29,40 @@ The function ConvertTo-DscJson converts a DSC Configuration Document (v1/v2) to 
 ## EXAMPLES
 
 ### EXAMPLE 1
-
-```powershell
+```
 $path = 'myConfig.ps1'
 PS C:\> ConvertTo-DscJson -Path $path
 ```
 
 ## PARAMETERS
 
+### -Content
+The content to a valid DSC Configuration Document.
+
+```yaml
+Type: String
+Parameter Sets: Content
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Path
 The file path to a valid DSC Configuration Document.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Path
 Aliases:
 
-Required: False
-Position: 1
+Required: True
+Position: Named
 Default value: None
-Accept pipeline input: True (ByValue)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -67,55 +87,47 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### Input a valid DSC Configuration Document
-
-```powershell
 configuration MyConfiguration {
-     Import-DscResource -ModuleName PSDesiredStateConfiguration
-     Node localhost
-     {
-         Environment CreatePathEnvironmentVariable
-         {
-             Name = 'TestPathEnvironmentVariable'
-             Value = 'TestValue'
-             Ensure = 'Present'
-             Path = $true
-             Target = @('Process')
-         }
-     }
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Node localhost
+    {
+        Environment CreatePathEnvironmentVariable
+        {
+            Name = 'TestPathEnvironmentVariable'
+            Value = 'TestValue'
+            Ensure = 'Present'
+            Path = $true
+            Target = @('Process')
+        }
+    }
 }
-```
-
 ## OUTPUTS
 
 ### Returns a JSON string
-
-```json
 {
-     "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json",
-     "resources": {
-         "name": "MyConfiguration node",
-         "type": "Microsoft.DSC/PowerShell",
-         "properties": {
-         "resources": [
-             {
-             "name": "CreatePathEnvironmentVariable",
-             "type": "PSDscResources/Environment",
-             "properties": {
-                 "Value": "TestValue",
-                 "Path": true,
-                 "Name": "TestPathEnvironmentVariable",
-                 "Ensure": "Present",
-                 "Target": [
-                             "Process"
-                         ]
-                     }
-                 }
-             ]
-         }
-     }
+    "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json",
+    "resources": {
+        "name": "MyConfiguration node",
+        "type": "Microsoft.DSC/PowerShell",
+        "properties": {
+        "resources": [
+            {
+            "name": "CreatePathEnvironmentVariable",
+            "type": "PSDscResources/Environment",
+            "properties": {
+                "Value": "TestValue",
+                "Path": true,
+                "Name": "TestPathEnvironmentVariable",
+                "Ensure": "Present",
+                "Target": [
+                            "Process"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
 }
-```
-
 ## NOTES
 
 ## RELATED LINKS

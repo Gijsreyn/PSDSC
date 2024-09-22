@@ -23,10 +23,11 @@ AfterAll {
 
 Describe 'ConvertToDscObject' {
     Context 'Converts configuration document into object' {
-        BeforeAll {
-            $script:filePath = (Join-Path -Path $TestDrive -ChildPath 'test.ps1')
-            New-Item -Path $filePath -ItemType File
-            $script:content = @'
+        It 'Should unable to read files without .ps1 extension' {
+            InModuleScope -ScriptBlock {
+                $filePath = (Join-Path -Path $TestDrive -ChildPath 'test.ps1')
+                New-Item -Path $filePath -ItemType File
+                $content = @'
 configuration MyConfiguration {
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Node localhost
@@ -42,14 +43,7 @@ configuration MyConfiguration {
     }
 }
 '@
-            Set-Content -Path $filePath -Value $content
-        }
-
-        AfterAll {
-            Remove-Item -Path $filePath -Recurse -Force
-        }
-        It 'Should unable to read files without .ps1 extension' {
-            InModuleScope -ScriptBlock {
+                Set-Content -Path $filePath -Value $content
                 $res = ConvertToDscObject -Path $filePath
                 $res.Count | Should -Be 9
             }
