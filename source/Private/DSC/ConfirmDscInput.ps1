@@ -42,11 +42,6 @@ function ConfirmDscInput
         $ParameterInput
     )
 
-    # TODO: can valid path for example passing in:
-    # builddscInput -Command config -Operation get -ResourceInput registry.example.config.yaml -Parameter registry.example.config.parameters.yaml
-    # does return:
-    # config  --parameters "\"registry.example.config.parameters.yaml\"" get --document "\"registry.example.config.yaml\""
-
     if ([string]::IsNullOrEmpty($ResourceInput) -and [string]::IsNullOrEmpty($ParameterInput))
     {
         return
