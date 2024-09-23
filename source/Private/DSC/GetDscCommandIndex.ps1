@@ -60,6 +60,11 @@ function GetDscCommandIndex
                 SubCommand = @('resource', 'delete')
             }
         }
+        'ExportDscResourceCommand' = @{
+            'preview.10' = @{
+                SubCommand = @('resource', 'export')
+            }
+        }
         'FindDscResourceCommand'   = @{
             'preview.10' = @{
                 SubCommand = @('resource', 'list')

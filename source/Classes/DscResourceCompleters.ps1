@@ -53,8 +53,7 @@ class DscResourceInputCompleter : System.Management.Automation.IArgumentComplete
         if ($fakeBoundParameters.ContainsKey('ResourceName'))
         {
             [array]$Resources = GetDscRequiredKey | Where-Object {
-                $_.type -eq $fakeBoundParameters.ResourceName -and
-                $_.Resource -like "$wordToComplete*"
+                $_.type -eq $fakeBoundParameters.ResourceName
             } | Select-Object -ExpandProperty resourceInput -Unique | Sort-Object
         }
         else

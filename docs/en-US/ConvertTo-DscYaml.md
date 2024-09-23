@@ -29,7 +29,8 @@ The function ConvertTo-DscYaml converts a DSC Configuration Document (v1/v2) to 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
+```powershell
 $path = 'myConfig.ps1'
 PS C:\> ConvertTo-DscYaml -Path $path
 ```

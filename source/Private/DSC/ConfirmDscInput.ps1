@@ -75,10 +75,20 @@ function ConfirmDscInput
         $out = $validate | ConvertTo-Json -Depth 10 -Compress
     }
 
-    $extension = (Get-Item $validate -ErrorAction SilentlyContinue).Extension
+    $extension = [System.IO.Path]::GetExtension($validate)
+
+    if ($extension -and $extension -notin ('.Hashtable'))
+    {
+        if (-not (Test-Path $validate))
+        {
+            Throw "Path '$validate' does not exist. Please enter a valid path."
+        }
+    }
+
+    $i = Get-Item $validate -ErrorAction SilentlyContinue
 
     # check if data is YAML or JSON path
-    if ($extension -in ('.json', '.yml', '.yaml') -and (Test-Path $validate -ErrorAction SilentlyContinue))
+    if ($extension -in ('.json', '.yml', '.yaml'))
     {
         Write-Debug -Message "Validated input as path"
         $out = $validate
@@ -121,15 +131,15 @@ function ConfirmDscInput
     {
         'config'
         {
-            if (-not $extension -and $IsResource)
+            if (-not $i -and $IsResource)
             {
                 $string = "--document $(($out | ConvertTo-Json) -replace "\\\\", "\")"
             }
-            elseif ($extension -and $IsResource)
+            elseif ($i -and $IsResource)
             {
                 $string = "--path $out"
             }
-            elseif (-not $extension -and -not $IsResource)
+            elseif (-not $i -and -not $IsResource)
             {
                 $string = ("--parameters $(($out | ConvertTo-Json) -replace "\\\\", "\")" -replace "`r`n", "")
             }
@@ -140,7 +150,7 @@ function ConfirmDscInput
         }
         'resource'
         {
-            if (-not $extension)
+            if (-not $i)
             {
                 $string = "--input $(($out | ConvertTo-Json) -replace "\\\\", "\")"
             }
