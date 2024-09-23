@@ -24,5 +24,32 @@
   "[markdown]": {
     "files.trimTrailingWhitespace": false,
     "files.encoding": "utf8"
-  }
+  },
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.autoIndent": "advanced",
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "diffEditor.ignoreTrimWhitespace": false
+  },
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.suggest.insertMode": "replace",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.autoIndent": "advanced"
+  },
+  "prettier.tabWidth": 4,
+  "prettier.useEditorConfig": true,
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/bundled/config/document.vscode.json": "**/*.dsc.config.yaml"
+  },
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "**/*.dsc.config.json"
+      ],
+      "url": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/bundled/config/document.vscode.json"
+    }
+  ]
 }
