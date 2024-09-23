@@ -12,6 +12,7 @@ The current list of commands implemented in the module:
 - [ConvertTo-DscYaml](./docs/en-US/ConvertTo-DscYaml.md)
 - [Install-DscCli](./docs/en-US/Install-DscCLI.md)
 - [Invoke-PsDscResource](./docs/en-US/Invoke-PsDscResource.md)
+- [New-PsDscVsCodeSettingsFile](./docs/en-US/New-PsDscVsCodeSettingsFile.md)
 
 ## Installation
 
@@ -66,8 +67,30 @@ $r.Arguments
 Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry -Operation Get -ResourceInput '{"keyPath":"<keyPath>"}' #or
 Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry -Operation Get -ResourceInput '{"_exist":"<_exist>","_metadata":"<_metadata>","valueName":"<valueName>","keyPath":"<keyPath>","valueData":"<valueData>"}'
 
+# there are also possibilities to have different input types
+Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry Set -ResourceInput @{keyPath = 'HKCU\1\2'}
+
+Invoke-PsDscResource -ResourceName MIcrosoft.Windows/Registry Test -ResourceInput registry.example.resource.json
+Invoke-PsDscResource -ResourceName MIcrosoft.Windows/Registry Test -ResourceInput registry.example.resource.yaml
+
 # powershell adapter works also when cache is available from powershell.resource.ps1
 Invoke-PsDscResource -ResourceName Microsoft.WinGet.DSC/WinGetPackage -ResourceInput '{"Id":"<string>"}'
+
+# to get schema definition integration in VSCode, you can use the New-PsDscVsCodeSettingsFile
+New-PsDscVsCodeSettingsFile # adds to settings.json file:
+
+# "yaml.schemas": {
+#     "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/bundled/config/document.vscode.json": "**/*.dsc.config.yaml"
+#   },
+#   "json.schemas": [
+#     {
+#       "fileMatch": [
+#         "**/*.dsc.config.json"
+#       ],
+#       "url": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/bundled/config/document.vscode.json"
+#     }
+#   ]
+
 ```
 
 ## Support
