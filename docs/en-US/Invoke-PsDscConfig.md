@@ -6,29 +6,27 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-PsDscResource
+# Invoke-PsDscConfig
 
 ## SYNOPSIS
-Invoke DSC version 3 resource using the command-line utility
+Invoke DSC version 3 config using the command-line utility
 
 ## SYNTAX
 
 ```
-Invoke-PsDscResource [-ResourceName] <String> [[-Operation] <String>] [[-ResourceInput] <Object>]
+Invoke-PsDscConfig [[-ResourceInput] <Object>] [-Operation] <String> [[-Parameter] <Object>]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The function Invoke-PsDscResource invokes Desired State Configuration version 3 resources calling the executable.
+The function Invoke-PsDscConfig invokes Desired State Configuration version 3 configuration documents calling 'dsc.exe'.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending -Operation Get
+Invoke-PsDscConfig -ResourceInput myconfig.dsc.config.yaml -Parameter myconfig.dsc.config.parameters.yaml
 ```
-
-Execute Microsoft.Windows/RebootPending resource on Windows system to check if there is a pending reboot
 
 ## PARAMETERS
 
@@ -41,8 +39,23 @@ Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Parameter
+Optionally, the parameter input to provide.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -73,24 +86,9 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -ResourceName
-The resource name to execute.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: Name
-
-Required: True
 Position: 1
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 

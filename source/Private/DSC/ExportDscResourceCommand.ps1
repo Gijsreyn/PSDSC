@@ -1,17 +1,17 @@
-function FindDscResourceCommand
+function ExportDscResourceCommand
 {
     <#
     .SYNOPSIS
-        Run list operation against DSC resource
+        Run export operation against DSC resource
 
     .DESCRIPTION
-        The function FindDscResourceCommand lists a DSC resource / adapter
+        The function FindDscResourceCommand exports a DSC resource / adapter
 
     .PARAMETER ResourceName
-        The resource name to get against.
+        The resource name to export against.
 
     .EXAMPLE
-        PS C:\> FindDscResourceCommand -ResourceName Microsoft.PowerShell/DSC
+        PS C:\> FindDscResourceCommand -ResourceName Microsoft.VSCode.Dsc/VSCodeExtension
 
     .NOTES
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.

@@ -105,7 +105,7 @@ keyPath: "HKCU"
         }
         It 'Should be able to return config string with JSON input and parameters input' {
             InModuleScope -ScriptBlock {
-                @'
+                $json = @'
 {
   "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json",
   "parameters": {
@@ -131,6 +131,44 @@ keyPath: "HKCU"
 
                 $res = BuildDscInput -Command config -Operation get -ResourceInput $json -Parameter $parameter
                 $res | Should -BeLike "config --parameters $json get --document *"
+            }
+        }
+        It 'Should be able to return config string with YAML input' {
+            InModuleScope -ScriptBlock {
+                $yamlInput = @'
+$schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json
+resources:
+  - name: Using registry
+    type: Microsoft.Windows/Registry
+    properties:
+      keyPath: HKCU
+'@
+
+                $res = BuildDscInput -Command config -Operation get -ResourceInput $yamlInput
+                $res | Should -BeLike "config get --document *"
+            }
+        }
+        It 'Should be able to return config string with YAML input and parameters input' {
+            InModuleScope -ScriptBlock {
+                $yamlInput = @'
+$schema: https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json
+parameters:
+  keyPath:
+    defaultValue: HKCU
+    type: string
+resources:
+  - name: Using registry
+    type: Microsoft.Windows/Registry
+    properties:
+      keyPath: "[parameters('keyPath')]"
+'@
+                $parameter = @'
+parameters:
+  keyPath: HKCU
+'@
+
+                $res = BuildDscInput -Command config -Operation get -ResourceInput $yamlInput -Parameter $parameter
+                $res | Should -BeLike "config --parameters * get --document *"
             }
         }
     }
