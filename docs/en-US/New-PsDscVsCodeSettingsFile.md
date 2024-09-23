@@ -6,44 +6,47 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-PsDscResource
+# New-PsDscVsCodeSettingsFile
 
 ## SYNOPSIS
-Invoke DSC version 3 resource using the command-line utility
+Simple function to add schema definitions to VSCode settings file.
 
 ## SYNTAX
 
 ```
-Invoke-PsDscResource [-ResourceName] <String> [[-Operation] <String>] [[-ResourceInput] <Object>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-PsDscVsCodeSettingsFile [[-Path] <Object>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The function Invoke-PsDscResource invokes Desired State Configuration version 3 resources calling the executable.
+The function New-PsDscVsCodeSettingsFile adds schema definitions to the 'settings.json' file to help author DSC Configuration Documents.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending -Operation Get
+New-PsDscVsCodeSettingsFile
 ```
 
-Execute Microsoft.Windows/RebootPending resource on Windows system to check if there is a pending reboot
+### EXAMPLE 2
+```
+New-PsDscVsCodeSettingsFile -Path customsettingsfile.json
+```
 
 ## PARAMETERS
 
-### -Operation
-The operation capability to execute e.g.
-'Set'.
+### -Path
+The path to the VSCode settings file.
+Defaults to $Home\AppData\Roaming\Code\User\settings.json
 
 ```yaml
-Type: String
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
-Default value: None
+Position: 1
+Default value: "$Home\AppData\Roaming\Code\User\settings.json"
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -58,37 +61,6 @@ Aliases: proga
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourceInput
-The resource input to provide.
-Supports JSON, YAML path and PowerShell hash table.
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -ResourceName
-The resource name to execute.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: Name
-
-Required: True
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -132,6 +104,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.String
 ## NOTES
 For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
 
