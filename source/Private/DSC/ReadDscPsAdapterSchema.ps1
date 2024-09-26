@@ -11,6 +11,9 @@ function ReadDscPsAdapterSchema
     .PARAMETER ReturnTypeInfo
         Switch parameter to only return the type name(s).
 
+    .PARAMETER BuildHashTable
+        A switch parameter to indicate if the output should be a hashtable.
+
     .EXAMPLE
         PS C:\> ReadDscAdapterSchema
 
@@ -26,31 +29,15 @@ function ReadDscPsAdapterSchema
     param
     (
         [System.Management.Automation.SwitchParameter]
-        $ReturnTypeInfo
+        $ReturnTypeInfo,
+
+        [Parameter(Mandatory = $false)]
+        [System.Management.Automation.SwitchParameter]
+        $BuildHashTable
     )
 
     begin
     {
-        function _generateCodeExample ($properties)
-        {
-            $resourceInput = [System.Collections.Generic.List[System.Array]]::new()
-            $inputObject = @{}
-            $mandatory = @{}
-            $properties | ForEach-Object {
-                $typeName = $_.PropertyType.Split(".")[-1].TrimEnd("]").Replace("[", "")
-                $inputObject.Add($_.Name, "<$typeName>")
-
-                if ($_.IsMandatory -eq $true)
-                {
-                    $mandatory.Add($_.Name, "<$typeName>")
-                }
-            }
-            $resourceInput.Add(($mandatory | ConvertTo-Json -Depth 10 -Compress))
-            $resourceInput.Add(($inputObject | ConvertTo-Json -Depth 10 -Compress))
-
-            return $resourceInput
-        }
-
         Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
     }
 
@@ -95,7 +82,11 @@ function ReadDscPsAdapterSchema
             }
 
             # add the example code
-            $exampleCode = @((_generateCodeExample -properties $resource.DscResourceInfo.Properties))
+            $pParams = @{
+                properties     = $resource.DscResourceInfo.Properties
+                BuildHashTable = $BuildHashTable.IsPresent
+            }
+            $exampleCode = @((ReadDscPsAdapterSchemaProperty @pParams))
             $resourceObject.resourceInput = $exampleCode
 
             $resourceObject

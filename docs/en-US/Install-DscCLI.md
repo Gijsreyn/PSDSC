@@ -38,6 +38,21 @@ Install preview.9 version of DSC and forces the installation
 
 ## PARAMETERS
 
+### -Version
+The version to be installed.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Force
 This switch will force DSC to be installed, even if another installation is already in place.
 
@@ -63,21 +78,6 @@ Aliases: proga
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Version
-The version to be installed.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

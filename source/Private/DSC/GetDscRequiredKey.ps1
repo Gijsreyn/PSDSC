@@ -11,6 +11,9 @@ function GetDscRequiredKey
     .PARAMETER Path
         The path to the 'dsc.exe' installation location.
 
+    .PARAMETER BuildHashTable
+        A switch parameter to indicate if the output should be a hashtable.
+
     .EXAMPLE
         PS C:\> $resolvedPath = Split-Path (Get-Command 'dsc').Source
         PS C:\> GetDscRequiredKey -Path $resolvedPath
@@ -25,7 +28,10 @@ function GetDscRequiredKey
     (
         [Parameter(Mandatory = $false)]
         [System.String]
-        $Path
+        $Path,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]$BuildHashTable
     )
 
     if (-not $PSBoundParameters.ContainsKey('Path'))
@@ -37,7 +43,12 @@ function GetDscRequiredKey
 
     if ($mFiles)
     {
-        $inputObject = ReadDscRequiredKey -ResourceManifest $mFiles
+        $p = @{
+            ResourceManifest = $mFiles
+            BuildHashTable   = $BuildHashTable.IsPresent
+        }
+
+        $inputObject = ReadDscRequiredKey @p
     }
 
     $inputObject

@@ -10,6 +10,9 @@ function ReadDscSchema
     .PARAMETER Schema
         The schema information to read.
 
+    .PARAMETER BuildHashTable
+        A switch parameter to indicate if the output should be a hashtable.
+
     .EXAMPLE
         PS C:\> $ctx = (Get-Content "$env:ProgramFiles\DSC\registry.dsc.resource.json" | ConvertFrom-Json)
         PS C:\> ReadDscSchema -Schema $ctx.schema
@@ -22,40 +25,26 @@ function ReadDscSchema
     (
         [Parameter(Mandatory = $true)]
         [psobject]
-        $Schema
+        $Schema,
+
+        [Parameter(Mandatory = $false)]
+        [System.Management.Automation.SwitchParameter]
+        $BuildHashTable
     )
 
     begin
     {
-        function _readSchemaProperty ($schemaObject)
-        {
-            $exampleCode = @()
-
-            # add the required keys as example
-            $exampleCode += $schemaObject.required.Foreach({
-                    @{ $_ = "<$($_)>" } | ConvertTo-Json -Depth 10 -Compress
-                })
-
-            # go through optional keys as example
-            $props = $schema.properties | Get-Member | Where-Object { $_.MemberType -eq 'NoteProperty' } | Select-Object -ExpandProperty Name
-
-            $hash = @{}
-            foreach ($prop in $props)
-            {
-                $hash.Add($prop , "<$prop>")
-            }
-
-            $exampleCode += ($hash | ConvertTo-Json -Compress)
-
-            return $exampleCode
-        }
-
         Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
     }
 
     process
     {
         $exampleCode = @()
+
+        $schemaParams = @{
+            schemaObject   = $null
+            BuildHashTable = $BuildHashTable.IsPresent
+        }
 
         if ($Schema.command)
         {
@@ -68,15 +57,15 @@ function ReadDscSchema
 
             if ($out.ExitCode -eq 0)
             {
-                $schema = $out.Output | ConvertFrom-Json
-                $exampleCode = _readSchemaProperty -schemaObject $schema
+                $schemaParams.schemaObject = $out.Output | ConvertFrom-Json
+                $exampleCode = ReadDscSchemaProperty @schemaParams
             }
         }
 
         if ($Schema.embedded)
         {
-            $schema = $Schema.embedded
-            $exampleCode = _readSchemaProperty -schemaObject $schema
+            $schemaParams.schemaObject = $Schema.embedded
+            $exampleCode = ReadDscSchemaProperty @schemaParams
         }
     }
     end

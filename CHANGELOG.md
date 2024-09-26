@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Improved unit testing and code coverage
+- Introduced both Initialize-PsDscConfigDocument and New-PsDscVsCodeSettingsFile command
+- Validate multiple inputs for `Invoke-PsDscResource` and `Invoke-PsDscConfig`
+
+## [0.0.1] - 2024-09-12
+
+### Added
+
 - Pester tests
 - The `ConvertTo-DscJson` and `ConvertTo-DscYaml` command
 - Initial start of `Invoke-PsDscResource`
