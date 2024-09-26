@@ -26,7 +26,7 @@ function Invoke-PsDscConfig
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'Required for down-level function(s).')]
     param
     (
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false)]
         [AllowNull()]
         [object]
         $ResourceInput,

@@ -10,6 +10,7 @@ The current list of commands implemented in the module:
 
 - [ConvertTo-DscJson](./docs/en-US/ConvertTo-DscJson.md)
 - [ConvertTo-DscYaml](./docs/en-US/ConvertTo-DscYaml.md)
+- [Initialize-PsDscConfigDocument](./docs/en-US/Initialize-PsDscConfigDocument.md)
 - [Install-DscCli](./docs/en-US/Install-DscCLI.md)
 - [Invoke-PsDscResource](./docs/en-US/Invoke-PsDscResource.md)
 - [New-PsDscVsCodeSettingsFile](./docs/en-US/New-PsDscVsCodeSettingsFile.md)
@@ -91,7 +92,19 @@ New-PsDscVsCodeSettingsFile # adds to settings.json file:
 #     }
 #   ]
 
+# using short alias to build a DSC v3 configuration document and execute it
+$doc = Init-PsDscConfigDocument -ResourceName Microsoft.Windows/Registry -ResourceInput @{'keyPath' = 'HKCU\User'}
+
+$p = @{
+    Operation = 'Get'
+    ResourceInput = $doc
+}
+Invoke-PsDscConfig @p
 ```
+
+To see tab-completion kicking in for resources, check out the following:
+
+![TabCompletionDscResource]
 
 ## Support
 
@@ -101,7 +114,11 @@ PSDSC targets PowerShell 7+, meaning it should run cross-platform. However, most
 - Build configuration documents from PowerShell v1/2 DSC Documents
 - Support multiple input possibilities
 - Familiarize yourself with new DSC concepts
+- Assist in setting up authoring experience for JSON and YAMl v3 DSC configuration documents
 
 ## Contributing
 
 Thank you for considering contributing to our project! All types of contributions are welcome, including bug reports, feature suggestions, and code improvements. Please follow the [CONTRIBUTING.md](CONTRIBUTING.md) guidelines below to ensure a smooth contribution process.
+
+<!-- References -->
+[TabCompletionDscResource]: .images/tab-completion-dsc-resource.gif
