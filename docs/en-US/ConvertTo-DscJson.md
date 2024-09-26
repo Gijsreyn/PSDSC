@@ -36,12 +36,12 @@ PS C:\> ConvertTo-DscJson -Path $path
 
 ## PARAMETERS
 
-### -Content
-The content to a valid DSC Configuration Document.
+### -Path
+The file path to a valid DSC Configuration Document.
 
 ```yaml
 Type: String
-Parameter Sets: Content
+Parameter Sets: Path
 Aliases:
 
 Required: True
@@ -51,12 +51,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Path
-The file path to a valid DSC Configuration Document.
+### -Content
+The content to a valid DSC Configuration Document.
 
 ```yaml
 Type: String
-Parameter Sets: Path
+Parameter Sets: Content
 Aliases:
 
 Required: True
@@ -87,6 +87,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### Input a valid DSC Configuration Document
+
+```powershell
 configuration MyConfiguration {
     Import-DscResource -ModuleName PSDesiredStateConfiguration
     Node localhost
@@ -101,9 +103,12 @@ configuration MyConfiguration {
         }
     }
 }
+```
+
 ## OUTPUTS
 
 ### Returns a JSON string
+```json
 {
     "$schema": "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json",
     "resources": {
@@ -128,6 +133,8 @@ configuration MyConfiguration {
         }
     }
 }
+```
+
 ## NOTES
 
 ## RELATED LINKS

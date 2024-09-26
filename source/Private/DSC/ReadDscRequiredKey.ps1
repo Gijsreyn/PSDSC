@@ -10,6 +10,9 @@ function ReadDscRequiredKey
     .PARAMETER ResourceManifest
         The resource manifest to read.
 
+    .PARAMETER BuildHashTable
+        A switch parameter to indicate if the output should be a hashtable.
+
     .EXAMPLE
         PS C:\> ReadDscRequiredKey -Path "$env:ProgramFiles\DSC\registry.dsc.resource.json"
 
@@ -27,7 +30,11 @@ function ReadDscRequiredKey
     (
         [Parameter(Mandatory = $false)]
         [System.IO.FileInfo[]]
-        $ResourceManifest
+        $ResourceManifest,
+
+        [Parameter(Mandatory = $false)]
+        [System.Management.Automation.SwitchParameter]
+        $BuildHashTable
     )
 
     begin
@@ -52,8 +59,13 @@ function ReadDscRequiredKey
                     # initialize
                     $inputObject = [ResourceManifest]::new($ctx.type, $ctx.description, $ctx.version)
 
+                    $schemaParams = @{
+                        Schema         = $ctx.schema
+                        BuildHashTable = $BuildHashTable.IsPresent
+                    }
+
                     # grab both embedded and schema key using ReadDscSchema
-                    $resourceInput = ReadDscSchema -Schema $ctx.schema
+                    $resourceInput = ReadDscSchema @schemaParams
 
                     $inputObject.resourceInput = $resourceInput
 
@@ -63,7 +75,7 @@ function ReadDscRequiredKey
 
                 if ($ctx.kind -eq 'Adapter' -and $ctx.type -in @('Microsoft.DSC/PowerShell', 'Microsoft.Windows/WindowsPowerShell'))
                 {
-                    $cacheRefresh = ReadDscPsAdapterSchema
+                    $cacheRefresh = ReadDscPsAdapterSchema -BuildHashTable:$BuildHashTable.IsPresent
 
                     if ($cacheRefresh)
                     {

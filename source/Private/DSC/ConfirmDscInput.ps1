@@ -42,82 +42,83 @@ function ConfirmDscInput
         $ParameterInput
     )
 
+    $Path = $false
+
     if ([string]::IsNullOrEmpty($ResourceInput) -and [string]::IsNullOrEmpty($ParameterInput))
     {
         return
     }
 
-    $validate, $IsResource = if ($PSBoundParameters.ContainsKey('ResourceInput'))
+    if ($PSCmdlet.ParameterSetName -eq 'ByInput' -and $ResourceInput)
     {
-        $ResourceInput, $true
-    }
-    else
-    {
-        $ParameterInput, $false
-    }
-
-    if (-not $IsResource -and $Command -eq 'resource')
-    {
-        Throw "Combination is not valid. You cannot use -ResourceInput and -Command 'resource' together."
-    }
-
-    $typeName = $validate.GetType().Name
-
-    # validate if data is hashtable
-    if ($typeName -eq 'HashTable')
-    {
-        Write-Debug -Message "Validated input as hash table"
-        $out = $validate | ConvertTo-Json -Depth 10 -Compress
-    }
-
-    $extension = [System.IO.Path]::GetExtension($validate)
-
-    if ($extension -and $extension -notin ('.Hashtable'))
-    {
-        if (-not (Test-Path $validate))
+        # check the type of ResourceInput and process accordingly
+        if ($ResourceInput -is [string] -and (Test-Path -Path $ResourceInput -ErrorAction SilentlyContinue))
         {
-            Throw "Path '$validate' does not exist. Please enter a valid path."
-        }
-    }
-
-    $i = Get-Item $validate -ErrorAction SilentlyContinue
-
-    # check if data is YAML or JSON path
-    if ($extension -in ('.json', '.yml', '.yaml'))
-    {
-        Write-Debug -Message "Validated input as path"
-        $out = $validate
-    }
-
-    if ($typeName -eq 'String' -and -not $extension)
-    {
-        # workaround JSON
-        try
-        {
-            # yes we need a way to validate if JSON is actually JSON
-            $out = $validate | ConvertFrom-Json -ErrorAction SilentlyContinue | ConvertTo-Json -Depth 10 -Compress
-            Write-Verbose "Validated input as JSON"
-        }
-        catch
-        {
-            Write-Verbose ("Could not converted '[{0}]' data. If this was not intented, please make sure the input is valid JSON." -f $validate)
-        }
-
-        # check if yaml is present
-        if ($null -eq $out)
-        {
-            if (TestYamlModule)
+            $extension = (Get-Item $ResourceInput -ErrorAction SilentlyContinue).Extension
+            if ($extension -in @('.json', '.yaml', '.yml'))
             {
-                # always pass output to JSON even thought dsc handles the rest
-                try
-                {
-                    $out = $validate | ConvertFrom-Yaml -ErrorAction SilentlyContinue | ConvertTo-Json -Depth 10 -Compress
-                    Write-Verbose "Validated input as YAML"
-                }
-                catch
-                {
-                    Write-Verbose ("Could not converted '[{0}]' data. If this was not intented, please make sure the input is valid YAML." -f $validate)
-                }
+                Write-Debug -Message "The '$ResourceInput' is a valid path string."
+                $out = $ResourceInput
+
+                # set variable
+                $Path = $true
+            }
+        }
+        elseif ($ResourceInput -is [hashtable])
+        {
+            # resourceInput is a hashtable
+            $json = $ResourceInput | ConvertTo-Json -Depth 10 -Compress
+            $out = $json
+        }
+        elseif ($ResourceInput -is [string])
+        {
+            try
+            {
+                $json = $ResourceInput | ConvertFrom-Json
+                $out = $json | ConvertTo-Json -Depth 10 -Compress
+            }
+            catch
+            {
+                Write-Debug -Message "The '$ResourceInput' is not a valid JSON string. Please make sure the input is valid JSON."
+            }
+        }
+        else
+        {
+            # TODO: check if YAML can be used to convert with ConvertFrom-Yaml
+        }
+    }
+
+
+    # process ParameterInput if provided
+    if ($PSCmdlet.ParameterSetName -eq 'ByParameter' -and $ParameterInput)
+    {
+        if ($ParameterInput -is [string] -and (Test-Path -Path $ParameterInput -ErrorAction SilentlyContinue))
+        {
+            $extension = (Get-Item $ParameterInput -ErrorAction SilentlyContinue).Extension
+            if ($extension -in @('.json', '.yaml', '.yml'))
+            {
+                Write-Debug -Message "The '$ParameterInput' is a valid path string."
+                $out = $ParameterInput
+
+                # set variable
+                $Path = $true
+            }
+        }
+        elseif ($ParameterInput -is [hashtable])
+        {
+            $json = $ParameterInput | ConvertTo-Json -Compress
+            $out = $json
+        }
+        elseif ($ParameterInput -is [string])
+        {
+            try
+            {
+                $json = $ParameterInput | ConvertFrom-Json
+                $out = $json | ConvertTo-Json -Depth 10 -Compress
+            }
+            catch
+            {
+                Write-Debug -Message "The '$ParameterInput' is not a valid JSON string. Please make sure the input is valid JSON."
             }
         }
     }
@@ -126,28 +127,28 @@ function ConfirmDscInput
     {
         'config'
         {
-            if (-not $i -and $IsResource)
-            {
-                $string = "--document $(($out | ConvertTo-Json) -replace "\\\\", "\")"
-            }
-            elseif ($i -and $IsResource)
+            if ($Path -and $PSCmdlet.ParameterSetName -eq 'ByInput')
             {
                 $string = "--path $out"
             }
-            elseif (-not $i -and -not $IsResource)
+            elseif ($PSCmdlet.ParameterSetName -eq 'ByInput')
             {
-                $string = ("--parameters $(($out | ConvertTo-Json) -replace "\\\\", "\")" -replace "`r`n", "")
+                $string = ("--document {0}" -f ($out | ConvertTo-Json) -replace "\\\\", "\")
+            }
+            elseif ($Path -and $PSCmdlet.ParameterSetName -eq 'ByParameter')
+            {
+                $string = "--parameters-file $out"
             }
             else
             {
-                $string = "--parameters-file $out"
+                $string = ("--parameters $(($out | ConvertTo-Json) -replace "\\\\", "\")" -replace "`r`n", "")
             }
         }
         'resource'
         {
-            if (-not $i)
+            if (-not $extension)
             {
-                $string = "--input $(($out | ConvertTo-Json) -replace "\\\\", "\")"
+                $string = ("--input {0}" -f ($out | ConvertTo-Json) -replace "\\\\", "\")
             }
             else
             {
@@ -155,6 +156,5 @@ function ConfirmDscInput
             }
         }
     }
-
     return $string
 }
