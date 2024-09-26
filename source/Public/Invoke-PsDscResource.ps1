@@ -39,7 +39,7 @@ function Invoke-PsDscResource
         [System.String]
         $Operation,
 
-        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [Parameter(Mandatory = $false)]
         [ArgumentCompleter([DscResourceInputCompleter])]
         [AllowNull()]
         [object]
