@@ -47,7 +47,7 @@ function New-PsDscVsCodeSettingsFile
 }
 "@
 
-    $pParams = @{
+    $params = @{
         Path     = $Path
         Encoding = 'utf8'
         Value    = $settings
@@ -58,7 +58,7 @@ function New-PsDscVsCodeSettingsFile
         Write-Verbose -Message ("Creating new file: '$Path' with")
         Write-Verbose -Message $settings
 
-        Set-Content @pParams
+        Set-Content @params
     }
     else
     {
@@ -95,7 +95,7 @@ function New-PsDscVsCodeSettingsFile
         }
         catch
         {
-            Throw "'$Path' is not a valid .JSON file. Error: $($PSItem.Exception.Message)"
+            Throw ("'$Path' is not a valid .JSON file. Error: {0}" -f $PSItem.Exception.Message)
         }
     }
 

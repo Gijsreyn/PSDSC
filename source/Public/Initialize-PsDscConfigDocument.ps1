@@ -51,6 +51,7 @@ function Initialize-PsDscConfigDocument
 
         [Parameter(Mandatory = $false)]
         [ArgumentCompleter([DscConfigInputCompleter])]
+        [AllowNull()]
         [hashtable]$ResourceInput,
 
         [Parameter(Mandatory = $false)]
