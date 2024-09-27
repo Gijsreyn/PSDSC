@@ -86,11 +86,11 @@ function New-PsDscVsCodeSettingsFile
             Write-Verbose -Message "Previous settings file:"
             Write-Verbose -Message ($reference | ConvertTo-Json -Depth 5 | Out-String)
 
-            $pParams.Value = $settings
+            $params.Value = $settings
 
             if ($PSCmdlet.ShouldProcess($Path, 'overwrite'))
             {
-                Set-Content @pParams
+                Set-Content @params
             }
         }
         catch

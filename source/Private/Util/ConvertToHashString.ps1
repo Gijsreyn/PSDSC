@@ -24,7 +24,7 @@ Function ConvertToHashString
     param
     (
         [Parameter(Mandatory = $true)]
-        [System.Collections.Hashtable]$HashTable
+        [System.Collections.Specialized.OrderedDictionary]$HashTable
     )
     $first = $true
     foreach ($pair in $HashTable.GetEnumerator())

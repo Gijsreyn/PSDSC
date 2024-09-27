@@ -25,6 +25,7 @@ function ResolveDscExe
     #>
     [OutputType([System.String])]
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPositionalParameters', '', Justification = 'PowerShell module is 7+).')]
     Param
     (
         [Parameter(Mandatory = $false)]
@@ -51,7 +52,15 @@ function ResolveDscExe
             $Path = Join-Path -Path $dscResourceVar -ChildPath 'dsc.exe'
         }
 
-        if (-not $Path)
+        if (TestWinGetModule)
+        {
+            # TODO: life is difficult with WinGet
+            $version = (GetDscVersion) -replace "preview.", ""
+            $architecture = ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture).ToString().ToLower()
+            $Path = Join-Path $env:ProgramFiles 'WindowsApps' "Microsoft.DesiredStateConfiguration-Preview_3.0.$version.0_$architecture`__8wekyb3d8bbwe" 'dsc.exe'
+        }
+
+        if (-not $Path -and -not (Test-Path $Path))
         {
             # try globally and default installation when elevated
             $Path = (Get-Command dsc -ErrorAction SilentlyContinue).Source
@@ -68,7 +77,7 @@ function ResolveDscExe
             Throw "Could not locate 'dsc.exe'. Please make sure it can be found through the PATH or DSC_RESOURCE_PATH environment variable."
         }
 
-        return $Path.ToString()
+        return $Path
     }
 
     # TODO: Resolve other paths on Mac/Linux

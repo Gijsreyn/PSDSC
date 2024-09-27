@@ -39,8 +39,11 @@ function StartNetProcessObject
     {
         while ($null -ne ($line = $Process.StandardOutput.ReadLine()))
         {
-            Write-Debug "Adding: $line"
-            $output.Add($line)
+            if (-not [string]::IsNullOrEmpty($line))
+            {
+                Write-Debug "Adding: $line"
+                $output.Add($line)
+            }
         }
     }
 

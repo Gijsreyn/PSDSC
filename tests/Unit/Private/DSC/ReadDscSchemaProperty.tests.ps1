@@ -118,7 +118,7 @@ Describe "ReadDscSchemaProperty" {
                 $result = ReadDscSchemaProperty -SchemaObject $schemaObject -BuildHashTable
 
                 $expected = @(
-                    "@{'optionalProp2' = '<optionalProp2>';'optionalProp1' = '<optionalProp1>'}"
+                    "@{'optionalProp1' = '<optionalProp1>';'optionalProp2' = '<optionalProp2>'}"
                 )
 
                 $result | Should -Be $expected
