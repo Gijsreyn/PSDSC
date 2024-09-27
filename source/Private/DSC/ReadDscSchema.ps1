@@ -48,11 +48,9 @@ function ReadDscSchema
 
         if ($Schema.command)
         {
-            # expect to be command-based DSC resource, also known as Resource kind
-            $exePath = ResolveDscExe
-            # use full exe path instead counting on environment variables to be present
-            $fullExePath = [System.String]::Concat("$(Split-Path -Path $exePath)\", $ctx.schema.command.executable, '.exe')
-            $process = GetNetProcessObject -Arguments "$($ctx.schema.command.args)" -ExePath $fullExePath
+            # use resource name because WinGet does not allow direct resource to be called
+            $resourceName = $ctx.type
+            $process = GetNetProcessObject -Arguments "resource schema -r $resourceName"
             $out = StartNetProcessObject -Process $process
 
             if ($out.ExitCode -eq 0)

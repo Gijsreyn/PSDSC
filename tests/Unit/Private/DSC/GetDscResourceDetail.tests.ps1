@@ -46,8 +46,14 @@ Describe 'GetDscResourceDetail' {
     Context 'Custom Path' {
         It 'Works with a custom path' {
             InModuleScope -ScriptBlock {
-                $customPath = (Get-Command dsc).Source
-                $result = GetDscResourceDetail -Path $customPath
+                if (TestWinGetModule)
+                {
+                    # TODO: life is difficult with WinGet
+                    $version = (GetDscVersion) -replace "preview.", ""
+                    $architecture = ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture).ToString().ToLower()
+                    $Path = Join-Path $env:ProgramFiles 'WindowsApps' "Microsoft.DesiredStateConfiguration-Preview_3.0.$version.0_$architecture`__8wekyb3d8bbwe" 'dsc.exe'
+                }
+                $result = GetDscResourceDetail -Path $Path
                 $result | Should -Not -BeNullOrEmpty
             }
 
@@ -101,22 +107,21 @@ Describe 'GetDscResourceDetail' {
                 }
                 else
                 {
-                    $cacheFilePath = Join-Path $env:LocalAppData "dsc" "PSAdapterCache.json"
+                    $existingContent = Get-Content -Path $cacheFilePath -Raw | ConvertFrom-Json
+                    if (-not $existingContent.ResourceCache.Type -ne 'Test/TestResource')
+                    {
+                        $inputObject = [System.Collections.Generic.List[psobject]]::new()
 
-                    if (-not (Test-Path $cacheFilePath) -and (Get-Item $cacheFilePath -ErrorAction SilentlyContinue).Length -eq 0)
-                    {
-                        $jsonContent = @{ResourceCache = @(@{Type = @("AdapterType1", "AdapterType2") }) } | ConvertTo-Json -Depth 5
-                        Set-Content -Path $cacheFilePath -Value $jsonContent
-                    }
-                    else
-                    {
-                        $existingContent = Get-Content -Path $cacheFilePath | ConvertFrom-Json
-                        if (-not $existingContent.ResourceCache.Type -ne 'Test/TestResource')
-                        {
-                            $existingContent.ResourceCache += $addedContent
-                            $updatedJsonContent = $existingContent | ConvertTo-Json -Depth 5
-                            Set-Content -Path $cacheFilePath -Value $updatedJsonContent
-                        }
+                        # add the new
+                        $inputObject.Add($addedContent)
+
+                        # add the existing
+                        $inputObject.Add($existingContent.ResourceCache)
+
+                        # overwrite the existing property
+                        $existingContent | Add-Member -MemberType NoteProperty -Name ResourceCache -Value $inputObject -Force
+
+                        Set-Content -Path $cacheFilePath -Value ($existingContent | ConvertTo-Json -Depth 10)
                     }
                 }
 

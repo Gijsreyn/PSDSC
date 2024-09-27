@@ -52,8 +52,8 @@ function ReadDscPsAdapterSchemaProperty
     )
 
     $resourceInput = [System.Collections.Generic.List[System.String]]::new()
-    $inputObject = @{}
-    $mandatory = @{}
+    $inputObject = [ordered]@{}
+    $mandatory = [ordered]@{}
 
     foreach ($property in $Properties)
     {

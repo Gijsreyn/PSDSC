@@ -45,7 +45,8 @@ function GetDscVersion
 
     if (TestDsc)
     {
-        $process = GetNetProcessObject -Arguments '--version'
+        # do it like this to avoid circular dependencies because of WinGet
+        $process = GetNetProcessObject -Arguments '--version' -ExePath (Get-Command -Name 'dsc.exe').Source
         $version = ((StartNetProcessObject -Process $process).Output -split "-")[-1]
         return $version
     }

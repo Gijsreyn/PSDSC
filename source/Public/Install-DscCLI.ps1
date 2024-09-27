@@ -7,9 +7,6 @@ function Install-DscCLI
     .DESCRIPTION
         The function Install-DscCLI installs Desired State Configuration version 3 executablle.
 
-    .PARAMETER Version
-        The version to be installed.
-
     .PARAMETER Force
         This switch will force DSC to be installed, even if another installation is already in place.
 
@@ -19,19 +16,21 @@ function Install-DscCLI
         Install the latest version of DSC
 
     .EXAMPLE
-        PS C:\> Install-DscCli -Version '3.0.0-preview.9' -Force
+        PS C:\> Install-DscCli -Force
 
-        Install preview.9 version of DSC and forces the installation
+        Install DSC and forces the installed if there is already a version installed.
 
     .NOTES
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
     #>
     [CmdletBinding()]
+    [OutputType([System.Boolean])]
     param (
-        [Parameter()]
-        [ArgumentCompleter([DscVersionCompleter])]
-        [System.String]
-        $Version,
+        # [Parameter()]
+        # TODO: later turn it on if we want to specify versions
+        # [ArgumentCompleter([DscVersionCompleter])]
+        # [System.String]
+        # $Version,
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
@@ -41,88 +40,69 @@ function Install-DscCLI
     # TODO: if WinGet package is present, use WinGet for Windows
     Write-Verbose -Message ("Starting: {0}" -f $MyInvocation.MyCommand.Name)
 
-    $dscInstalled = TestDsc
+    $winGetModuleInstalled = TestWinGetModule
 
-    if (-not $IsWindows)
+    if (-not $winGetModuleInstalled)
     {
-        throw "This function is only supported for Windows systems."
+        throw "This function requires the 'Microsoft.WinGet.Dsc' module to be installed. Please install it using 'Install-PSResource -Name Microsoft.WinGet.Dsc'."
     }
 
-    $base = 'https://api.github.com/repos/PowerShell/DSC/releases'
-
-    if ($PSBoundParameters.ContainsKey('Version'))
+    if ($IsWindows)
     {
-        $releaseUrl = ('{0}/tags/v{1}' -f $base, $Version)
-    }
-    else
-    {
-        # TODO: no latest tag because no official release
-        $releaseUrl = $base
-    }
-
-    if ($Force.IsPresent -and $dscInstalled -eq $true)
-    {
-        Write-Warning -Message "'dsc.exe' is already installed. You can update it using Update-DscCLI."
-    }
-
-    if ($Force.IsPresent -or $dscInstalled -eq $false)
-    {
-        $releases = Invoke-RestMethod -Uri $releaseUrl
-
-        # TODO: remove after latest is known
-        if ($releases.Count -gt 1)
-        {
-            $releases = $releases | Sort-Object -Descending | Select-Object -First 1
+        $hashArgs = @{
+            Id          = '9PCX3HX4HZ0Z'
+            MatchOption = 'EqualsCaseInsensitive'
         }
 
-        $fileName = 'DSC-3.0.0-*-x86_64-pc-windows-msvc.zip'
-        # get latest asset to be downloaded
-        $asset = $releases.assets | Where-Object -Property Name -Like $fileName
+        $versionPackage = Get-WinGetPackage @hashArgs
 
-        # download the installer
-        $tmpdir = [System.IO.Path]::GetTempPath()
-        $fileName = $asset.name
-        $installerPath = [System.IO.Path]::Combine($tmpDir, $fileName)
-        (New-Object Net.WebClient).DownloadFileAsync($asset.browser_download_url, $installerPath)
-        Write-Verbose "Downloading $($asset.browser_download_url) to location $installerPath"
-        do
+        if (-not $versionPackage)
         {
-            $PercentComplete = [math]::Round((Get-Item $installerPath).Length / $asset.size * 100)
-            Write-Progress -Activity 'Downloading DSC' -PercentComplete $PercentComplete
-            start-sleep 1
-        } while ((Get-Item $installerPath).Length -lt $asset.size)
+            $dscInstalled = Install-WinGetPackage @hashArgs
 
-        # expand the installer to directory
-        $elevated = TestAdministrator
-        $exePath = if ($elevated)
-        {
-            "$env:ProgramFiles\DSC"
-        }
-        else
-        {
-            "$env:LOCALAPPDATA\DSC"
+            if ($dscInstalled.Status -eq 'Ok')
+            {
+                $version = GetDscVersion
+                Write-Verbose -Message "DSC successfully installed with version $version"
+
+                # return
+                return $true
+            }
         }
 
-        Write-Verbose -Message ("Expanding '{0}' to '{1}'" -f $installerPath, $exePath)
-        $null = Expand-Archive -LiteralPath $installerPath -DestinationPath $exePath -Force
+        if ($versionPackage)
+        {
+            $versions = Find-WinGetPackage @hashArgs | Select-Object -First 1 # TODO: validate if multiple version are available
 
-        if ($elevated)
-        {
-            $exePath | AddToPath -Persistent:$true
-        }
-        else
-        {
-            $exePath | AddToPath -User
-        }
+            if ($versionPackage.Version -le $versions.Version -and $PSBoundParameters.ContainsKey('Force'))
+            {
+                Write-Verbose -Message "Updating DSC version: '$($versionPackage.Version)' to '$($versions.Version)'"
+                $dscInstalled = Update-WinGetPackage @hashArgs
 
-        if (TestDsc)
-        {
-            $dsc = GetDscVersion
-            Write-Verbose -Message "DSC successfully installed with version $dsc"
+                if ($dscInstalled.Status -eq 'Ok' -or $dscInstalled.Status -eq 'NoApplicableUpgrade')
+                {
+                    $version = GetDscVersion
+                    Write-Verbose -Message "DSC successfully updated with version $version"
+
+                    # return
+                    return $true
+                }
+            }
+
+            if ($versionPackage.Version -le $versions.Version)
+            {
+                Write-Warning -Message "DSC is already installed with version $($versionPackage.Version), but you have not specified the -Force switch to update it. If you want to update it, please add the -Force parameter."
+
+                # return
+                return $false
+            }
+            else
+            {
+                Write-Verbose -Message "DSC is already installed with version $($versionPackage.Version)."
+
+                # return
+                return $true
+            }
         }
-    }
-    else
-    {
-        # TODO: check if we are always getting latest available releases by comparing
     }
 }

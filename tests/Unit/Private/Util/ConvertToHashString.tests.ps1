@@ -24,7 +24,7 @@ AfterAll {
 Describe "ConvertToHashString" {
     It "should convert a hashtable with one key-value pair to a string" {
         InModuleScope -ScriptBlock {
-            $hashtable = @{ 'key' = 'value' }
+            $hashtable = [ordered]@{ 'key' = 'value' }
             $expected = "@{'key' = 'value'}"
             $result = ConvertToHashString -HashTable $hashtable
             $result | Should -BeExactly $expected
@@ -33,7 +33,7 @@ Describe "ConvertToHashString" {
 
     It "should convert a hashtable with multiple key-value pairs to a string" {
         InModuleScope -ScriptBlock {
-            $hashtable = @{ 'key1' = 'value1'; 'key2' = 'value2' }
+            $hashtable = [ordered]@{ 'key1' = 'value1'; 'key2' = 'value2' }
             $expected = "@{'key1' = 'value1';'key2' = 'value2'}"
             $result = ConvertToHashString -HashTable $hashtable
             $result | Should -BeExactly $expected
@@ -43,7 +43,7 @@ Describe "ConvertToHashString" {
 
     It "should handle an empty hashtable" {
         InModuleScope -ScriptBlock {
-            $hashtable = @{}
+            $hashtable = [ordered]@{}
             $expected = "@{}"
             $result = ConvertToHashString -HashTable $hashtable
             $result | Should -BeExactly $expected
@@ -54,7 +54,7 @@ Describe "ConvertToHashString" {
     It "should handle a hashtable with different types of values" {
         InModuleScope -ScriptBlock {
             $hashtable = [ordered]@{ 'key1' = 123; 'key2' = $true; }
-            $expected = "@{'key2' = 'True';'key1' = '123'}"
+            $expected = "@{'key1' = '123';'key2' = 'True'}"
             $result = ConvertToHashString -HashTable $hashtable
             $result | Should -BeExactly $expected
         }
