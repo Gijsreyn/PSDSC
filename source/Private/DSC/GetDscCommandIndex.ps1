@@ -35,8 +35,11 @@ function GetDscCommandIndex
 
     # TODO: When version information is available, we can get it using Get-Item and use ResolveDscExe
     # $resolveExe = ResolveDscExe
-    $versionProc = GetNetProcessObject
-    $version = ((StartNetProcessObject -Process $versionProc).Output.Trim() -split "-") | Select-Object -Last 1
+    if (-not $script:version)
+    {
+        $versionProc = GetNetProcessObject
+        $script:version = ((StartNetProcessObject -Process $versionProc).Output.Trim() -split "-") | Select-Object -Last 1
+    }
 
     # TODO: can add without version later
     $cmdData = @{

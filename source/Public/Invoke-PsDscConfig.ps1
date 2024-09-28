@@ -8,7 +8,12 @@ function Invoke-PsDscConfig
         The function Invoke-PsDscConfig invokes Desired State Configuration version 3 configuration documents calling 'dsc.exe'.
 
     .PARAMETER ResourceInput
-        The resource input to provide. Supports JSON, YAML path and PowerShell hash table.
+        The resource input to provide. Supports:
+
+        - JSON (string and path)
+        - YAML (string and path)
+        - PowerShell hash table
+        - PowerShell configuration document script (.ps1)
 
     .PARAMETER Operation
         The operation capability to execute e.g. 'Set'.
@@ -18,6 +23,26 @@ function Invoke-PsDscConfig
 
     .EXAMPLE
         PS C:\> Invoke-PsDscConfig -ResourceInput myconfig.dsc.config.yaml -Parameter myconfig.dsc.config.parameters.yaml
+
+    .EXAMPLE
+        PS C:\> Invoke-PsDscConfig -ResourceInput @{keyPath = 'HKCU\1'} -Operation Set
+
+    .EXAMPLE
+        PS C:\> $script = @'
+        configuration WinGet {
+            Import-DscResource -ModuleName 'Microsoft.WinGet.DSC'
+
+            node localhost {
+                WinGetPackage WinGetPackageExample
+                {
+                    Id = 'Microsoft.PowerShell.Preview'
+                    Ensure = 'Present'
+                }
+            }
+        }
+        '@
+        PS C:\> Set-Content -Path 'winget.powershell.dsc.config.ps1' -Value $script
+        PS C:\> Invoke-PsDscConfig -ResourceInput 'winget.powershell.dsc.config.ps1' -Operation Set
 
     .NOTES
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.

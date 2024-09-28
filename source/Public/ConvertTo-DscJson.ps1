@@ -102,6 +102,6 @@ function ConvertTo-DscJson
     end
     {
         Write-Verbose ("Ended: {0}" -f $MyInvocation.MyCommand.Name)
-        return ($configurationDocument | ConvertTo-Json -Depth 10)
+        return ($configurationDocument | ConvertTo-Json -Depth 10 -Compress)
     }
 }
