@@ -63,6 +63,15 @@ function ConfirmDscInput
                 # set variable
                 $Path = $true
             }
+
+            if ($extension -eq '.ps1' -and $Command -eq 'config')
+            {
+                Write-Debug -Message "The '$ResourceInput' is a PowerShell (.ps1) script. Converting..."
+                $out = ConvertTo-DscJson -Path $ResourceInput
+
+                Write-Debug -Message "The converted JSON is:"
+                Write-Debug -Message $out
+            }
         }
         elseif ($ResourceInput -is [hashtable])
         {
