@@ -10,6 +10,7 @@ The current list of commands implemented in the module:
 
 - [ConvertTo-DscJson](./docs/en-US/ConvertTo-DscJson.md)
 - [ConvertTo-DscYaml](./docs/en-US/ConvertTo-DscYaml.md)
+- [Get-PsDscResourceSchema](./docs/en-US/Get-PsDscResourceSchema.md)
 - [Initialize-PsDscConfigDocument](./docs/en-US/Initialize-PsDscConfigDocument.md)
 - [Install-DscCli](./docs/en-US/Install-DscCLI.md)
 - [Invoke-PsDscResource](./docs/en-US/Invoke-PsDscResource.md)
@@ -100,6 +101,24 @@ $p = @{
     ResourceInput = $doc
 }
 Invoke-PsDscConfig @p
+
+# Invoke-PsDscConfig also supports the ability to use (.ps1) configuration document scripts.
+# MyConfiguration.ps1
+configuration MyConfiguration {
+    Import-DscResource -ModuleName PSDesiredStateConfiguration
+    Node localhost
+    {
+        Environment CreatePathEnvironmentVariable
+        {
+            Name = 'TestPathEnvironmentVariable'
+            Value = 'TestValue'
+            Ensure = 'Present'
+            Path = $true
+        }
+    }
+}
+Invoke-PsDscConfig -Operation Get -ResourceInput MyConfiguration.ps1
+
 ```
 
 To see tab-completion kicking in for resources, check out the following:

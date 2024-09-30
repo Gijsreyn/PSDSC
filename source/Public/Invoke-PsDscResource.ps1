@@ -58,6 +58,11 @@ function Invoke-PsDscResource
 
     process
     {
+        if (-not $PSBoundParameters.ContainsKey('Operation') -and $PSBoundParameters.ContainsKey('ResourceInput'))
+        {
+            $boundParameters.Remove('ResourceInput')
+        }
+
         switch ($Operation)
         {
             'Get'

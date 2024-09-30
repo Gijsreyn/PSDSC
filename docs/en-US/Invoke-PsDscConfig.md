@@ -28,23 +28,31 @@ The function Invoke-PsDscConfig invokes Desired State Configuration version 3 co
 Invoke-PsDscConfig -ResourceInput myconfig.dsc.config.yaml -Parameter myconfig.dsc.config.parameters.yaml
 ```
 
-## PARAMETERS
-
-### -ResourceInput
-The resource input to provide.
-Supports JSON, YAML path and PowerShell hash table.
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: None
-Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
+### EXAMPLE 2
 ```
+Invoke-PsDscConfig -ResourceInput @{keyPath = 'HKCU\1'} -Operation Set
+```
+
+### EXAMPLE 3
+```
+$script = @'
+configuration WinGet {
+    Import-DscResource -ModuleName 'Microsoft.WinGet.DSC'
+```
+
+node localhost {
+        WinGetPackage WinGetPackageExample
+        {
+            Id = 'Microsoft.PowerShell.Preview'
+            Ensure = 'Present'
+        }
+    }
+}
+'@
+PS C:\\\> Set-Content -Path 'winget.powershell.dsc.config.ps1' -Value $script
+PS C:\\\> Invoke-PsDscConfig -ResourceInput 'winget.powershell.dsc.config.ps1' -Operation Set
+
+## PARAMETERS
 
 ### -Operation
 The operation capability to execute e.g.
@@ -77,17 +85,37 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases: wi
+Aliases: proga
 
 Required: False
 Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ResourceInput
+The resource input to provide.
+Supports:
+
+- JSON (string and path)
+- YAML (string and path)
+- PowerShell hash table
+- PowerShell configuration document script (.ps1)
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -108,13 +136,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
-Type: ActionPreference
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: proga
+Aliases: wi
 
 Required: False
 Position: Named
