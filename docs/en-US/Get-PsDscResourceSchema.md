@@ -6,47 +6,49 @@ online version:
 schema: 2.0.0
 ---
 
-# New-PsDscVsCodeSettingsFile
+# Get-PsDscResourceSchema
 
 ## SYNOPSIS
-Simple function to add schema definitions to VSCode settings file.
+Retrieves the schema for a specified DSC resource.
 
 ## SYNTAX
 
 ```
-New-PsDscVsCodeSettingsFile [[-Path] <Object>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+Get-PsDscResourceSchema [-ResourceName] <String> [-IncludeProperty] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The function New-PsDscVsCodeSettingsFile adds schema definitions to the 'settings.json' file to help author DSC Configuration Documents.
+The function Get-PsDscResourceSchema function retrieves the schema for a specified Desired State Configuration (DSC) resource.
+It can optionally include the properties of the resource in the output.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-PsDscVsCodeSettingsFile
+Get-PsDscResourceSchema -ResourceName "Microsoft.Windows/Registry"
+Retrieves the schema for the "Microsoft.Windows/Registry" DSC resource.
 ```
 
 ### EXAMPLE 2
 ```
-New-PsDscVsCodeSettingsFile -Path customsettingsfile.json
+Get-PsDscResourceSchema -ResourceName "Microsoft.WinGet.DSC/WinGetPackage" -IncludeProperty
+Retrieves the schema for the "Microsoft.WinGet.DSC/WinGetPackage" DSC resource and includes its properties in the output onyl.
 ```
 
 ## PARAMETERS
 
-### -Path
-The path to the VSCode settings file.
-Defaults to $Home\AppData\Roaming\Code\User\settings.json
+### -IncludeProperty
+A switch parameter that, when specified, includes the properties of the DSC resource in the output.
 
 ```yaml
-Type: Object
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
-Default value: "$Home\AppData\Roaming\Code\User\settings.json"
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -66,32 +68,16 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
+### -ResourceName
+The name of the DSC resource for which to retrieve the schema.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
-Aliases: cf
+Aliases: Name
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
+Required: True
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -104,8 +90,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### System.String
 ## NOTES
-For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
+For more details, refer to the module documentation.
 
 ## RELATED LINKS

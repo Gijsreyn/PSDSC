@@ -14,7 +14,7 @@ Install DSC CLI (Windows only).
 ## SYNTAX
 
 ```
-Install-DscCLI [[-Version] <String>] [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Install-DscCLI [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -31,27 +31,12 @@ Install the latest version of DSC
 
 ### EXAMPLE 2
 ```
-Install-DscCli -Version '3.0.0-preview.9' -Force
+Install-DscCli -Force
 ```
 
-Install preview.9 version of DSC and forces the installation
+Install DSC and forces the installed if there is already a version installed.
 
 ## PARAMETERS
-
-### -Version
-The version to be installed.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
 
 ### -Force
 This switch will force DSC to be installed, even if another installation is already in place.
@@ -90,6 +75,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### System.Boolean
 ## NOTES
 For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
 
