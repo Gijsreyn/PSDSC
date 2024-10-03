@@ -54,7 +54,7 @@ Describe 'GetDscResourceDetail' {
                     $Path = Join-Path $env:ProgramFiles 'WindowsApps' "Microsoft.DesiredStateConfiguration-Preview_3.0.$version.0_$architecture`__8wekyb3d8bbwe" 'dsc.exe'
                     if ($env:TF_BUILD)
                     {
-
+                        $Path = Join-path $env:ProgramFiles 'dsc' 'dsc.exe'
                     }
                 }
                 $result = GetDscResourceDetail -Path $Path
