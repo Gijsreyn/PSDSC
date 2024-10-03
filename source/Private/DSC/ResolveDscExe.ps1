@@ -72,6 +72,11 @@ function ResolveDscExe
             }
         }
 
+        if ($env:TF_BUILD)
+        {
+            return (Join-Path -Path $env:ProgramFiles 'dsc' 'dsc.exe')
+        }
+
         if (-not (Test-Path $Path -ErrorAction SilentlyContinue))
         {
             Throw "Could not locate 'dsc.exe'. Please make sure it can be found through the PATH or DSC_RESOURCE_PATH environment variable."
