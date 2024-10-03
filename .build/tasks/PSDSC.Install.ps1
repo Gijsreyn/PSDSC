@@ -40,6 +40,6 @@ task PSDSC.Install {
 
     $exePath = Join-path $env:ProgramFiles 'dsc'
 
-    Write-Build -Yellow ("Expanding '{0}' to '{1}'" -f $installerPath, $exePath)
+    Write-Build Yellow "Expanding archive: $installerPath to $exePath"
     $null = Expand-Archive -LiteralPath $installerPath -DestinationPath $exePath -Force
 }
