@@ -2,7 +2,7 @@ param
 (
 )
 
-task PSDSC.Install {
+task PSDSC.Windows.Install {
     Write-Build Yellow "Installing 'dsc.exe' from Github"
 
     if (-not $IsWindows)
@@ -42,4 +42,19 @@ task PSDSC.Install {
 
     Write-Build Yellow "Expanding archive: $installerPath to $exePath"
     $null = Expand-Archive -LiteralPath $installerPath -DestinationPath $exePath -Force
+
+    # Add $exePath to the PATH environment variable for both machine and process
+    $currentPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::Machine)
+    if (-not $currentPath.Split(';') -contains $exePath)
+    {
+        $newPath = "$currentPath;$exePath"
+        [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Machine)
+    }
+
+    $currentProcessPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::Process)
+    if (-not $currentProcessPath.Split(';') -contains $exePath)
+    {
+        $newProcessPath = "$currentProcessPath;$exePath"
+        [System.Environment]::SetEnvironmentVariable('PATH', $newProcessPath, [System.EnvironmentVariableTarget]::Process)
+    }
 }

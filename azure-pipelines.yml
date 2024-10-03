@@ -110,7 +110,7 @@ stages:
             displayName: "Install DSC"
             inputs:
               filePath: "./build.ps1"
-              arguments: "-tasks PSDSC.Install"
+              arguments: "-tasks PSDSC.Windows.Install"
               pwsh: true
 
           - task: PowerShell@2
