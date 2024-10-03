@@ -52,6 +52,10 @@ Describe 'GetDscResourceDetail' {
                     $version = (GetDscVersion) -replace "preview.", ""
                     $architecture = ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture).ToString().ToLower()
                     $Path = Join-Path $env:ProgramFiles 'WindowsApps' "Microsoft.DesiredStateConfiguration-Preview_3.0.$version.0_$architecture`__8wekyb3d8bbwe" 'dsc.exe'
+                    if ($env:TF_BUILD)
+                    {
+
+                    }
                 }
                 $result = GetDscResourceDetail -Path $Path
                 $result | Should -Not -BeNullOrEmpty
