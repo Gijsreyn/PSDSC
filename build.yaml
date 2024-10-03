@@ -134,4 +134,5 @@ TaskHeader: |
   "-" * 79
   Write-Build DarkGray "  $Path"
   Write-Build DarkGray "  $($Task.InvocationInfo.ScriptName):$($Task.InvocationInfo.ScriptLineNumber)"
+  Write-Build DarkGray "  `nUsing: $($env:PATH)"
   ""
