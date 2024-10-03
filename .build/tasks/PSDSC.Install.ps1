@@ -38,8 +38,8 @@ task PSDSC.Install {
         start-sleep 1
     } while ((Get-Item $installerPath).Length -lt $asset.size)
 
-    $installerPath = Join-path $env:ProgramFiles 'dsc'
+    $exePath = Join-path $env:ProgramFiles 'dsc'
 
-    Write-Verbose -Message ("Expanding '{0}' to '{1}'" -f $installerPath, $exePath)
+    Write-Build -Yellow ("Expanding '{0}' to '{1}'" -f $installerPath, $exePath)
     $null = Expand-Archive -LiteralPath $installerPath -DestinationPath $exePath -Force
 }
