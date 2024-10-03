@@ -15,5 +15,5 @@
     Sampler               = 'latest'
     'Sampler.GitHubTasks' = 'latest'
     yayaml                = 'latest'
-
+    'Microsoft.WinGet.DSC'  = 'latest'
 }
