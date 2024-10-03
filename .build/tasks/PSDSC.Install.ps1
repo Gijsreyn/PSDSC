@@ -14,6 +14,7 @@ function Add-PathToEnvironmentVariable
         [string]$Target
     )
 
+    Write-Output $Path
     # Validate the target
     $targetEnum = [System.EnvironmentVariableTarget]::Machine
     switch ($Target)
@@ -35,8 +36,10 @@ function Add-PathToEnvironmentVariable
     # Get the current PATH environment variable for the specified target
     $currentPath = [System.Environment]::GetEnvironmentVariable('PATH', $targetEnum)
 
+    $paths = $currentPath.Split(";")
+
     # Check if the specified path is already in the PATH environment variable
-    if (-not $currentPath.Split(';') -contains $Path)
+    if (-not ($Path -in $Paths))
     {
         # Add the path to the PATH environment variable
         $newPath = "$currentPath;$Path"
