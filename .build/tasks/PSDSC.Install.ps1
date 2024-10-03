@@ -2,6 +2,53 @@ param
 (
 )
 
+function Add-PathToEnvironmentVariable
+{
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateSet("Machine", "User", "Process")]
+        [string]$Target
+    )
+
+    # Validate the target
+    $targetEnum = [System.EnvironmentVariableTarget]::Machine
+    switch ($Target)
+    {
+        "Machine"
+        {
+            $targetEnum = [System.EnvironmentVariableTarget]::Machine
+        }
+        "User"
+        {
+            $targetEnum = [System.EnvironmentVariableTarget]::User
+        }
+        "Process"
+        {
+            $targetEnum = [System.EnvironmentVariableTarget]::Process
+        }
+    }
+
+    # Get the current PATH environment variable for the specified target
+    $currentPath = [System.Environment]::GetEnvironmentVariable('PATH', $targetEnum)
+
+    # Check if the specified path is already in the PATH environment variable
+    if (-not $currentPath.Split(';') -contains $Path)
+    {
+        # Add the path to the PATH environment variable
+        $newPath = "$currentPath;$Path"
+        [System.Environment]::SetEnvironmentVariable('PATH', $newPath, $targetEnum)
+        Write-Output "Path added to $Target PATH environment variable."
+    }
+    else
+    {
+        Write-Output "Path already exists in $Target PATH environment variable."
+    }
+}
+
 task PSDSC.Windows.Install {
     Write-Build Yellow "Installing 'dsc.exe' from Github"
 
@@ -43,18 +90,6 @@ task PSDSC.Windows.Install {
     Write-Build Yellow "Expanding archive: $installerPath to $exePath"
     $null = Expand-Archive -LiteralPath $installerPath -DestinationPath $exePath -Force
 
-    # Add $exePath to the PATH environment variable for both machine and process
-    $currentPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::Machine)
-    if (-not $currentPath.Split(';') -contains $exePath)
-    {
-        $newPath = "$currentPath;$exePath"
-        [System.Environment]::SetEnvironmentVariable('PATH', $newPath, [System.EnvironmentVariableTarget]::Machine)
-    }
-
-    $currentProcessPath = [System.Environment]::GetEnvironmentVariable('PATH', [System.EnvironmentVariableTarget]::Process)
-    if (-not $currentProcessPath.Split(';') -contains $exePath)
-    {
-        $newProcessPath = "$currentProcessPath;$exePath"
-        [System.Environment]::SetEnvironmentVariable('PATH', $newProcessPath, [System.EnvironmentVariableTarget]::Process)
-    }
+    Add-PathToEnvironmentVariable -Path $exePath -Target Machine
+    Add-PathToEnvironmentVariable -Path $exePath -Target Process
 }
