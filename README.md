@@ -31,7 +31,7 @@ Install-PSResource -Name PSDSC -TrustRepository -Repository PSGallery
 
 ## Usage examples
 
-The PSDSC module is not difficult to operate, as it hooks directly into `dsc.exe`. While JSON is the primary driver, `dsc.exe` supports JSON and YAML as input. Under the hood, it is always converted to JSON. PSDSC extends more capabilities, by also supporting PowerShell objects based on `hashtable` object and a single `-ResourceInput` parameter. You don't have to worry about if the input is a `.json` file or `@{}` PowerShell input object. PSDSC translates the input to the relevant options.
+The PSDSC module is not difficult to operate, as it hooks directly into `dsc.exe`. While JSON is the primary driver, `dsc.exe` supports JSON and YAML as input. Under the hood, it is always converted to JSON. PSDSC extends more capabilities, by also supporting PowerShell objects based on `hashtable` object and a single `-ResourceInput` parameter. You don't have to worry about if the input is a `.json` file or `@{}` PowerShell input object. PSDSC translates the input to the required options.
 
 PowerShell v7+ is required.
 
@@ -51,7 +51,6 @@ configuration MyConfiguration {
             Value = 'TestValue'
             Ensure = 'Present'
             Path = $true
-            Target = @('Process')
         }
     }
 }
