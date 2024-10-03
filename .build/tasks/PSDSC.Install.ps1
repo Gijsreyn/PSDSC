@@ -95,4 +95,6 @@ task PSDSC.Windows.Install {
 
     Add-PathToEnvironmentVariable -Path $exePath -Target Machine
     Add-PathToEnvironmentVariable -Path $exePath -Target Process
+
+    & dsc --version
 }
