@@ -134,5 +134,5 @@ TaskHeader: |
   "-" * 79
   Write-Build DarkGray "  $Path"
   Write-Build DarkGray "  $($Task.InvocationInfo.ScriptName):$($Task.InvocationInfo.ScriptLineNumber)"
-  if (-not ($env:Path -Split(";") -contains "$env:programFiles\dsc") -and $IsWindows) {$env:Path += (Join-Path -Path $env:ProgramFiles -ChildPath dsc)}
+  if (-not ($env:Path -Split ";" -contains "$env:programFiles\dsc") -and $IsWindows) {$env:Path += (Join-Path -Path $env:ProgramFiles -ChildPath dsc)}
   ""
