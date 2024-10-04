@@ -5,11 +5,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- Allow .ps1 configuration document files to be validated
-- Decreased the amount of calls towards DSC's version
-
 ### Added
 
 - Improved unit testing and code coverage
@@ -19,3 +14,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `ConvertTo-DscJson` and `ConvertTo-DscYaml` command
 - Initial start of `Invoke-PsDscResource`
 - Created installation command
+- Decreased the amount of calls towards DSC's version
+- Allow .ps1 configuration document files to be validated
