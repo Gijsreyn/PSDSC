@@ -18,7 +18,7 @@
 
 .EXAMPLE
     PS C:\> Get-PsDscResourceSchema -ResourceName "Microsoft.WinGet.DSC/WinGetPackage" -IncludeProperty
-    Retrieves the schema for the "Microsoft.WinGet.DSC/WinGetPackage" DSC resource and includes its properties in the output onyl.
+    Retrieves the schema for the "Microsoft.WinGet.DSC/WinGetPackage" DSC resource and includes its properties in the output only.
 
 .NOTES
     For more details, refer to the module documentation.
