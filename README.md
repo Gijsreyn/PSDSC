@@ -1,4 +1,4 @@
-# PSDSC - PowerShell Desired State Configuration Version 3 Module
+# ![PSDSCIcon] PSDSC - PowerShell Desired State Configuration Version 3 Module
 
 This is the repository for the PowerShell Desired State Configuration (DSC) Version 3 Module. You might think, why another PowerShell module for DSC? We already have the [PSDesiredStateConfiguration](https://learn.microsoft.com/nl-nl/powershell/module/psdesiredstateconfiguration/?view=dsc-2.0).
 
@@ -117,7 +117,6 @@ configuration MyConfiguration {
     }
 }
 Invoke-PsDscConfig -Operation Get -ResourceInput MyConfiguration.ps1
-
 ```
 
 To see tab-completion kicking in for resources, check out the following:
@@ -140,3 +139,4 @@ Thank you for considering contributing to our project! All types of contribution
 
 <!-- References -->
 [TabCompletionDscResource]: .images/tab-completion-dsc-resource.gif
+[PSDSCIcon]: .images/psdsc_40px.png
