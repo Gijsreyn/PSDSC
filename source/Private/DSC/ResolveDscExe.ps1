@@ -49,7 +49,29 @@ function ResolveDscExe
         $dscResourceVar = GetEnvironmentVariable -Name 'DSC_RESOURCE_PATH' -Scope $Scope -Expanded
         if ($dscResourceVar.Length -ne 0)
         {
-            $Path = Join-Path -Path $dscResourceVar -ChildPath 'dsc.exe'
+            $dscExePath = Join-Path -Path $dscResourceVar -ChildPath 'dsc.exe'
+
+            if (Test-Path $dscExePath)
+            {
+                Write-Verbose -Message "Returning DSC executable from DSC_RESOURCE_PATH environment variable: $dscExePath."
+                return $dscExePath
+            }
+        }
+
+        $elevated = TestAdministrator
+        $dscExePath = if ($elevated)
+        {
+            Join-Path $env:ProgramFiles 'dsc' 'dsc.exe'
+        }
+        else
+        {
+            Join-Path $env:LOCALAPPDATA 'dsc' 'dsc.exe'
+        }
+
+        if (Test-Path $dscexePath)
+        {
+            Write-Verbose -Message "Returning DSC executable from default installation path: $dscExePath."
+            return $dscExePath
         }
 
         if (TestWinGetModule)
@@ -57,33 +79,41 @@ function ResolveDscExe
             # TODO: life is difficult with WinGet
             $version = (GetDscVersion) -replace "preview.", ""
             $architecture = ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture).ToString().ToLower()
-            $Path = Join-Path $env:ProgramFiles 'WindowsApps' "Microsoft.DesiredStateConfiguration-Preview_3.0.$version.0_$architecture`__8wekyb3d8bbwe" 'dsc.exe'
-        }
+            $dscExePath = Join-Path $env:ProgramFiles 'WindowsApps' "Microsoft.DesiredStateConfiguration-Preview_3.0.$version.0_$architecture`__8wekyb3d8bbwe" 'dsc.exe'
 
-        if (-not $Path -and -not (Test-Path $Path))
-        {
-            # try globally and default installation when elevated
-            $Path = (Get-Command dsc -ErrorAction SilentlyContinue).Source
-
-            if (-not $Path)
+            if (Test-Path $dscExePath)
             {
-                # used for pipeline info
-                $Path = Join-Path -Path $env:ProgramFiles 'DSC' 'dsc.exe'
+                Write-Verbose -Message "Returning DSC executable from WindowsApps: $dscExePath."
+                return $dscExePath
             }
         }
 
-        if ($env:TF_BUILD)
+        $dscExePath = (Get-Command -Name 'dsc.exe' -ErrorAction SilentlyContinue).Source
+        if ($dscExePath)
         {
-            return (Join-Path -Path $env:ProgramFiles 'dsc' 'dsc.exe')
+            Write-Verbose -Message "Returning DSC executable from PATH: $dscExePath."
+            return $dscExePath
         }
-
-        if (-not (Test-Path $Path -ErrorAction SilentlyContinue))
+        else
         {
             Throw "Could not locate 'dsc.exe'. Please make sure it can be found through the PATH or DSC_RESOURCE_PATH environment variable."
         }
-
-        return $Path
     }
+    elseif ($IsLinux)
+    {
+        $dscExePath = (Get-Command -Name 'dsc.exe' -ErrorAction SilentlyContinue).Source
+        if ($dscExePath)
+        {
+            Write-Verbose -Message "Returning DSC executable from PATH: $dscExePath."
+            return $dscExePath
+        }
+        else
+        {
+            Throw "Could not locate 'dsc.exe'. Please make sure it can be found through the PATH or DSC_RESOURCE_PATH environment variable."
+        }
+    }
+    elseif ($IsMacOs)
+    {
 
-    # TODO: Resolve other paths on Mac/Linux
+    }
 }

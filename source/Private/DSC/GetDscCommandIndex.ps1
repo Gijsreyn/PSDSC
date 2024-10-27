@@ -44,52 +44,52 @@ function GetDscCommandIndex
     # TODO: can add without version later
     $cmdData = @{
         'GetDscResourceCommand'    = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('resource', 'get')
             }
         }
         'SetDscResourceCommand'    = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('resource', 'set')
             }
         }
         'TestDscResourceCommand'   = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('resource', 'test')
             }
         }
         'RemoveDscResourceCommand' = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('resource', 'delete')
             }
         }
         'ExportDscResourceCommand' = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('resource', 'export')
             }
         }
         'FindDscResourceCommand'   = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('resource', 'list')
             }
         }
         'GetDscConfigCommand'      = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('config', 'get')
             }
         }
         'SetDscConfigCommand'      = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('config', 'set')
             }
         }
         'TestDscConfigCommand'     = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('config', 'test')
             }
         }
         'RemoveDscConfigCommand'   = @{
-            'preview.10' = @{
+            'preview.11' = @{
                 SubCommand = @('config', 'delete')
             }
         }
