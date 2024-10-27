@@ -1,10 +1,10 @@
 # ![PSDSCLogo] PSDSC - PowerShell Desired State Configuration Version 3 Module
 
-This is the repository for the PowerShell Desired State Configuration (DSC) Version 3 Module. You might think, why another PowerShell module for DSC? We already have the [PSDesiredStateConfiguration](https://learn.microsoft.com/nl-nl/powershell/module/psdesiredstateconfiguration/?view=dsc-2.0).
+This is the repository for the PowerShell Desired State Configuration (DSC) Version 3 Module. There are plenty of community modules availabe, but there is something special about DSC V3.
 
-DSC version 3 is no longer only PowerShell. Instead, the engine is written in Rust. Building the project from GitHub, produces a command-line utility (CLI): `dsc.exe`. This community project was created to enable the same features the CLI provides, only using PowerShell as the tool for invoking `dsc.exe`.
+That's because DSC version 3 is doesn't rely on PowerShell anymore. The `PSDesiredStateConfiguration` module is not the driver of the engine anymore. The project is open-sourced and written in Rust. Building the project from GitHub, produces a command-line utility (CLI): `dsc.exe`. This community project was created to enable the same features the CLI provides, only using PowerShell. PowerShell invokes `dsc.exe` using the .NET object `System.Diagnostics.Process`.
 
-PowerShell also adds features and helps you familiarize yourself with the cmdlets wrapped around the _commands_ under the hood. While following the approved verbs and following the creation of recognizable PowerShell commands, you should be able to see everything using the common parameters, for example `-Debug` or `-Verbose` parameter.
+PowerShell also adds features and helps you familiarize yourself with the cmdlets wrapped around the _command options_ under the hood. Each command in the module follows the approved verbs. This allows for recognizable commands towards `dsc.exe` without hiding the unnecessary. You should be able to see what is sent towards the engine using common parameters. For example, turn on `-Verbose` or `Debug` parameter on each command to see these type of messages.
 
 The current list of commands implemented in the module:
 
@@ -27,7 +27,7 @@ Install-PSResource -Name PSDSC -TrustRepository -Repository PSGallery
 ```
 
 > [!NOTE]
-> `Microsoft.PowerShell.PSResourceGet` is included since PowerShell 7.4 Preview 5. If you get _The term 'Install-PSResource' is not recognized as the name of a cmdlet, function, script file, or operable program error message, please update your PowerShell version to the latest version.
+> `Microsoft.PowerShell.PSResourceGet` should be shipped in higher version of PowerShell 7.2+. If you get _The term 'Install-PSResource' is not recognized as the name of a cmdlet, function, script file, or operable program error message_, update PowerShell to the latest version.
 
 ## Usage examples
 
