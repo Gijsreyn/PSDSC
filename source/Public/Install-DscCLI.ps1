@@ -224,7 +224,37 @@ function Install-DscCLI
         # Add to path
         $env:PATH += [System.IO.Path]::PathSeparator + "/usr/bin/dsc"
 
-        # Call version
-        dsc --version
+        return $true
+    }
+    elseif ($IsMacOS)
+    {
+        if ($UseVersion)
+        {
+            $filePath = '/tmp/DSC-' + $Version + '-x86_64-apple-darwin.tar.gz'
+            $uri = "https://github.com/PowerShell/DSC/releases/download/v$Version/DSC-$Version-x86_64-apple-darwin.tar.gz"
+        }
+        else
+        {
+            $filePath = '/tmp/DSC-3.0.0-x86_64-apple-darwin.tar.gz'
+            $fileName = 'DSC-3.0.0-*-x86_64-apple-darwin.tar.gz'
+            $uri = ($releases.assets | Where-Object -Property Name -Like $fileName).browser_download_url
+        }
+
+        curl -L -o $filePath $uri
+        # Create the target folder where powershell will be placed
+        sudo mkdir -p /usr/local/microsoft/dsc
+
+        # Expand powershell to the target folder
+        sudo tar zxf $filePath -C /usr/local/microsoft/dsc
+
+        # Set execute permissions
+        sudo chmod +x /usr/local/microsoft/dsc
+
+        # Create the symbolic link that points to pwsh
+        sudo ln -s /usr/local/microsoft/dsc /usr/bin/dsc
+
+        Get-ChildItem -Path /usr/local/microsoft/dsc -Recurse
+        # Add to path
+        $env:PATH += [System.IO.Path]::PathSeparator + "/usr/local/microsoft/dsc"
     }
 }

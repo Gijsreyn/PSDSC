@@ -94,26 +94,41 @@ function ResolveDscExe
             Write-Verbose -Message "Returning DSC executable from PATH: $dscExePath."
             return $dscExePath
         }
-        else
-        {
-            Throw "Could not locate 'dsc.exe'. Please make sure it can be found through the PATH or DSC_RESOURCE_PATH environment variable."
-        }
     }
     elseif ($IsLinux)
     {
-        $dscExePath = (Get-Command -Name 'dsc.exe' -ErrorAction SilentlyContinue).Source
+        $dscExePath = Join-Path '/opt/' 'microsoft' 'dsc' 'dsc'
+        if (Test-Path $dscExePath)
+        {
+            Write-Verbose -Message "Returning DSC executable from default installation path: $dscExePath."
+            return $dscExePath
+        }
+
+        $dscExePath = (Get-Command -Name 'dsc' -ErrorAction SilentlyContinue).Source
         if ($dscExePath)
         {
             Write-Verbose -Message "Returning DSC executable from PATH: $dscExePath."
             return $dscExePath
         }
-        else
-        {
-            Throw "Could not locate 'dsc.exe'. Please make sure it can be found through the PATH or DSC_RESOURCE_PATH environment variable."
-        }
     }
     elseif ($IsMacOs)
     {
+        $dscExePath = Join-Path '/usr/' 'local' 'microsoft' 'dsc' 'dsc'
+        if (Test-Path $dscExePath)
+        {
+            Write-Verbose -Message "Returning DSC executable from default installation path: $dscExePath."
+            return $dscExePath
+        }
 
+        $dscExePath = (Get-Command -Name 'dsc' -ErrorAction SilentlyContinue).Source
+        if ($dscExePath)
+        {
+            Write-Verbose -Message "Returning DSC executable from PATH: $dscExePath."
+            return $dscExePath
+        }
+    }
+    else
+    {
+        Throw "Could not locate 'dsc.exe'. Please make sure it can be found through the PATH or DSC_RESOURCE_PATH environment variable."
     }
 }

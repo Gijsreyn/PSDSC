@@ -5,6 +5,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2024-27-10
+
+- Bug fix when installing MacOS on agents
+
+## [1.0.3] - 2024-27-10
+
+### Added
+
+- MacOS support when installing `dsc.exe`
+
+## [1.0.2] - 2024-27-10
+
+### Fixed 
+
+- Additional path added for Linux
+
 ### Fixed 
 
 - Added Linux and UseGitHub option when installing `dsc.exe`
