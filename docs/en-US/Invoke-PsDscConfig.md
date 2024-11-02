@@ -54,6 +54,27 @@ PS C:\\\> Invoke-PsDscConfig -ResourceInput 'winget.powershell.dsc.config.ps1' -
 
 ## PARAMETERS
 
+### -ResourceInput
+The resource input to provide.
+Supports:
+
+- JSON (string and path)
+- YAML (string and path)
+- PowerShell hash table
+- PowerShell configuration document script (.ps1)
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Operation
 The operation capability to execute e.g.
 'Set'.
@@ -85,37 +106,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
-Type: ActionPreference
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: proga
+Aliases: wi
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourceInput
-The resource input to provide.
-Supports:
-
-- JSON (string and path)
-- YAML (string and path)
-- PowerShell hash table
-- PowerShell configuration document script (.ps1)
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -136,14 +137,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+### -ProgressAction
+{{ Fill ProgressAction Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: ActionPreference
 Parameter Sets: (All)
-Aliases: wi
+Aliases: proga
 
 Required: False
 Position: Named

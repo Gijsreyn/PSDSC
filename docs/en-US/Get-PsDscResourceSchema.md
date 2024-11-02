@@ -38,6 +38,21 @@ Retrieves the schema for the "Microsoft.WinGet.DSC/WinGetPackage" DSC resource a
 
 ## PARAMETERS
 
+### -ResourceName
+The name of the DSC resource for which to retrieve the schema.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: Name
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -IncludeProperty
 A switch parameter that, when specified, includes the properties of the DSC resource in the output.
 
@@ -63,21 +78,6 @@ Aliases: proga
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourceName
-The name of the DSC resource for which to retrieve the schema.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: Name
-
-Required: True
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

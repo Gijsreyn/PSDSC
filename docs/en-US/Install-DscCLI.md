@@ -14,7 +14,8 @@ Install DSC CLI (Windows only).
 ## SYNTAX
 
 ```
-Install-DscCLI [-Force] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Install-DscCLI [[-Version] <String>] [-UseWinGet] [-UseGitHub] [-Force] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -37,6 +38,51 @@ Install-DscCli -Force
 Install DSC and forces the installed if there is already a version installed.
 
 ## PARAMETERS
+
+### -Version
+The version of DSC to install.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseWinGet
+Use the Windows Package Manager to install DSC.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseGitHub
+Use GitHub to install DSC.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Force
 This switch will force DSC to be installed, even if another installation is already in place.

@@ -1,44 +1,48 @@
 ---
 external help file: PSDSC-help.xml
-GeneratedBy: Sampler update_help_source task
 Module Name: PSDSC
 online version:
 schema: 2.0.0
 ---
 
-# Invoke-PsDscResource
+# Initialize-PsDscConfigurationResource
 
 ## SYNOPSIS
-Invoke DSC version 3 resource using the command-line utility
+Initializes a DSC Configuration Resource.
 
 ## SYNTAX
 
 ```
-Invoke-PsDscResource [-ResourceName] <String> [[-Operation] <String>] [[-ResourceInput] <Object>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Initialize-PsDscConfigurationResource [-ResourceName] <String> [-ResourceType] <String>
+ [[-ResourceInput] <Object>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The function Invoke-PsDscResource invokes Desired State Configuration version 3 resources calling the executable.
+The Initialize-PsDscConfigurationResource function initializes a Desired State Configuration (DSC) resource with the specified name, type, and optional input parameters.
+It creates an instance of the ConfigurationResource class and sets its properties based on the provided parameters.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-PsDscResource -ResourceName Microsoft.Windows/RebootPending -Operation Get
+Initialize-PsDscConfigurationResource -ResourceName 'Registry keys' -ResourceType 'Microsoft.Windows/Registry' -ResourceInput @{'keyPath' = 'HKCU\1'}
 ```
 
-Execute Microsoft.Windows/RebootPending resource on Windows system to check if there is a pending reboot
+Returns:
+name          type                       properties
+----          ----                       ----------
+Registry keys Microsoft.Windows/Registry {\[type, Microsoft.Windows/Registry\]
 
 ## PARAMETERS
 
 ### -ResourceName
-The resource name to execute.
+Specifies the name of the DSC resource.
+This parameter is mandatory.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: Name
+Aliases:
 
 Required: True
 Position: 1
@@ -47,16 +51,16 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Operation
-The operation capability to execute e.g.
-'Set'.
+### -ResourceType
+Specifies the type of the DSC resource.
+This parameter is mandatory and supports argument completer for DSC configuration.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 2
 Default value: None
 Accept pipeline input: False
@@ -64,8 +68,8 @@ Accept wildcard characters: False
 ```
 
 ### -ResourceInput
-The resource input to provide.
-Supports JSON, YAML path and PowerShell hash table.
+Specifies the input parameters for the DSC resource.
+This parameter is optional and allows null values.
 
 ```yaml
 Type: Object
@@ -74,37 +78,6 @@ Aliases:
 
 Required: False
 Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -132,6 +105,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### ConfigurationResource
 ## NOTES
 For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
 

@@ -2,109 +2,82 @@ function Initialize-PsDscConfigDocument
 {
     <#
     .SYNOPSIS
-        Initialize a DSC configuration document.
+        Initializes a PowerShell DSC Configuration Document.
 
     .DESCRIPTION
-        The function Initialize-PsDscConfigDocument initializes a DSC configuration document. It can pick up 'resource' and 'adapter' from PowerShell or Windows PowerShell.
+    The Initialize-PsDscConfigDocument function initializes a PowerShell Desired State Configuration (DSC) Configuration Document based on the specified schema version and resources.
+    The output can be in JSON or YAML format.
 
-    .PARAMETER ResourceName
-        The resource name to execute.
+    .PARAMETER SchemaVersion
+        Specifies the schema version to use for the configuration document. Valid values are '2024/04' and '2023/10'.
 
-    .PARAMETER ResourceInput
-        The resource input to provide. Supports PowerShell hash table.
+    .PARAMETER Resource
+        Specifies the configuration resources to include in the configuration document. This parameter is mandatory.
 
-    .PARAMETER ResourceDescription
-        The resource description to provide.
+    .PARAMETER AsJson
+        Specifies that the output should be in JSON format. This parameter is optional.
 
-    .PARAMETER IsPwsh
-        Switch to indicate if the resource is using PowerShell. Adds 'Microsoft.DSC/PowerShell' type.
-
-    .PARAMETER IsWindowsPowerShell
-        Switch to indicate if the resource is using Windows PowerShell. Adds 'Microsoft.Windows/WindowsPowerShell' type.
+    .PARAMETER AsYaml
+        Specifies that the output should be in YAML format. This parameter is optional.
 
     .EXAMPLE
-        PS C:\> Initialize-PsDscConfigDocument -ResourceName 'Microsoft.Windows/Registry' -ResourceInput @{'keyPath' = 'HKCU\1'} -ResourceDescription 'Registry'
+        PS C:\> $resources = @(
+            Initialize-PsDscConfigurationResource -ResourceName 'Registry keys' -ResourceType 'Microsoft.Windows/Registry' -ResourceInput @{'keyPath' = 'HKCU\1'}
+        )
+        PS C:\> Initialize-PsDscConfigDocument -SchemaVersion '2024/04' -Resource $resources
 
-        Returns:
-        {"$schema":"https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json","resources":[{"name":"Registry","type":"Microsoft.Windows/Registry","properties":"@{keyPath=HKCU\\1}"}]}
+        This command initializes a DSC Configuration Document using the schema version '2024/04' and the specified resources. The output returns a [ConfigurationDocument] object.
 
     .EXAMPLE
-        PS C:\> Init-PsDscConfigDocument -ResourceName Microsoft.WinGet.DSC/WinGetPackage -IsPwsh -ResourceInput @{ Id = 'Microsoft.PowerShell.Preview'} -ResourceDescription 'WinGetPackage'
+        PS C:\> $resource = Init-PsDscConfigResource -ResourceName 'WinGetPackage' -ResourceType Microsoft.WinGet.DSC/WinGetPackage -ResourceInput @{'Id' = 'Microsoft.PowerShell.Preview'}
+        PS C:\> Initialize-PsDscConfigDocument -SchemaVersion '2023/10' -Resource $resource -AsJson
 
-        Returns:
-        {"$schema":"https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json","resources":[{"name":"Using Pwsh","type":"Microsoft.DSC/PowerShell","properties":"@{resources=}"}]}
-
-    .OUTPUTS
-        System.String
+        This command initializes a DSC Configuration Document using the schema version '2023/10' and the specified resources, and outputs the document in JSON format.
 
     .NOTES
         For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
     #>
     [CmdletBinding()]
-    [Alias('Init-PsDscConfigDocument')]
-    [OutputType([System.String])]
+    [Alias('Init-PsDscConfigDoc')]
+    [OutputType([ConfigurationDocument])]
     param
     (
         [Parameter(Mandatory = $true)]
-        [ArgumentCompleter([DscConfigCompleter])]
-        [string]$ResourceName,
+        [ValidateSet('2024/04', '2023/10')]
+        [string]
+        $SchemaVersion,
 
-        [Parameter(Mandatory = $false)]
-        [ArgumentCompleter([DscConfigInputCompleter])]
-        [AllowNull()]
-        [hashtable]$ResourceInput,
-
-        [Parameter(Mandatory = $false)]
-        [string]$ResourceDescription,
+        [Parameter(Mandatory = $true)]
+        [ConfigurationResource[]]
+        $Resource,
 
         [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter]
-        $IsPwsh,
+        $AsJson,
 
         [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter]
-        $IsWindowsPowerShell
-
+        $AsYaml
     )
 
-    if ([string]::IsNullOrEmpty($ResourceDescription))
+    $uri = ("https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/{0}/config/document.json" -f $SchemaVersion)
+
+    $configurationDocument = [ConfigurationDocument]::new($uri, $Resource)
+
+    if ($PSBoundParameters.ContainsKey('Metadata'))
     {
-        $ResourceDescription = $ResourceName
+        $configurationDocument.metadata = $Metadata
     }
 
-    $resources = [ordered]@{
-        name       = $ResourceDescription
-        type       = $ResourceName
-        properties = $ResourceInput
-    }
-
-    if ($IsPwsh.IsPresent)
+    if ($AsJson.IsPresent)
     {
-        $resources = [ordered]@{
-            name       = 'Using Pwsh'
-            type       = 'Microsoft.DSC/PowerShell'
-            properties = [ordered]@{
-                resources = $resources
-            }
-        }
+        return $configurationDocument.SerializeToJson()
     }
 
-    if ($IsWindowsPowerShell.IsPresent)
+    if ($AsYaml.IsPresent)
     {
-        $resources = [ordered]@{
-            name       = 'Using Pwsh'
-            type       = 'Microsoft.Windows/WindowsPowerShell'
-            properties = [ordered]@{
-                resources = $resources
-            }
-        }
+        return $configurationDocument.SerializeToYaml()
     }
 
-    $configDocument = [ordered]@{
-        '$schema' = 'https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json'
-        resources = @($resources)
-
-    }
-
-    return $configDocument | ConvertTo-Json -Depth 10
+    return $configurationDocument
 }

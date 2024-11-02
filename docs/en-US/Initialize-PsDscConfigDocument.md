@@ -14,9 +14,8 @@ Initialize a DSC configuration document.
 ## SYNTAX
 
 ```
-Initialize-PsDscConfigDocument [-ResourceName] <String> [[-ResourceInput] <Hashtable>]
- [[-ResourceDescription] <String>] [-IsPwsh] [-IsWindowsPowerShell] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Initialize-PsDscConfigDocument [-SchemaVersion] <String> [-Resource] <ConfigurationResource[]> [-AsJson]
+ [-AsYaml] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,9 +42,38 @@ Returns:
 
 ## PARAMETERS
 
-### -IsPwsh
-Switch to indicate if the resource is using PowerShell.
-Adds 'Microsoft.DSC/PowerShell' type.
+### -SchemaVersion
+Specifies the schema version to use for the configuration document. Valid values are '2024/04' and '2023/10'.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Resource
+Specifies the configuration resources to include in the configuration document. This parameter is mandatory.
+
+```yaml
+Type: ConfigurationResource[]
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AsJson
+Specifies that the output should be in JSON format. This parameter is optional.
 
 ```yaml
 Type: SwitchParameter
@@ -59,9 +87,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IsWindowsPowerShell
-Switch to indicate if the resource is using Windows PowerShell.
-Adds 'Microsoft.Windows/WindowsPowerShell' type.
+### -AsYaml
+Specifies that the output should be in YAML format. This parameter is optional.
 
 ```yaml
 Type: SwitchParameter
@@ -85,52 +112,6 @@ Aliases: proga
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourceDescription
-The resource description to provide.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourceInput
-The resource input to provide.
-Supports PowerShell hash table.
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourceName
-The resource name to execute.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

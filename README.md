@@ -93,7 +93,8 @@ New-PsDscVsCodeSettingsFile # adds to settings.json file:
 #   ]
 
 # using short alias to build a DSC v3 configuration document and execute it
-$doc = Init-PsDscConfigDocument -ResourceName Microsoft.Windows/Registry -ResourceInput @{'keyPath' = 'HKCU\User'}
+$resource = Initialize-PsDscConfigurationResource -ResourceName 'Registry' -ResourceType Microsoft.Windows/Registry -ResourceInput @{'keyPath' = 'HKCU\1'}
+$doc = Initialize-PsDscConfigDocument -SchemaVersion '2024/04' -Resource $resource -AsJson
 
 $p = @{
     Operation = 'Get'

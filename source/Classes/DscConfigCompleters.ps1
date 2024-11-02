@@ -45,10 +45,10 @@ class DscConfigInputCompleter : System.Management.Automation.IArgumentCompleter
         [Collections.IDictionary] $fakeBoundParameters
     )
     {
-        if ($fakeBoundParameters.ContainsKey('ResourceName'))
+        if ($fakeBoundParameters.ContainsKey('ResourceName') -or $fakeBoundParameters.ContainsKey('ResourceType'))
         {
             [array]$Resources = GetDscRequiredKey -BuildHashTable | Where-Object {
-                $_.type -eq $fakeBoundParameters.ResourceName
+                $_.type -eq $fakeBoundParameters.ResourceName -or $_.type -eq $fakeBoundParameters.ResourceType
             } | Select-Object -ExpandProperty resourceInput -Unique | Sort-Object
         }
         else

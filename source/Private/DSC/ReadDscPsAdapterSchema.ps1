@@ -14,6 +14,9 @@ function ReadDscPsAdapterSchema
     .PARAMETER BuildHashTable
         A switch parameter to indicate if the output should be a hashtable.
 
+    .PARAMETER IsPwsh
+        A switch parameter to determine if the current value from Windows PowerShell or PowerShell cache should be retrieved.
+
     .EXAMPLE
         PS C:\> ReadDscAdapterSchema
 
@@ -33,7 +36,11 @@ function ReadDscPsAdapterSchema
 
         [Parameter(Mandatory = $false)]
         [System.Management.Automation.SwitchParameter]
-        $BuildHashTable
+        $BuildHashTable,
+
+        [Parameter(Mandatory = $false)]
+        [System.Management.Automation.SwitchParameter]
+        $IsPwsh
     )
 
     begin
@@ -43,7 +50,7 @@ function ReadDscPsAdapterSchema
 
     process
     {
-        $cacheFilePath = if ($IsWindows)
+        $cacheFilePath = if ($IsWindows -or $IsPwsh.IsPresent)
         {
             # PS 6+ on Windows
             Join-Path -Path $env:LocalAppData "dsc\PSAdapterCache.json"
@@ -51,7 +58,7 @@ function ReadDscPsAdapterSchema
         else
         {
             # either WinPS or PS 6+ on Linux/Mac
-            if ($PSVersionTable.PSVersion.Major -le 5)
+            if ($PSVersionTable.PSVersion.Major -le 5 -or -not $IsPwsh.IsPresent)
             {
                 Join-Path -Path $env:LocalAppData "dsc\WindowsPSAdapterCache.json"
             }
