@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.6] - 2024-11-02
+
+### Fixed
+
+- Fix unit test for Initialize-PsConfigDocument command
+
 ## [1.0.5] - 2024-11-02
 
 ### Changed

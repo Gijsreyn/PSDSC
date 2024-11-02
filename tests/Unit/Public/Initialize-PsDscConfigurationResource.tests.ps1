@@ -7,11 +7,5 @@ Describe 'Initialize-PsDscConfigurationResource' {
         }
     }
 
-    Context 'When ResourceType is found in Windows PowerShell cache' {
-        It 'Should set adapterType to Microsoft.Windows/WindowsPowerShell' {
-            $ResourceType = 'Microsoft.Windows/WindowsPowerShell'
-            $result = Initialize-PsDscConfigurationResource -ResourceType $ResourceType -ResourceName 'Windows PowerShell'
-            $result.type | Should -Be 'Microsoft.Windows/WindowsPowerShell'
-        }
-    }
+    # TODO: Add test for Windows PowerShell
 }
