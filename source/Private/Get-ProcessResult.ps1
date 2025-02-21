@@ -1,27 +1,7 @@
-function StartNetProcessObject
+function Get-ProcessResult
 {
-    <#
-    .SYNOPSIS
-        Start process using .NET.
-
-    .DESCRIPTION
-        The function StartNetProcessObject starts a process using .NET instead of Start-Process cmdlet.
-
-    .PARAMETER Process
-        The process object to start.
-
-    .EXAMPLE
-        PS C:\> $Process = [System.Diagnostics.Process]::new()
-        PS C:\> $ProcStartinfo = [System.Diagnostics.ProcessStartInfo]::new('dsc.exe', '--version')
-        PS C:\> $Process.StartInfo = $ProcStartInfo
-        PS C:\> StartNetProcessObject -Process $Process
-
-        Runs dsc --version
-
-    .NOTES
-        For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
-    #>
     [CmdletBinding()]
+    [OutputType([PSCustomObject])]
     param
     (
         [Parameter(Mandatory = $false)]
@@ -32,6 +12,8 @@ function StartNetProcessObject
 
     Write-Verbose -Message "Starting '$($Process.StartInfo.FileName)' with arguments '$($Process.StartInfo.Arguments)'"
 
+    Write-Debug -Message "Process starting..."
+    $startTime = Get-Date
     [void]$Process.Start()
 
     # Create a list to store the output
@@ -53,6 +35,9 @@ function StartNetProcessObject
     }
 
     $Process.WaitForExit()
+    $endTime = Get-Date
+    $elapsedTime = $endTime - $startTime
+    Write-Debug -Message "Process has exited. Elapsed time: $($elapsedTime.TotalSeconds) seconds."
 
     return [PSCustomObject]@{
         Executable = $Process.StartInfo.FileName
