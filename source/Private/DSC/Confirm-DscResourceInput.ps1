@@ -31,5 +31,7 @@ function Confirm-DscResourceInput
         $ResourceInput += " --input $Inputs"
     }
 
+    Write-Debug -Message "The resource input is: $ResourceInput"
+
     return $ResourceInput
 }
