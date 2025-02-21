@@ -1,6 +1,6 @@
-function Set-PsDscResource
+function Remove-PsDscResource
 {
-    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
+    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'High')]
     [OutputType([PSCustomObject])]
     param
     (
@@ -19,11 +19,11 @@ function Set-PsDscResource
 
     $resourceInput = Resolve-DscResourceInput -Inputs $Inputs
 
-    $processArgument = Confirm-DscResourceInput -Resource $Resource -Inputs $resourceInput -Operation 'set'
+    $processArgument = Confirm-DscResourceInput -Resource $Resource -Inputs $resourceInput -Operation 'delete'
 
     $Process = Get-ProcessObject -Argument $processArgument
 
-    if ($PSCmdlet.ShouldProcess("'$Resource' with '$resourceInput'" , "Set"))
+    if ($PSCmdlet.ShouldProcess("'$Resource' with '$resourceInput'" , "Remove"))
     {
         $result = Get-ProcessResult -Process $Process
     }

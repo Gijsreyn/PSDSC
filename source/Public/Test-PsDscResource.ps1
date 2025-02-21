@@ -1,6 +1,6 @@
-function Set-PsDscResource
+function Test-PsDscResource
 {
-    [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
+    [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param
     (
@@ -19,14 +19,11 @@ function Set-PsDscResource
 
     $resourceInput = Resolve-DscResourceInput -Inputs $Inputs
 
-    $processArgument = Confirm-DscResourceInput -Resource $Resource -Inputs $resourceInput -Operation 'set'
+    $processArgument = Confirm-DscResourceInput -Resource $Resource -Inputs $resourceInput -Operation 'test'
 
     $Process = Get-ProcessObject -Argument $processArgument
 
-    if ($PSCmdlet.ShouldProcess("'$Resource' with '$resourceInput'" , "Set"))
-    {
-        $result = Get-ProcessResult -Process $Process
-    }
+    $result = Get-ProcessResult -Process $Process
 
     return $result
 }

@@ -14,7 +14,7 @@ function Confirm-DscResourceInput
         $Inputs,
 
         [Parameter(Mandatory = $true)]
-        [ValidateSet('get', 'set', 'test')]
+        [ValidateSet('get', 'set', 'test', 'delete')]
         [System.String]
         $Operation
 

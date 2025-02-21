@@ -5,7 +5,7 @@ function Get-PsDscResource
     param
     (
         [Parameter(Mandatory = $true)]
-        [Alias('Name')]
+        [Alias('ResourceName')]
         [ArgumentCompleter([DscResourceCompleter])]
         [System.String]
         $Resource,
