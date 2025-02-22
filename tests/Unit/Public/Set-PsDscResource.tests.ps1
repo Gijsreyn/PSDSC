@@ -40,7 +40,7 @@ Describe 'Set-PsDscResource' -Tag 'Public' {
 
         }
 
-        It 'Set the specified PsDsc resource' {
+        It 'Sets the specified PsDsc resource' {
             $result = Set-PsDscResource -Resource 'test/Resource' -Inputs @{test = 'abc' } -Confirm:$false
             $result | Should -Not -BeNullOrEmpty
 

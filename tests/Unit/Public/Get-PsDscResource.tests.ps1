@@ -40,7 +40,7 @@ Describe 'Get-PsDscResource' -Tag 'Public' {
 
         }
 
-        It 'Retrieves the specified PsDsc resource' {
+        It 'Gets the specified PsDsc resource' {
             $result = Get-PsDscResource -Resource 'test/Resource' -Inputs @{test = 'abc' }
             $result | Should -Not -BeNullOrEmpty
 

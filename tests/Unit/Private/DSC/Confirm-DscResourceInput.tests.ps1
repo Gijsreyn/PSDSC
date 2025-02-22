@@ -23,7 +23,7 @@ AfterAll {
 }
 
 Describe 'Confirm-DscResourceInput' -Tag Private {
-    Context 'When Inputs is a file path' {
+    Context 'When inputs is a file path' {
         BeforeAll {
             Mock -CommandName 'Test-Path' -MockWith { $true }
         }
@@ -36,7 +36,7 @@ Describe 'Confirm-DscResourceInput' -Tag Private {
         }
     }
 
-    Context 'When Inputs is not a file path' -Tag Private {
+    Context 'When inputs is not a file path' -Tag Private {
         BeforeAll {
             Mock -CommandName 'Test-Path' -MockWith { $false }
         }

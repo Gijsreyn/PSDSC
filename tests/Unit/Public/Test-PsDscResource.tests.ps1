@@ -40,7 +40,7 @@ Describe 'Test-PsDscResource' -Tag 'Public' {
 
         }
 
-        It 'Test the specified PsDsc resource' {
+        It 'Tests the specified PsDsc resource' {
             $result = Test-PsDscResource -Resource 'test/Resource' -Inputs @{test = 'abc' }
             $result | Should -Not -BeNullOrEmpty
 
