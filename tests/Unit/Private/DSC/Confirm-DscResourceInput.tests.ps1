@@ -1,4 +1,3 @@
-# filepath: /c:/Source/PSDSC/tests/Unit/Private/Confirm-DscResourceInput.tests.ps1
 BeforeAll {
     $script:moduleName = 'PSDSC'
 

@@ -8,7 +8,7 @@ class DscResourceCompleter : System.Management.Automation.IArgumentCompleter
         [Collections.IDictionary] $fakeBoundParameters
     )
     {
-        $exe = ResolveDscExe -ErrorAction SilentlyContinue
+        $exe = Resolve-DscExe -ErrorAction SilentlyContinue
 
         $list = [System.Collections.Generic.List[System.Management.Automation.CompletionResult]]::new()
 
@@ -29,8 +29,8 @@ class DscResourceCompleter : System.Management.Automation.IArgumentCompleter
             }
 
             # section to include PSTypes data
-            $psTypes = ReadDscPsAdapterSchema -ReturnTypeInfo
-            $psTypes | ForEach-Object { $list.Add($_) }
+            # $psTypes = ReadDscPsAdapterSchema -ReturnTypeInfo
+            # $psTypes | ForEach-Object { $list.Add($_) }
             return $list
         }
         else
