@@ -1,5 +1,23 @@
 function Get-ProcessResult
 {
+    <#
+    .SYNOPSIS
+        Get the result of a process.
+
+    .DESCRIPTION
+        The function Get-ProcessResult gets the result of a process.
+
+    .PARAMETER Process
+        The process to get the result from.
+
+    .EXAMPLE
+        PS C:\> Get-ProcessResult -Process (Get-ProcessObject -Argument 'resource get --resource Microsoft.Windows/Registry')
+
+        This example gets the result of the process created by Get-ProcessObject.
+
+    .NOTES
+        For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
+    #>
     [CmdletBinding()]
     [OutputType([PSCustomObject])]
     param

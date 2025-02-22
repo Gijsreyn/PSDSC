@@ -1,5 +1,28 @@
 function Resolve-DscResourceInput
 {
+    <#
+    .SYNOPSIS
+        Resolve the input to a JSON string.
+
+    .DESCRIPTION
+        The function Resolve-DscResourceInput resolves the input to a JSON string. The input can be a hashtable, JSON, YAML, or a file path (both JSON and YAML).
+
+    .PARAMETER Inputs
+        The input to provide. Supports a hashtable of key-value pairs, JSON, YAML, or a file path (both JSON and YAML).
+
+    .EXAMPLE
+        PS C:\> Resolve-DscResourceInput -Inputs @{ keyPath = 'HKCU\1\2' }
+
+        This example resolves the hashtable input to a JSON string.
+
+    .EXAMPLE
+        PS C:\> Resolve-DscResourceInput -Inputs 'registry.json'
+
+        This example resolves the JSON input to a JSON string.
+
+    .NOTES
+        For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
+    #>
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
