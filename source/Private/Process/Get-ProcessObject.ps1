@@ -33,7 +33,7 @@ function Get-ProcessObject
         [Parameter(Mandatory = $false)]
         [AllowNull()]
         [System.String]
-        $DscExe = (ResolveDscExe)
+        $DscExe = (Resolve-DscExe)
     )
 
     $process = [System.Diagnostics.Process]::new()

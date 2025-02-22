@@ -71,5 +71,5 @@ function Resolve-DscResourceInput
 
     Write-Debug -Message "The resolved input is:"
     Write-Debug -Message $json
-    return $json
+    return ($json -replace "`r`n", "")
 }

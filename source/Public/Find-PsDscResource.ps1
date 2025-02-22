@@ -13,10 +13,10 @@ function Find-PsDscResource
         The adapter name is optional.
 
     .PARAMETER Description
-        The description to filter on.
+        The description to filter on. The description is optional.
 
     .PARAMETER Tag
-        The tag to filter on.
+        The tag to filter on. The tag is optional.
 
     .EXAMPLE
         PS C:\> Find-PsDscResource -Adapter 'Microsoft.Windows/WindowsPowerShell' -Description 'This is a test description' -Tag 'Test'
