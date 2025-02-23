@@ -8,6 +8,9 @@ BeforeAll {
 
     Import-Module -Name $script:moduleName -Force -ErrorAction 'Stop'
 
+    $helperModule = Join-Path $PSScriptRoot -ChildPath '../../testHelper.psm1'
+    Import-Module -Name $helperModule -Force -ErrorAction 'Stop'
+
     $PSDefaultParameterValues['InModuleScope:ModuleName'] = $script:moduleName
     $PSDefaultParameterValues['Mock:ModuleName'] = $script:moduleName
     $PSDefaultParameterValues['Should:ModuleName'] = $script:moduleName
@@ -21,14 +24,14 @@ AfterAll {
     Remove-Module -Name $script:moduleName -Force
 }
 
+
 Describe 'DscResourceInputCompleter' -Tag Private {
+    # Expect dsc to be available to get argument completions
+    $valid = [bool](Get-Command 'dsc' -ErrorAction SilentlyContinue)
+
     Context "When ResourceName is not in fakeBoundParameters" {
-        It "Should return an empty list" {
-            InModuleScope -ScriptBlock {
-                Get-Command 'Get-PsDscResource' | Should -HaveParameter Resource -HasArgumentCompleter
-                # $completer = [DscResourceInputCompleter]::new()
-                # $completer | Should -Not -BeNullOrEmpty
-            }
+        It "Should return an empty list" -Skip:(!$valid) {
+            Complete 'Get-PsDscResource -Resource Microsoft'  | Should -Not -BeNullOrEmpty
         }
     }
 }
