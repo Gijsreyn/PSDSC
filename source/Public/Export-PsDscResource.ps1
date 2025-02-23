@@ -24,7 +24,7 @@ function Export-PsDscResource
     (
         [Parameter(Mandatory = $true)]
         [Alias('ResourceName')]
-        [ArgumentCompleter([DscResourceCompleter])]
+        [ArgumentCompleter([ResourceCompleter])]
         [System.String]
         $Resource
     )

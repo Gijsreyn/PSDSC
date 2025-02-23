@@ -21,7 +21,7 @@ AfterAll {
     Remove-Module -Name $script:moduleName -Force
 }
 
-Describe 'Confirm-DscResourceInput' -Tag Private {
+Describe 'Confirm-DscResourceInput' -Tag Private, Unit {
     Context 'When inputs is a file path' {
         BeforeAll {
             Mock -CommandName 'Test-Path' -MockWith { $true }

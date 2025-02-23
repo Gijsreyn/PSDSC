@@ -25,47 +25,30 @@ AfterAll {
     Remove-Module -Name $script:moduleName -Force
 }
 
-Describe 'Resolve-DscExe' -Tag Private, Unit {
-    Context 'Resolve path to dsc' {
-        BeforeAll {
-            Mock -CommandName 'Resolve-DscExe' -MockWith { Join-Path -Path $env:LOCALAPPDATA -ChildPath 'dsc\dsc.exe' }
-        }
-        It 'Should return the path of dsc' {
+Describe 'Test-DscExe' -Tag Private, Integration {
+    Context 'Check if dsc is installed' {
+        It 'Should return true' {
             InModuleScope -ScriptBlock {
-                $result = Resolve-DscExe
-                $result | Should -Be "$env:LOCALAPPDATA\dsc\dsc.exe"
+                $result = Test-DscExe
+                $result | Should -Be $true
             }
         }
     }
 
-    Context 'Resolve path to dsc when dsc.exe does not exist' {
-        BeforeAll {
-            Mock -CommandName 'Resolve-DscExe' -MockWith { return $null }
-        }
-
-        It 'Should return null' {
-            InModuleScope -ScriptBlock {
-                $result = Resolve-DscExe
-                $result | Should -BeNullOrEmpty
+    Context 'Check if dsc is not installed' {
+        It 'Should return false' -Skip:(!$IsWindows) {
+            BeforeDiscovery {
+                $env:Path = ($env:Path -split ';' | Where-Object { $_ -ne "$env:LOCALAPPDATA\dsc" }) -join ';'
             }
-        }
-    }
 
-    Context 'Resolve path to dsc when $script:dscExePath is set' {
-        BeforeAll {
-            $script:dscExePath = 'C:\CustomPath\dsc.exe'
-            Mock -CommandName 'Resolve-DscExe' -MockWith { $script:dscExePath }
-        }
-
-        It 'Should return the custom path of dsc' {
             InModuleScope -ScriptBlock {
-                $result = Resolve-DscExe
-                $result | Should -Be 'C:\CustomPath\dsc.exe'
+                $result = Test-DscExe
+                $result | Should -Be $false
             }
         }
 
         AfterAll {
-            Remove-Variable -Name 'dscExePath' -Scope Script
+            $env:PATH += [System.IO.Path]::PathSeparator + "$env:LOCALAPPDATA\dsc"
         }
     }
 }

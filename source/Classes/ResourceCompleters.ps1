@@ -1,4 +1,4 @@
-class DscResourceCompleter : System.Management.Automation.IArgumentCompleter
+class ResourceCompleter : System.Management.Automation.IArgumentCompleter
 {
     [System.Collections.Generic.IEnumerable[System.Management.Automation.CompletionResult]] CompleteArgument(
         [string] $CommandName,
@@ -31,16 +31,13 @@ class DscResourceCompleter : System.Management.Automation.IArgumentCompleter
             # section to include PSTypes data
             # $psTypes = ReadDscPsAdapterSchema -ReturnTypeInfo
             # $psTypes | ForEach-Object { $list.Add($_) }
-            return $list
         }
-        else
-        {
-            return $list
-        }
+
+        return $list
     }
 }
 
-class DscResourceInputCompleter : System.Management.Automation.IArgumentCompleter
+class ResourceInputCompleter : System.Management.Automation.IArgumentCompleter
 {
     [System.Collections.Generic.IEnumerable[System.Management.Automation.CompletionResult]] CompleteArgument(
         [string] $CommandName,
@@ -50,10 +47,10 @@ class DscResourceInputCompleter : System.Management.Automation.IArgumentComplete
         [Collections.IDictionary] $fakeBoundParameters
     )
     {
-        if ($fakeBoundParameters.ContainsKey('ResourceName'))
+        if ($fakeBoundParameters.ContainsKey('Resource'))
         {
             [array]$Resources = GetDscRequiredKey | Where-Object {
-                $_.type -eq $fakeBoundParameters.ResourceName
+                $_.type -eq $fakeBoundParameters.Resource
             } | Select-Object -ExpandProperty resourceInput -Unique | Sort-Object
         }
         else
