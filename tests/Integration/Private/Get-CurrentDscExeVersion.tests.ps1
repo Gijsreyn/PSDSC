@@ -21,25 +21,30 @@ AfterAll {
     Remove-Module -Name $script:moduleName -Force
 }
 
-Describe 'Get-ProcessObject' -Tag Private, Unit {
-    Context 'When object can be created' {
-        BeforeAll {
-            Mock -CommandName 'Resolve-DscExe' -MockWith { "$env:LOCALAPPDATA\dsc\dsc.exe" }
-        }
-
-        It 'Should return a process object' {
+Describe 'Get-CurrentDscExeVersion' -Tag Private, Integration {
+    Context 'Check if DSC version is retrieved' {
+        It 'Should return a valid version string' {
             InModuleScope -ScriptBlock {
-                $result = Get-ProcessObject
-                $result | Should -BeOfType 'System.Diagnostics.Process'
+                $result = Get-CurrentDscExeVersion
+                $result | Should -Match '3.0.0-*'
+            }
+        }
+    }
+
+    Context 'Check if DSC is not installed' {
+        It 'Should return $null' -Skip:(!$IsWindows) {
+            BeforeDiscovery {
+                $env:Path = ($env:Path -split ';' | Where-Object { $_ -ne "$env:LOCALAPPDATA\dsc" }) -join ';'
+            }
+
+            InModuleScope -ScriptBlock {
+                $result = Get-CurrentDscExeVersion
+                $result | Should -BeNullOrEmpty
             }
         }
 
-        It 'Should return a process object with argument' {
-            InModuleScope -ScriptBlock {
-                $result = Get-ProcessObject -Argument 'resource'
-                $result | Should -BeOfType 'System.Diagnostics.Process'
-                $result.StartInfo.Arguments | Should -Be 'resource'
-            }
+        AfterAll {
+            $env:PATH += [System.IO.Path]::PathSeparator + "$env:LOCALAPPDATA\dsc"
         }
     }
 }

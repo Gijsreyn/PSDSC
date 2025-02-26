@@ -21,7 +21,7 @@ AfterAll {
     Remove-Module -Name $script:moduleName -Force
 }
 
-Describe 'Resolve-DscResourceInput' -Tag Private {
+Describe 'Resolve-DscResourceInput' -Tag Private, Unit {
     Context 'When Inputs is a hashtable' {
         It 'Should resolve the hashtable input to a JSON string' {
             InModuleScope -ScriptBlock {

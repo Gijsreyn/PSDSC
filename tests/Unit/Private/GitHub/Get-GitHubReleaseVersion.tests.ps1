@@ -21,24 +21,12 @@ AfterAll {
     Remove-Module -Name $script:moduleName -Force
 }
 
-Describe 'Get-ProcessObject' -Tag Private, Unit {
-    Context 'When object can be created' {
-        BeforeAll {
-            Mock -CommandName 'Resolve-DscExe' -MockWith { "$env:LOCALAPPDATA\dsc\dsc.exe" }
-        }
-
-        It 'Should return a process object' {
+Describe 'Get-GitHubReleaseVersion' -Tag Private, Unit {
+    Context 'Check if GitHub release version is retrieved' {
+        It 'Should return a valid version string' {
             InModuleScope -ScriptBlock {
-                $result = Get-ProcessObject
-                $result | Should -BeOfType 'System.Diagnostics.Process'
-            }
-        }
-
-        It 'Should return a process object with argument' {
-            InModuleScope -ScriptBlock {
-                $result = Get-ProcessObject -Argument 'resource'
-                $result | Should -BeOfType 'System.Diagnostics.Process'
-                $result.StartInfo.Arguments | Should -Be 'resource'
+                $result = Get-GitHubReleaseVersion -Organization 'PowerShell' -Repository 'DSC'
+                $result | Should -Not -BeNullOrEmpty
             }
         }
     }

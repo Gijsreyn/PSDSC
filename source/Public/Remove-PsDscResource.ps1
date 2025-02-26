@@ -36,12 +36,12 @@ function Remove-PsDscResource
     (
         [Parameter(Mandatory = $true)]
         [Alias('ResourceName')]
-        [ArgumentCompleter([DscResourceCompleter])]
+        [ArgumentCompleter([ResourceCompleter])]
         [System.String]
         $Resource,
 
         [Parameter(Mandatory = $true)]
-        [ArgumentCompleter([DscResourceInputCompleter])]
+        [ArgumentCompleter([ResourceInputCompleter])]
         [ValidateNotNullOrEmpty()]
         [System.Object]
         $Inputs

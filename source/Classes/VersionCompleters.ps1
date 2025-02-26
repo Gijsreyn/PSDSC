@@ -1,4 +1,4 @@
-class DscVersionCompleter : System.Management.Automation.IArgumentCompleter
+class VersionCompleter : System.Management.Automation.IArgumentCompleter
 {
     [System.Collections.Generic.IEnumerable[System.Management.Automation.CompletionResult]] CompleteArgument(
         [string] $CommandName,
@@ -8,16 +8,16 @@ class DscVersionCompleter : System.Management.Automation.IArgumentCompleter
         [Collections.IDictionary] $fakeBoundParameters
     )
     {
-        [array]$DscVersions = (GetDscVersion -UseGitHub) | Where-Object { $_ -like "$wordToComplete*" }
+        [array]$dscVersions = (Get-DscVersion -UseGitHub) | Where-Object { $_ -like "$wordToComplete*" }
 
         $list = [System.Collections.Generic.List[System.Management.Automation.CompletionResult]]::new()
 
-        foreach ($DscVersion in $DscVersions)
+        foreach ($version in $dscVersions)
         {
-            $CompletionText = $DscVersion
-            $ListItemText = $DscVersion
+            $CompletionText = $version
+            $ListItemText = $version
             $ResultType = [System.Management.Automation.CompletionResultType]::ParameterValue
-            $ToolTip = $DscVersion
+            $ToolTip = $version
 
             $obj = [System.Management.Automation.CompletionResult]::new($CompletionText, $ListItemText, $ResultType, $Tooltip)
             $list.add($obj)

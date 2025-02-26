@@ -21,7 +21,7 @@ AfterAll {
     Remove-Module -Name $script:moduleName -Force
 }
 
-Describe 'Get-ProcessResult' -Tag Private {
+Describe 'Get-ProcessResult' -Tag Private, Unit {
     Context 'When process is provided' {
         It 'Should return process detail' {
             InModuleScope -ScriptBlock {
