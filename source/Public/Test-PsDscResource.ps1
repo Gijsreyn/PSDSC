@@ -47,13 +47,13 @@ function Test-PsDscResource
         $Inputs
     )
 
-    $resourceInput = Resolve-DscResourceInput -Inputs $Inputs
+    $resourceInput = Resolve-DscInput -Inputs $Inputs
 
     $processArgument = Confirm-DscResourceInput -Resource $Resource -Inputs $resourceInput -Operation 'test'
 
-    $Process = Get-ProcessObject -Argument $processArgument
+    $process = Get-ProcessObject -Argument $processArgument
 
-    $result = Get-ProcessResult -Process $Process
+    $result = Get-ProcessResult -Process $process
 
     return $result
 }

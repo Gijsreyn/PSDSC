@@ -19,7 +19,7 @@ AfterAll {
 Describe 'Test-PsDscResource' -Tag 'Public' {
     Context 'When resource and input is valid' {
         BeforeAll {
-            Mock -CommandName 'Resolve-DscResourceInput' -MockWith {
+            Mock -CommandName 'Resolve-DscInput' -MockWith {
                 return ((@{test = 'abc' } | ConvertTo-Json -Compress | ConvertTo-Json) -replace "\\\\", "\" | Out-String)
             }
             Mock -CommandName 'Confirm-DscResourceInput' -MockWith {
@@ -44,7 +44,7 @@ Describe 'Test-PsDscResource' -Tag 'Public' {
             $result = Test-PsDscResource -Resource 'test/Resource' -Inputs @{test = 'abc' }
             $result | Should -Not -BeNullOrEmpty
 
-            Assert-MockCalled -CommandName 'Resolve-DscResourceInput' -Exactly -Times 1
+            Assert-MockCalled -CommandName 'Resolve-DscInput' -Exactly -Times 1
             Assert-MockCalled -CommandName 'Confirm-DscResourceInput' -Exactly -Times 1
             Assert-MockCalled -CommandName 'Get-ProcessObject' -Exactly -Times 1
             Assert-MockCalled -CommandName 'Get-ProcessResult' -Exactly -Times 1

@@ -31,9 +31,9 @@ function Export-PsDscResource
 
     $processArgument = "resource export --resource $Resource"
 
-    $Process = Get-ProcessObject -Argument $processArgument
+    $process = Get-ProcessObject -Argument $processArgument
 
-    $result = Get-ProcessResult -Process $Process
+    $result = Get-ProcessResult -Process $process
 
     return $result
 }

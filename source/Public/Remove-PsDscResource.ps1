@@ -47,15 +47,15 @@ function Remove-PsDscResource
         $Inputs
     )
 
-    $resourceInput = Resolve-DscResourceInput -Inputs $Inputs
+    $resourceInput = Resolve-DscInput -Inputs $Inputs
 
     $processArgument = Confirm-DscResourceInput -Resource $Resource -Inputs $resourceInput -Operation 'delete'
 
-    $Process = Get-ProcessObject -Argument $processArgument
+    $process = Get-ProcessObject -Argument $processArgument
 
     if ($PSCmdlet.ShouldProcess("'$Resource' with '$resourceInput'" , "Remove"))
     {
-        $result = Get-ProcessResult -Process $Process
+        $result = Get-ProcessResult -Process $process
     }
 
     return $result
