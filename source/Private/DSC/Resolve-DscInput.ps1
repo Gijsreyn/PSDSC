@@ -44,7 +44,7 @@ function Resolve-DscInput
     }
     elseif (Test-Json $Inputs -ErrorAction SilentlyContinue)
     {
-        $Inputs
+        $Inputs | ConvertFrom-Json
     }
     elseif (Get-Command ConvertFrom-Yaml -ErrorAction SilentlyContinue)
     {

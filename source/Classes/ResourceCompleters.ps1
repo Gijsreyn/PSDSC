@@ -14,23 +14,30 @@ class ResourceCompleter : System.Management.Automation.IArgumentCompleter
 
         if ($exe)
         {
+            # section to include DSC resource data
             $manifestFiles = Get-ChildItem -Path (Split-Path $exe -Parent) -Depth 1 -Filter "*.dsc.resource.json"
-            foreach ($manifest in $manifestFiles)
+
+            if ($manifestFiles.Count -ne 0)
             {
-                $typeName = (Get-Content $manifest | ConvertFrom-Json -ErrorAction SilentlyContinue).type
+                $manifestFiles | ForEach-Object {
+                    $typeName = (Get-Content $manifest | ConvertFrom-Json -ErrorAction SilentlyContinue).type
 
-                $CompletionText = $typeName
-                $ListItemText = $typeName
-                $ResultType = [System.Management.Automation.CompletionResultType]::ParameterValue
-                $ToolTip = $typeName
-
-                $obj = [System.Management.Automation.CompletionResult]::new($CompletionText, $ListItemText, $ResultType, $Tooltip)
-                $list.add($obj)
+                    if ($typeName)
+                    {
+                        $obj = CreateCompletionResult -text $typeName
+                        $list.add($obj)
+                    }
+                }
             }
 
             # section to include PSTypes data
-            # $psTypes = ReadDscPsAdapterSchema -ReturnTypeInfo
-            # $psTypes | ForEach-Object { $list.Add($_) }
+            $psTypes = Read-PsDscAdapterSchema -ReturnTypeInfo
+            if (-not [string]::IsNullOrEmpty($psTypes))
+            {
+                $psTypes | ForEach-Object {
+                    $list.add((CreateCompletionResult $_))
+                }
+            }
         }
 
         return $list
