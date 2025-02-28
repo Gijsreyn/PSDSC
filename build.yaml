@@ -135,3 +135,13 @@ TaskHeader: |
   Write-Build DarkGray "  $Path"
   Write-Build DarkGray "  $($Task.InvocationInfo.ScriptName):$($Task.InvocationInfo.ScriptLineNumber)"
   ""
+
+####################################################
+#               GitHub Configuration               #
+####################################################
+GitHubConfig:
+  GitHubFilesToAdd:
+    - "CHANGELOG.md"
+  GitHubConfigUserName: gijsreijn
+  GitHubConfigUserEmail: gijsreijn@hotmail.com
+  UpdateChangelogOnPrerelease: false
