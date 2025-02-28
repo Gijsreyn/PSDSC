@@ -15,6 +15,11 @@ BeforeAll {
     $PSDefaultParameterValues['InModuleScope:ModuleName'] = $script:moduleName
     $PSDefaultParameterValues['Mock:ModuleName'] = $script:moduleName
     $PSDefaultParameterValues['Should:ModuleName'] = $script:moduleName
+
+    if (Test-Path "$env:ProgramFiles\dsc" -ErrorAction SilentlyContinue)
+    {
+        $env:Path += [System.IO.Path]::PathSeparator + "$env:ProgramFiles\dsc"
+    }
 }
 
 AfterAll {
