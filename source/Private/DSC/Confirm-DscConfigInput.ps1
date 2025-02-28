@@ -47,7 +47,7 @@ function Confirm-DscConfigInput
 
     if (-not [string]::IsNullOrEmpty($Parameter))
     {
-        $parameterInput = if (-not (Test-Path $Parameter -ErrorAction SilentlyContinue) -and ([System.IO.Path]::GetExtension($Parameter) -notin @('.json', '.yaml', '.yml')))
+        $parameterInput = if (Test-IsDscFilePath -Path $Parameter)
         {
             # Resolve the parameter input and append it to the command
             $Parameter = Resolve-DscInput -Inputs $Parameter
@@ -64,7 +64,7 @@ function Confirm-DscConfigInput
 
     [void]$sb.Append(" $Operation")
 
-    $inputParameter = if (-not (Test-Path $Inputs -ErrorAction SilentlyContinue) -and ([System.IO.Path]::GetExtension($Inputs) -notin @('.json', '.yaml', '.yml')))
+    $inputParameter = if (Test-IsDscFilePath -Path $Inputs)
     {
         "--input $Inputs"
     }

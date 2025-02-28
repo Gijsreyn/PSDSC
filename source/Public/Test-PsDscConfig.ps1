@@ -36,7 +36,7 @@ function Test-PsDscConfig
 
     PS C:\> Test-PsDscConfig -Inputs $configDoc
 
-    This example retrieves the DSC configuration with the specified inputs using a hashtable.
+    This example tests the information on the 'Microsoft.DSC.Debug/Echo' resource.
 
   .NOTES
     For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.

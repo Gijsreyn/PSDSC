@@ -5,7 +5,7 @@ function ConvertTo-PsDscJson
         Convert DSC Configuration (v1/v2) Document to JSON.
 
     .DESCRIPTION
-        The function ConvertTo-DscJson converts a DSC Configuration Document (v1/v2) to JSON.
+        The function ConvertTo-PsDscJson converts a DSC Configuration Document (v1/v2) to JSON.
 
     .PARAMETER Path
         The file path to a valid DSC Configuration Document.
@@ -15,7 +15,7 @@ function ConvertTo-PsDscJson
 
     .EXAMPLE
         PS C:\> $path = 'myConfig.ps1'
-        PS C:\> ConvertTo-DscJson -Path $path
+        PS C:\> ConvertTo-PsDscJson -Path $path
 
     .INPUTS
         Input a valid DSC Configuration Document

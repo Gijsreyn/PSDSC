@@ -51,13 +51,23 @@ function Find-PsDscResource
 
     $resourceInput = @('resource', 'list')
 
+    $supportedAdapters = @(
+        'Microsoft.DSC/PowerShell',
+        'Microsoft.Windows/WMI',
+        'Microsoft.Windows/WindowsPowerShell'
+    )
+
     # TODO: Validate if we can fetch adapters from different location
     if (-not [string]::IsNullOrEmpty($AdapterName))
     {
         # TODO: We can return if PSAdapterCache.json is present without calling dsc.exe
-        if ($AdapterName -in @( 'Microsoft.DSC/PowerShell', 'Microsoft.Windows/WMI', 'Microsoft.Windows/WindowsPowerShell'))
+        if ($AdapterName -in $supportedAdapters)
         {
             $resourceInput += "--adapter $AdapterName"
+        }
+        else
+        {
+            Write-Warning "The adapter '$AdapterName' is not supported. Supported adapters are: $($supportedAdapters -join ', ')"
         }
     }
 

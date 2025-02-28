@@ -18,25 +18,16 @@ function Export-PsDscConfig
       '$schema' = 'https://aka.ms/dsc/schemas/v3/bundled/config/document.json'
       resources = @(
         @{
-          name = 'Echo 1'
-          type = 'Microsoft.DSC.Debug/Echo'
-          properties = @{
-            output = 'hello'
-          }
-        },
-        @{
-          name = 'Echo 2'
-          type = 'Microsoft.DSC.Debug/Echo'
-          properties = @{
-            output = 'world'
-          }
+          name = 'OSInfo'
+          type = 'Microsoft/OSInfo'
+          properties = @{}
         }
       )
     }
 
-    PS C:\> Get-PsDscConfig -Inputs $configDoc
+    PS C:\> Export-PsDscConfig -Inputs $configDoc
 
-    This example retrieves the DSC configuration with the specified inputs using a hashtable.
+    This example exports the information on the 'Microsoft/OSInfo' resource.
 
   .NOTES
     For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.

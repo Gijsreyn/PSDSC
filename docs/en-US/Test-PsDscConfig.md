@@ -36,6 +36,7 @@ The function Test-PsDscConfig invokes the config test operation on Desired State
 
 ### EXAMPLE 1
 
+```powershell
 $configDoc = @{
   '$schema' = 'https://aka.ms/dsc/schemas/v3/bundled/config/document.json'
   resources = @(
@@ -57,8 +58,9 @@ $configDoc = @{
 }
 
 PS C:\> Test-PsDscConfig -Inputs $configDoc
+```
 
-This example retrieves the DSC configuration with the specified inputs using a hashtable.
+This example tests the information on the 'Microsoft.DSC.Debug/Echo' resource.
 
 ## PARAMETERS
 
@@ -127,4 +129,3 @@ For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

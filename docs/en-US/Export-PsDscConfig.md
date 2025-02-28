@@ -36,29 +36,22 @@ The function Export-PsDscConfig invokes the config export operation on Desired S
 
 ### EXAMPLE 1
 
+```powershell
 $configDoc = @{
   '$schema' = 'https://aka.ms/dsc/schemas/v3/bundled/config/document.json'
   resources = @(
     @{
-      name = 'Echo 1'
-      type = 'Microsoft.DSC.Debug/Echo'
-      properties = @{
-        output = 'hello'
-      }
-    },
-    @{
-      name = 'Echo 2'
-      type = 'Microsoft.DSC.Debug/Echo'
-      properties = @{
-        output = 'world'
-      }
+      name       = 'OSInfo'
+      type       = 'Microsoft/OSInfo'
+      properties = @{}
     }
   )
 }
 
-PS C:\> Get-PsDscConfig -Inputs $configDoc
+PS C:\> Export-PsDscConfig -Inputs $configDoc
+```
 
-This example retrieves the DSC configuration with the specified inputs using a hashtable.
+This example exports the information on the 'Microsoft/OSInfo' resource.
 
 ## PARAMETERS
 
@@ -127,4 +120,3 @@ For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-

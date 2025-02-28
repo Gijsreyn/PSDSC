@@ -32,7 +32,7 @@ function Resolve-DscInput
         $Inputs
     )
 
-    if ([System.IO.Path]::GetExtension($Inputs) -in @('.json', '.yaml', '.yml') -and (Test-Path $Inputs -ErrorAction SilentlyContinue))
+    if (Test-IsDscFilePath -Path $Inputs)
     {
         return $Inputs
     }

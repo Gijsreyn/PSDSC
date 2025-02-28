@@ -51,7 +51,7 @@ function Get-PsDscConfig
 
     [Parameter()]
     [AllowNull()]
-    [System.String]
+    [System.Object]
     $Parameter
   )
 

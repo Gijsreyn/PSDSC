@@ -36,14 +36,14 @@ This cmdlet has the following aliases,
 
 ## DESCRIPTION
 
-The function ConvertTo-DscJson converts a DSC Configuration Document (v1/v2) to JSON.
+The function ConvertTo-PsDscJson converts a DSC Configuration Document (v1/v2) to JSON.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
 $path = 'myConfig.ps1'
-PS C:\> ConvertTo-DscJson -Path $path
+PS C:\> ConvertTo-PsDscJson -Path $path
 
 ## PARAMETERS
 
@@ -162,4 +162,3 @@ For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-
