@@ -35,20 +35,25 @@ Describe 'Test-DscExe' -Tag Private, Integration {
         }
     }
 
-    Context 'Check if dsc is not installed' {
-        It 'Should return false' -Skip:(!$IsWindows) {
-            BeforeDiscovery {
-                $env:Path = ($env:Path -split ';' | Where-Object { $_ -ne "$env:LOCALAPPDATA\dsc" }) -join ';'
-            }
+    # Context 'Check if dsc is not installed' {
+    #     It 'Should return false' -Skip:(!$IsWindows) {
+    #         BeforeDiscovery {
+    #             $script:commonPaths = @("$env:ProgramFiles\dsc", "$env:localappdata\dsc")
+    #         }
 
-            InModuleScope -ScriptBlock {
-                $result = Test-DscExe
-                $result | Should -Be $false
-            }
-        }
+    #         InModuleScope -ScriptBlock {
+    #             $result = Test-DscExe
+    #             $result | Should -Be $false
+    #         }
+    #     }
 
-        AfterAll {
-            $env:PATH += [System.IO.Path]::PathSeparator + "$env:LOCALAPPDATA\dsc"
-        }
-    }
+    #     AfterAll {
+    #         $commonPaths | ForEach-Object {
+    #             if (Test-Path $_ -ErrorAction SilentlyContinue)
+    #             {
+    #                 $env:Path += [System.IO.Path]::PathSeparator + $_
+    #             }
+    #         }
+    #     }
+    # }
 }

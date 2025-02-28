@@ -40,14 +40,17 @@ function Resolve-DscInput
     # Check for YAML, hash table, or JSON input
     $stringData = if ($Inputs -is [Hashtable])
     {
+        Write-Debug -Message "The input is a hashtable."
         $Inputs
     }
     elseif (Test-Json $Inputs -ErrorAction SilentlyContinue)
     {
+        Write-Debug -Message "The input is a JSON string."
         $Inputs | ConvertFrom-Json
     }
     elseif (Get-Command ConvertFrom-Yaml -ErrorAction SilentlyContinue)
     {
+        Write-Debug -Message "The input is a YAML string."
         $Inputs | ConvertFrom-Yaml
     }
     else

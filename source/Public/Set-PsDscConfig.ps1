@@ -1,11 +1,11 @@
-function Get-PsDscConfig
+function Set-PsDscConfig
 {
   <#
   .SYNOPSIS
-    Invokes the config get operation for DSC version 3 command-line utility.
+    Invokes the config set operation for DSC version 3 command-line utility.
 
   .DESCRIPTION
-    The function Get-PsDscConfig invokes the config get operation on Desired State Configuration version 3 executable 'dsc.exe'.
+    The function Set-PsDscConfig invokes the config set operation on Desired State Configuration version 3 executable 'dsc.exe'.
 
   .PARAMETER Inputs
     The input to provide. Supports a hashtable of key-value pairs, JSON, YAML, or a file path (both JSON and YAML).
@@ -34,14 +34,14 @@ function Get-PsDscConfig
       )
     }
 
-    PS C:\> Get-PsDscConfig -Inputs $configDoc
+    PS C:\> Set-PsDscConfig -Inputs $configDoc
 
     This example retrieves the DSC configuration with the specified inputs using a hashtable.
 
   .NOTES
     For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
   #>
-  [CmdletBinding()]
+  [CmdletBinding(SupportsShouldProcess = $true, ConfirmImpact = 'Medium')]
   param
   (
     [Parameter(Mandatory = $true)]
@@ -57,11 +57,14 @@ function Get-PsDscConfig
 
   $inputParameter = Resolve-DscInput -Inputs $Inputs
 
-  $processArgument = Confirm-DscConfigInput -Inputs $inputParameter -Parameter $Parameter -Operation 'get'
+  $processArgument = Confirm-DscConfigInput -Inputs $inputParameter -Parameter $Parameter -Operation 'set'
 
   $process = Get-ProcessObject -Argument $processArgument
 
-  $result = Get-ProcessResult -Process $process
+  if ($PSCmdlet.ShouldProcess("$Inputs" , "Set"))
+  {
+    $result = Get-ProcessResult -Process $process
+  }
 
   return $result
 }

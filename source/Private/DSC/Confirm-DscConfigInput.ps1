@@ -49,6 +49,8 @@ function Confirm-DscConfigInput
     {
         $parameterInput = if (-not (Test-Path $Parameter -ErrorAction SilentlyContinue) -and ([System.IO.Path]::GetExtension($Parameter) -notin @('.json', '.yaml', '.yml')))
         {
+            # Resolve the parameter input and append it to the command
+            $Parameter = Resolve-DscInput -Inputs $Parameter
             " --parameters $Parameter"
         }
         else

@@ -1,11 +1,11 @@
-function Get-PsDscConfig
+function Test-PsDscConfig
 {
   <#
   .SYNOPSIS
-    Invokes the config get operation for DSC version 3 command-line utility.
+    Invokes the config test operation for DSC version 3 command-line utility.
 
   .DESCRIPTION
-    The function Get-PsDscConfig invokes the config get operation on Desired State Configuration version 3 executable 'dsc.exe'.
+    The function Test-PsDscConfig invokes the config test operation on Desired State Configuration version 3 executable 'dsc.exe'.
 
   .PARAMETER Inputs
     The input to provide. Supports a hashtable of key-value pairs, JSON, YAML, or a file path (both JSON and YAML).
@@ -34,7 +34,7 @@ function Get-PsDscConfig
       )
     }
 
-    PS C:\> Get-PsDscConfig -Inputs $configDoc
+    PS C:\> Test-PsDscConfig -Inputs $configDoc
 
     This example retrieves the DSC configuration with the specified inputs using a hashtable.
 
@@ -57,7 +57,7 @@ function Get-PsDscConfig
 
   $inputParameter = Resolve-DscInput -Inputs $Inputs
 
-  $processArgument = Confirm-DscConfigInput -Inputs $inputParameter -Parameter $Parameter -Operation 'get'
+  $processArgument = Confirm-DscConfigInput -Inputs $inputParameter -Parameter $Parameter -Operation 'test'
 
   $process = Get-ProcessObject -Argument $processArgument
 

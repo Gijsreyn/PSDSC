@@ -1,11 +1,11 @@
-function Get-PsDscConfig
+function Export-PsDscConfig
 {
   <#
   .SYNOPSIS
-    Invokes the config get operation for DSC version 3 command-line utility.
+    Invokes the config export operation for DSC version 3 command-line utility.
 
   .DESCRIPTION
-    The function Get-PsDscConfig invokes the config get operation on Desired State Configuration version 3 executable 'dsc.exe'.
+    The function Export-PsDscConfig invokes the config export operation on Desired State Configuration version 3 executable 'dsc.exe'.
 
   .PARAMETER Inputs
     The input to provide. Supports a hashtable of key-value pairs, JSON, YAML, or a file path (both JSON and YAML).
@@ -51,7 +51,7 @@ function Get-PsDscConfig
 
     [Parameter()]
     [AllowNull()]
-    [System.String]
+    [System.Object]
     $Parameter
   )
 

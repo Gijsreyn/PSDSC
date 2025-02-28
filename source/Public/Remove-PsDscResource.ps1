@@ -41,7 +41,6 @@ function Remove-PsDscResource
         $Resource,
 
         [Parameter(Mandatory = $true)]
-        [ArgumentCompleter([ResourceInputCompleter])]
         [ValidateNotNullOrEmpty()]
         [System.Object]
         $Inputs
