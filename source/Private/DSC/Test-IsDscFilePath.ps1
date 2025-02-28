@@ -8,7 +8,7 @@ function Test-IsDscFilePath
         The function Test-IsDscFilePath tests if the given path is a valid DSC file path. The function returns true if the path is a valid DSC file path, otherwise false.
 
     .PARAMETER Path
-        The path to test.
+        The path or input to test for.
 
     .EXAMPLE
         PS C:\> Test-IsDscFilePath -Path 'C:\path\to\file.json'

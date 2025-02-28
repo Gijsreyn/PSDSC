@@ -47,7 +47,7 @@ function Confirm-DscConfigInput
 
     if (-not [string]::IsNullOrEmpty($Parameter))
     {
-        $parameterInput = if (Test-IsDscFilePath -Path $Parameter)
+        $parameterInput = if (-not (Test-IsDscFilePath -Path $Parameter))
         {
             # Resolve the parameter input and append it to the command
             $Parameter = Resolve-DscInput -Inputs $Parameter
@@ -64,7 +64,7 @@ function Confirm-DscConfigInput
 
     [void]$sb.Append(" $Operation")
 
-    $inputParameter = if (Test-IsDscFilePath -Path $Inputs)
+    $inputParameter = if (-not (Test-IsDscFilePath -Path $Inputs))
     {
         "--input $Inputs"
     }
