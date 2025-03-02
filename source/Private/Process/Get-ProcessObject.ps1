@@ -31,7 +31,6 @@ function Get-ProcessObject
         $Argument,
 
         [Parameter(Mandatory = $false)]
-        [AllowNull()]
         [System.String]
         $DscExe = (Resolve-DscExe)
     )
