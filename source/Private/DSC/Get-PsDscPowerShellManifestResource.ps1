@@ -1,5 +1,21 @@
 function Get-PsDscPowerShellManifestResource
 {
+    <#
+    .SYNOPSIS
+        Search for a PowerShell DSC resource manifest in the cache.
+
+    .DESCRIPTION
+        The function Get-PsDscPowerShellManifestResource searches for a PowerShell DSC resource manifest in the cache.
+
+    .PARAMETER Resource
+        The name of the resource to search for.
+
+    .EXAMPLE
+        PS C:\> Get-PsDscPowerShellManifestResource -Resource 'Microsoft.WinGet.DSC/WinGetPackage'
+
+    .NOTES
+        For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
+    #>
     [CmdletBinding()]
     param
     (
