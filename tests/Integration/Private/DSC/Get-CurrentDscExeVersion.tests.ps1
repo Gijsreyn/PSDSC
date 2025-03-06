@@ -1,5 +1,4 @@
 BeforeAll {
-    # TODO: Find way how to install / uninstall yayaml or unload from current session
     $script:moduleName = 'PSDSC'
 
     # If the module is not found, run the build task 'noop'.
@@ -16,6 +15,8 @@ BeforeAll {
     $PSDefaultParameterValues['Mock:ModuleName'] = $script:moduleName
     $PSDefaultParameterValues['Should:ModuleName'] = $script:moduleName
 
+    $script:currentPath = $env:Path
+
     if (Test-Path "$env:ProgramFiles\dsc" -ErrorAction SilentlyContinue)
     {
         $env:Path += [System.IO.Path]::PathSeparator + "$env:ProgramFiles\dsc"
@@ -28,37 +29,25 @@ AfterAll {
     $PSDefaultParameterValues.Remove('Should:ModuleName')
 
     Remove-Module -Name $script:moduleName -Force
+
+    $env:Path = $script:currentPath
 }
 
-Describe 'Test-DscExe' -Tag Private, Integration {
-    Context 'Check if dsc is installed' {
-        It 'Should return true' {
+AfterAll {
+    $PSDefaultParameterValues.Remove('InModuleScope:ModuleName')
+    $PSDefaultParameterValues.Remove('Mock:ModuleName')
+    $PSDefaultParameterValues.Remove('Should:ModuleName')
+
+    Remove-Module -Name $script:moduleName -Force
+}
+
+Describe 'Get-CurrentDscExeVersion' -Tag Private, Integration {
+    Context 'Check if DSC version is retrieved' {
+        It 'Should return a valid version string' {
             InModuleScope -ScriptBlock {
-                $result = Test-DscExe
-                $result | Should -Be $true
+                $result = Get-CurrentDscExeVersion
+                $result | Should -Match '3.0.0-*'
             }
         }
     }
-
-    # Context 'Check if dsc is not installed' {
-    #     It 'Should return false' -Skip:(!$IsWindows) {
-    #         BeforeDiscovery {
-    #             $script:commonPaths = @("$env:ProgramFiles\dsc", "$env:localappdata\dsc")
-    #         }
-
-    #         InModuleScope -ScriptBlock {
-    #             $result = Test-DscExe
-    #             $result | Should -Be $false
-    #         }
-    #     }
-
-    #     AfterAll {
-    #         $commonPaths | ForEach-Object {
-    #             if (Test-Path $_ -ErrorAction SilentlyContinue)
-    #             {
-    #                 $env:Path += [System.IO.Path]::PathSeparator + $_
-    #             }
-    #         }
-    #     }
-    # }
 }

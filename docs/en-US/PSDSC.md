@@ -42,6 +42,10 @@ Invokes the config get operation for DSC version 3 command-line utility.
 
 Invoke the get operation for DSC version 3 command-line utility.
 
+### [Initialize-PsDscResourceInput](Initialize-PsDscResourceInput.md)
+
+Initializes a hashtable input for a DSC resource.
+
 ### [Install-DscExe](Install-DscExe.md)
 
 Install DSC executable.
