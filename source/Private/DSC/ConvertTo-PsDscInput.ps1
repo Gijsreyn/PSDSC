@@ -45,31 +45,61 @@ function ConvertTo-PsDscInput
         $RequiredOnly
     )
 
-    $resourceInput = @{}
-
-    if ($Manifest)
+    begin
     {
-        # Check if there is a schema embedded in the manifest
-        if ($Manifest.schema.embedded)
+        function Add-ResourceInput ($RequiredOnly, $InputObject)
         {
-            if ($RequiredOnly.IsPresent)
+            if ($RequiredOnly)
             {
-                foreach ($requiredValue in $Manifest.schema.embedded.required)
+                foreach ($requiredValue in $InputObject.required)
                 {
                     $resourceInput.Add($requiredValue, $null)
                 }
             }
             else
             {
-                $noteProperties = $manifest.schema.embedded.properties | Foreach-Object { Get-Member -MemberType NoteProperty -InputObject $_ }
+                $noteProperties = $InputObject.properties | Foreach-Object { Get-Member -MemberType NoteProperty -InputObject $_ }
 
                 foreach ($noteProperty in $noteProperties)
                 {
-                    $resourceInput.Add($noteProperty.Name, $manifest.schema.embedded.properties.$($noteProperty.Name).type)
+                    $resourceInput.Add($noteProperty.Name, $InputObject.properties.$($noteProperty.Name).type)
                 }
             }
         }
     }
 
-    return $resourceInput
+    process
+    {
+        # Create container bag
+        $resourceInput = @{}
+
+        if ($Manifest)
+        {
+            # Check if there is a schema embedded in the manifest
+            if ($Manifest.schema.embedded)
+            {
+                Add-ResourceInput -RequiredOnly $RequiredOnly -InputObject $Manifest.schema.embedded
+            }
+            else
+            {
+                $processArgument = "resource schema --resource $($Manifest.type) --output-format json"
+
+                $process = Get-ProcessObject -Argument $processArgument
+
+                $result = Get-ProcessResult -Process $process
+
+                if ($result.Output)
+                {
+                    $schema = $result.Output | ConvertFrom-Json
+
+                    Add-ResourceInput -RequiredOnly $RequiredOnly -InputObject $schema
+                }
+            }
+        }
+    }
+
+    end
+    {
+        return $resourceInput
+    }
 }

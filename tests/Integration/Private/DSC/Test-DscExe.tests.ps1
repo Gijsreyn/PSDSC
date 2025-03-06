@@ -1,5 +1,4 @@
 BeforeAll {
-    # TODO: Find way how to install / uninstall yayaml or unload from current session
     $script:moduleName = 'PSDSC'
 
     # If the module is not found, run the build task 'noop'.
@@ -16,6 +15,8 @@ BeforeAll {
     $PSDefaultParameterValues['Mock:ModuleName'] = $script:moduleName
     $PSDefaultParameterValues['Should:ModuleName'] = $script:moduleName
 
+    $script:currentPath = $env:Path
+
     if (Test-Path "$env:ProgramFiles\dsc" -ErrorAction SilentlyContinue)
     {
         $env:Path += [System.IO.Path]::PathSeparator + "$env:ProgramFiles\dsc"
@@ -28,6 +29,8 @@ AfterAll {
     $PSDefaultParameterValues.Remove('Should:ModuleName')
 
     Remove-Module -Name $script:moduleName -Force
+
+    $env:Path = $script:currentPath
 }
 
 Describe 'Test-DscExe' -Tag Private, Integration {
