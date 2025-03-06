@@ -160,11 +160,7 @@ stages:
       condition: |
           and(
             succeeded(),
-            or(
-              eq(variables['Build.SourceBranch'], 'refs/heads/main'),
-              startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-            ),
-            contains(variables['System.TeamFoundationCollectionUri'], 'GijsReijn')
+            startsWith(variables['Build.SourceBranch'], 'refs/tags/')
           )
       jobs:
           - job: Deploy_Module
