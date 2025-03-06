@@ -8,13 +8,19 @@ PowerShell also adds features and helps you familiarize yourself with the cmdlet
 
 The current list of commands implemented in the module:
 
-- [ConvertTo-DscJson](./docs/en-US/ConvertTo-DscJson.md)
-- [ConvertTo-DscYaml](./docs/en-US/ConvertTo-DscYaml.md)
-- [Get-PsDscResourceSchema](./docs/en-US/Get-PsDscResourceSchema.md)
-- [Initialize-PsDscConfigDocument](./docs/en-US/Initialize-PsDscConfigDocument.md)
-- [Install-DscCli](./docs/en-US/Install-DscCLI.md)
-- [Invoke-PsDscResource](./docs/en-US/Invoke-PsDscResource.md)
-- [New-PsDscVsCodeSettingsFile](./docs/en-US/New-PsDscVsCodeSettingsFile.md)
+- [ConvertTo-PsDscJson](./docs/en-US/ConvertTo-PsDscJson.md)
+- [Export-PsDscConfig](./docs/en-US/Export-PsDscConfig.md)
+- [Export-PsDscResource](./docs/en-US/Export-PsDscResource.md)
+- [Find-PsDscResource](./docs/en-US/Find-PsDscResource.md)
+- [Get-PsDscConfig](./docs/en-US/Get-PsDscConfig.md)
+- [Get-PsDscResource](./docs/en-US/Get-PsDscResource.md)
+- [Initialize-PsDscResourceInput](./docs/en-US/Initialize-PsDscResourceInput.md)
+- [Install-DscExe](./docs/en-US/Install-DscExe.md)
+- [Remove-PsDscResource](./docs/en-US/Remove-PsDscResource.md)
+- [Set-PsDscConfig](./docs/en-US/Set-PsDscConfig.md)
+- [Set-PsDscResource](./docs/en-US/Set-PsDscResource.md)
+- [Test-PsDscConfig](./docs/en-US/Test-PsDscConfig.md)
+- [Test-PsDscResource](./docs/en-US/Test-PsDscResource.md)
 
 ## Installation
 
@@ -23,21 +29,22 @@ The PSDSC is published to [PowerShellGallery](https://www.powershellgallery.com/
 The module works on PowerShell 7+ and was tested on Windows. To install the module, use the following command:
 
 ```powershell
-Install-PSResource -Name PSDSC -TrustRepository -Repository PSGallery
+Install-PSResource -Name PSDSC
 ```
-
-> [!NOTE]
-> `Microsoft.PowerShell.PSResourceGet` should be shipped in higher version of PowerShell 7.2+. If you get _The term 'Install-PSResource' is not recognized as the name of a cmdlet, function, script file, or operable program error message_, update PowerShell to the latest version.
 
 ## Usage examples
 
-The PSDSC module is not difficult to operate, as it hooks directly into `dsc.exe`. While JSON is the primary driver, `dsc.exe` supports JSON and YAML as input. Under the hood, it is always converted to JSON. PSDSC extends more capabilities, by also supporting PowerShell objects based on `hashtable` object and a single `-ResourceInput` parameter. You don't have to worry about if the input is a `.json` file or `@{}` PowerShell input object. PSDSC translates the input to the required options.
+The PSDSC module is not difficult to operate. It calls the `dsc.exe` executable directly. While the input for `dsc.exe` only supports JSON and YAML as input, PSDSC extends it with more capabilities. It supports the PowerShell objects by passing in a `hashtable` object on a single parameter. The parameter `-Inputs` can be found on nearly every command in this module. This makes it easy recognizable and you don't have to worry about if the input is a `.json` file or a `${}` PowerShell input object. PSDSC translates the input to the required options underneath.
+
+> [!NOTE]
+>
+> You can always check out how it is translated by turning the `-Verbose` or `-Debug` parameter.
 
 PowerShell v7+ is required.
 
 ```powershell
-# start by installing 'dsc.exe' using Install-DscCli
-Install-DscCli
+# start by installing 'dsc.exe' using Install-DscExe
+Install-DscExe
 
 # if you have an existing configuration document as such
 # MyConfiguration.ps1
@@ -47,35 +54,38 @@ configuration MyConfiguration {
     {
         Environment CreatePathEnvironmentVariable
         {
-            Name = 'TestPathEnvironmentVariable'
-            Value = 'TestValue'
+            Name   = 'TestPathEnvironmentVariable'
+            Value  = 'TestValue'
             Ensure = 'Present'
-            Path = $true
+            Path   = $true
         }
     }
 }
 
-# you can use the ConvertTo-DscJson 
-$resourceInput = ConvertTo-DscJson -Path MyConfiguration.ps1
+
+# you can use the ConvertTo-PsDscJson
+$resourceInput = ConvertTo-PsDscJson -Path MyConfiguration.ps1
 
 # call dsc config get
-$r = $resourceInput | Invoke-PsDscConfig -Operation Get
+
+$r = Get-PsDscConfig -Inputs $resourceInput
 
 # return build arguments
 $r.Arguments
 
 # when working with resource, tab-completion kicks in on resources known to 'dsc.exe'
-Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry -Operation Get -ResourceInput '{"keyPath":"<keyPath>"}' #or
-Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry -Operation Get -ResourceInput '{"_exist":"<_exist>","_metadata":"<_metadata>","valueName":"<valueName>","keyPath":"<keyPath>","valueData":"<valueData>"}'
+Get-PsDscResource -Resource Microsoft.Windows/Registry -Inputs '{"keyPath":"<keyPath>"}' #or
+Get-PsDscResource -Resource Microsoft.Windows/Registry -Inputs '{"_exist":"<_exist>","_metadata":"<_metadata>","valueName":"<valueName>","keyPath":"<keyPath>","valueData":"<valueData>"}'
 
 # there are also possibilities to have different input types
-Invoke-PsDscResource -ResourceName Microsoft.Windows/Registry Set -ResourceInput @{keyPath = 'HKCU\1\2'}
+Get-PsDscResource -Resource Microsoft.Windows/Registry -Inputs @{keyPath = 'HKCU\MyPath'}
 
-Invoke-PsDscResource -ResourceName MIcrosoft.Windows/Registry Test -ResourceInput registry.example.resource.json
-Invoke-PsDscResource -ResourceName MIcrosoft.Windows/Registry Test -ResourceInput registry.example.resource.yaml
+# Or use paths
+Get-PsDscResource -Resource Microsoft.Windows/Registry -Inputs registry.example.resource.json
+Get-PsDscResource -Resource Microsoft.Windows/Registry -Inputs registry.example.resource.yaml
 
-# powershell adapter works also when cache is available from powershell.resource.ps1
-Invoke-PsDscResource -ResourceName Microsoft.WinGet.DSC/WinGetPackage -ResourceInput '{"Id":"<string>"}'
+# To generate example input
+Initialize-PsDscResourceInput -Resource Microsoft.Windows/Registry # Or use -RequiredOnly
 
 # to get schema definition integration in VSCode, you can use the New-PsDscVsCodeSettingsFile
 New-PsDscVsCodeSettingsFile # adds to settings.json file:
@@ -92,33 +102,8 @@ New-PsDscVsCodeSettingsFile # adds to settings.json file:
 #     }
 #   ]
 
-# using short alias to build a DSC v3 configuration document and execute it
-$resource = Initialize-PsDscConfigurationResource -ResourceName 'Registry' -ResourceType Microsoft.Windows/Registry -ResourceInput @{'keyPath' = 'HKCU\1'}
-$doc = Initialize-PsDscConfigDocument -SchemaVersion '2024/04' -Resource $resource -AsJson
-
-$p = @{
-    Operation = 'Get'
-    ResourceInput = $doc
-}
-Invoke-PsDscConfig @p
-
-# Invoke-PsDscConfig also supports the ability to use (.ps1) configuration document scripts.
-# MyConfiguration.ps1
-configuration MyConfiguration {
-    Import-DscResource -ModuleName PSDesiredStateConfiguration
-    Node localhost
-    {
-        Environment CreatePathEnvironmentVariable
-        {
-            Name = 'TestPathEnvironmentVariable'
-            Value = 'TestValue'
-            Ensure = 'Present'
-            Path = $true
-        }
-    }
-}
-Invoke-PsDscConfig -Operation Get -ResourceInput MyConfiguration.ps1
-
+# To find out more commands use
+Get-Command -Module PSDSC
 ```
 
 To see tab-completion kicking in for resources, check out the following:
@@ -133,7 +118,7 @@ PSDSC targets PowerShell 7+, meaning it should run cross-platform. However, most
 - Build configuration documents from PowerShell v1/2 DSC Documents
 - Support multiple input possibilities
 - Familiarize yourself with new DSC concepts
-- Assist in setting up authoring experience for JSON and YAMl v3 DSC configuration documents
+- Assist in setting up authoring experience for JSON and YAML v3 DSC configuration documents
 
 ## Contributing
 
