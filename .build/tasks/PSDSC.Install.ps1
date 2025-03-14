@@ -60,18 +60,11 @@ task PSDSC.Windows.Install {
         throw "This function is only supported for Windows systems."
     }
 
-    $base = 'https://api.github.com/repos/PowerShell/DSC/releases'
-
+    $base = 'https://api.github.com/repos/PowerShell/DSC/releases/latest'
 
     $releases = Invoke-RestMethod -Uri $base
 
-    # TODO: remove after latest is known
-    if ($releases.Count -gt 1)
-    {
-        $releases = $releases | Sort-Object -Descending | Select-Object -First 1
-    }
-
-    $fileName = 'DSC-3.0.0-*-x86_64-pc-windows-msvc.zip'
+    $fileName = 'DSC-3.0.0-x86_64-pc-windows-msvc.zip'
     # get latest asset to be downloaded
     $asset = $releases.assets | Where-Object -Property Name -Like $fileName
 
