@@ -52,22 +52,16 @@ function Install-DscExe
     else
     {
         # TODO: no latest tag because no official release
-        $releaseUrl = $base
+        $releaseUrl = ('{0}/latest' -f $base)
     }
 
     $releases = Invoke-RestMethod -Uri $releaseUrl
-
-    # TODO: remove after latest is known
-    if ($releases.Count -gt 1)
-    {
-        $releases = $releases | Sort-Object -Descending | Select-Object -First 1
-    }
 
     if ($IsWindows)
     {
         if ($Force.IsPresent -or -not $dscInstalled)
         {
-            $fileName = 'DSC-3.0.0-*-x86_64-pc-windows-msvc.zip'
+            $fileName = 'DSC-3.0.0-x86_64-pc-windows-msvc.zip'
             # get latest asset to be downloaded
             $asset = $releases.assets | Where-Object -Property Name -Like $fileName
 
