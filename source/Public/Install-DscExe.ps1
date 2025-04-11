@@ -28,7 +28,7 @@ function Install-DscExe
     #>
     [CmdletBinding()]
     [OutputType([System.Boolean])]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPositionalParameters", "PowerShell 7")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPositionalParameters", "")]
     param (
         [Parameter()]
         [ArgumentCompleter([VersionCompleter])]
