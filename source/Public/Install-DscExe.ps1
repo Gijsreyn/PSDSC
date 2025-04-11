@@ -28,6 +28,7 @@ function Install-DscExe
     #>
     [CmdletBinding()]
     [OutputType([System.Boolean])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPositionalParameters", "")]
     param (
         [Parameter()]
         [ArgumentCompleter([VersionCompleter])]
@@ -61,7 +62,7 @@ function Install-DscExe
     {
         if ($Force.IsPresent -or -not $dscInstalled)
         {
-            $fileName = 'DSC-3.0.0-x86_64-pc-windows-msvc.zip'
+            $fileName = 'DSC-*-x86_64-pc-windows-msvc.zip'
             # get latest asset to be downloaded
             $asset = $releases.assets | Where-Object -Property Name -Like $fileName
 
@@ -116,7 +117,6 @@ function Install-DscExe
         }
         else
         {
-            # TODO: When DSC is fully available in GitHub, compare versions and install if newer
             Write-Warning -Message "DSC is already installed. Use -Force to reinstall."
             return $true
         }
@@ -125,14 +125,15 @@ function Install-DscExe
     {
         if ($UseVersion)
         {
-            $filePath = '/tmp/DSC-' + $Version + '-x86_64-unknown-linux-gnu.tar.gz'
-            $uri = "https://github.com/PowerShell/DSC/releases/download/v$Version/DSC-$Version-x86_64-unknown-linux-gnu.tar.gz"
+            $filePath = [System.IO.Path]::Combine($env:TEMP, "DSC-$Version-x86_64-linux.tar.gz")
+            $uri = "https://github.com/PowerShell/DSC/releases/download/v$Version/DSC-$Version-x86_64-linux.tar.gz"
         }
         else
         {
-            $filePath = '/tmp/DSC-3.0.0-x86_64-unknown-linux-gnu.tar.gz'
-            $fileName = 'DSC-3.0.0-*-x86_64-unknown-linux-gnu.tar.gz'
-            $uri = ($releases.assets | Where-Object -Property Name -Like $fileName).browser_download_url
+            $fileName = 'DSC-*-x86_64-linux.tar.gz'
+            $asset = $releases.assets | Where-Object -Property Name -Like $fileName
+            $filePath = [System.IO.Path]::Combine($env:TEMP, $asset.name)
+            $uri = $asset.browser_download_url
         }
 
         Write-Verbose -Message "Using URI: $uri on path: $filePath"
@@ -150,7 +151,7 @@ function Install-DscExe
         sudo ln -s /opt/microsoft/dsc /usr/bin/dsc
 
         # Add to path
-        $env:PATH += [System.IO.Path]::PathSeparator + "/usr/bin/dsc"
+        $env:PATH += [System.IO.Path]::PathSeparator + (Join-Path 'usr' 'bin' 'dsc')
 
         return $true
     }
@@ -158,14 +159,15 @@ function Install-DscExe
     {
         if ($UseVersion)
         {
-            $filePath = '/tmp/DSC-' + $Version + '-x86_64-apple-darwin.tar.gz'
+            $filePath = [System.IO.Path]::Combine($env:TEMP, "DSC-$Version-x86_64-apple-darwin.tar.gz")
             $uri = "https://github.com/PowerShell/DSC/releases/download/v$Version/DSC-$Version-x86_64-apple-darwin.tar.gz"
         }
         else
         {
-            $filePath = '/tmp/DSC-3.0.0-x86_64-apple-darwin.tar.gz'
-            $fileName = 'DSC-3.0.0-*-x86_64-apple-darwin.tar.gz'
-            $uri = ($releases.assets | Where-Object -Property Name -Like $fileName).browser_download_url
+            $fileName = 'DSC-*-x86_64-apple-darwin.tar.gz'
+            $asset = $releases.assets | Where-Object -Property Name -Like $fileName
+            $filePath = [System.IO.Path]::Combine($env:TEMP, $asset.name)
+            $uri = $asset.browser_download_url
         }
 
         curl -L -o $filePath $uri
@@ -183,6 +185,8 @@ function Install-DscExe
 
         Get-ChildItem -Path /usr/local/microsoft/dsc -Recurse
         # Add to path
-        $env:PATH += [System.IO.Path]::PathSeparator + "/usr/local/microsoft/dsc"
+        $env:PATH += [System.IO.Path]::PathSeparator + (Join-Path 'usr' 'local' 'microsoft' 'dsc')
+
+        return $true
     }
 }

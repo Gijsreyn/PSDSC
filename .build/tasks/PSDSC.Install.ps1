@@ -64,7 +64,7 @@ task PSDSC.Windows.Install {
 
     $releases = Invoke-RestMethod -Uri $base
 
-    $fileName = 'DSC-3.0.0-x86_64-pc-windows-msvc.zip'
+    $fileName = 'DSC-*-x86_64-pc-windows-msvc.zip'
     # get latest asset to be downloaded
     $asset = $releases.assets | Where-Object -Property Name -Like $fileName
 

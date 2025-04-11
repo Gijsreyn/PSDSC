@@ -23,11 +23,11 @@ AfterAll {
 
 Describe 'Get-CurrentDscExeVersion' -Tag Private, Unit {
     Context 'Check if DSC version is retrieved' {
-        Mock -CommandName 'Get-CurrentDscExeVersion' -MockWith { return '3.0.0-1234' }
+        Mock -CommandName 'Get-CurrentDscExeVersion' -MockWith { return '3.0.2' }
         It 'Should return a valid version string' {
             InModuleScope -ScriptBlock {
                 $result = Get-CurrentDscExeVersion
-                $result | Should -Match '3.0.0-*'
+                $result | Should -Match '3.0.*'
             }
         }
     }
