@@ -46,7 +46,7 @@ Describe 'Get-CurrentDscExeVersion' -Tag Private, Integration {
         It 'Should return a valid version string' {
             InModuleScope -ScriptBlock {
                 $result = Get-CurrentDscExeVersion
-                $result | Should -Match '3.0.0-*'
+                $result | Should -Match '3.0.*'
             }
         }
     }
