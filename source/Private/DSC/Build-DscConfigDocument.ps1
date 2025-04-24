@@ -46,54 +46,58 @@ function Build-DscConfigDocument
         $Content
     )
 
-    # create configuration document resource class (can be re-used)
-    $configurationDocument = [PSCustomObject]@{
-        name       = $null
-        type       = $null
-        properties = @{}
+    # start by declaring the configuration document
+    $configurationDocument = [ordered]@{
+        "`$schema" = "https://aka.ms/dsc/schemas/v3/bundled/config/document.json"
+        resources  = $null
     }
 
-    # convert object
-    $rs = ConvertTo-DscObject @PSBoundParameters -ErrorAction SilentlyContinue
+    # convert all objects to hashtables
+    $dscObjects = ConvertTo-DscObject @PSBoundParameters -ErrorAction SilentlyContinue
 
-    $configurationDocument.name = ($rs | Select-Object -First 1 -ExpandProperty ConfigurationName)
-    $configurationDocument.type = ($rs | Select-Object -First 1 -ExpandProperty Type)
+    # store all resources in variables
+    $resources = [System.Collections.Generic.List[object]]::new()
 
-    # bag to hold resources
-    $resourceProps = [System.Collections.Generic.List[object]]::new()
-
-    foreach ($resource in $rs)
+    foreach ($dscObject in $dscObjects)
     {
-        # props
-        $properties = @{}
-
-        # TODO: make the dependsOn key using resourceId() function
-        $resource.GetEnumerator() | ForEach-Object { if ($_.Key -notin @('ResourceInstanceName', 'ResourceName', 'ModuleName', 'DependsOn', 'ConfigurationName', 'Type'))
-            {
-                $properties.Add($_.Key, $_.Value)
-            } }
-
-        # build the module
-        $inputObject = [PSCustomObject]@{
-            name       = $resource.ResourceInstanceName
-            type       = ("{0}/{1}" -f $resource.ModuleName, $resource.ResourceName)
-            properties = $properties
+        $resource = [PSCustomObject]@{
+            name       = $dscObject.ResourceInstanceName
+            type       = ("{0}/{1}" -f $dscObject.ModuleName, $dscObject.ResourceName)
+            properties = $null
         }
 
-        # add to bag
-        $resourceProps.Add($inputObject)
+        $properties = [ordered]@{}
+
+        foreach ($dscObjectProperty in $dscObject.GetEnumerator())
+        {
+            if ($dscObjectProperty.Key -notin @('ResourceInstanceName', 'ResourceName', 'ModuleName', 'DependsOn', 'ConfigurationName', 'Type'))
+            {
+                $properties.Add($dscObjectProperty.Key, $dscObjectProperty.Value)
+            }
+        }
+
+        # add properties
+        $resource.properties = $properties
+
+        if ($dscObject.ContainsKey('DependsOn'))
+        {
+            $dependsOnKeys = $dscObject.DependsOn.Split("]").Replace("[", "")
+
+            $previousGroupHash = $dscObjects | Where-Object { $_.ResourceName -eq $dependsOnKeys[0] -and $_.ResourceInstanceName -eq $dependsOnKeys[1] }
+            if ($previousGroupHash)
+            {
+                $dependsOnString = "[resourceId('$("{0}/{1}" -f $previousGroupHash.ModuleName, $previousGroupHash.ResourceName)','$($previousGroupHash.ResourceInstanceName)')]"
+
+                Write-Verbose -Message "Found '$dependsOnstring' for resource: $($dscObject.ResourceInstanceName)"
+                # Add it to the object
+                $resource | Add-Member -MemberType NoteProperty -Name 'dependsOn' -Value @($dependsOnString)
+            }
+        }
+
+        $resources.Add($resource)
     }
 
-    # add all the resources
-    $configurationDocument.properties = @{
-        resources = $resourceProps
-    }
-
-    # TODO: get schema information from GitHub
-    $configurationDocument = [ordered]@{
-        "`$schema" = "https://raw.githubusercontent.com/PowerShell/DSC/main/schemas/2024/04/config/document.json"
-        resources  = @($configurationDocument)
-    }
+    $configurationDocument.resources = $resources
 
     return $configurationDocument
 }

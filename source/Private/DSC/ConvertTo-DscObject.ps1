@@ -198,12 +198,6 @@ function ConvertTo-DscObject
         $currentResourceInfo.Add("ResourceInstanceName", $resourceInstanceName)
         $currentResourceInfo.Add("ModuleName", $ModulesToLoad.ModuleName)
         $currentResourceInfo.Add("ConfigurationName", $configurationName)
-        $adapter = 'Microsoft.DSC/PowerShell'
-        if ($PSVersionTable.PSEdition -ne 'Core')
-        {
-            $adapter = 'Microsoft.Windows/WindowsPowerShell'
-        }
-        $currentResourceInfo.Add("Type", $adapter)
 
         # Get a reference to the current resource.
         $currentResource = $DSCResources | Where-Object -FilterScript { $_.Name -eq $resourceType }

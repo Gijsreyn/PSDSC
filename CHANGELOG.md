@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2025-04-24
+
+### Changed
+
+- Changed the way how `ConvertTo-PsDsc*` commands work with adapters
+
 ## [1.2.1] - 2025-04-11
 
 ### Fixed

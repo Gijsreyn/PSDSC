@@ -1,4 +1,4 @@
-Describe 'ConvertTo-DscYaml' {
+Describe 'ConvertTo-PsDscYaml' {
     Context 'Converts PowerShell script to DSC v3 YAML' {
         BeforeAll {
             $script:filePath = (Join-Path -Path $TestDrive -ChildPath 'test.ps1')
@@ -14,24 +14,22 @@ configuration MyConfiguration {
             Value = 'TestValue'
             Ensure = 'Present'
             Path = $true
-            Target = @('Process')
         }
     }
 }
 '@
             Set-Content -Path $filePath -Value $content
-
-            $script:skip = (Get-Command ConvertFrom-Yaml).Parameters.Keys -contains 'InputObject'
         }
 
         AfterAll {
             Remove-Item -Path $filePath -Recurse -Force
         }
 
-        It 'Should return valid YAML' -Skip:(!$skip) {
+        It 'Should return valid YAML' {
             $yaml = ConvertTo-PsDscYaml -Path $filePath
             $out = $yaml | ConvertFrom-Yaml
-            $out.resources.name | Should -Be 'MyConfiguration'
+            $out.resources.name | Should -Be 'CreatePathEnvironmentVariable'
+            $out.resources.type | Should -Be 'PSDesiredStateConfiguration/Environment'
         }
     }
 }
