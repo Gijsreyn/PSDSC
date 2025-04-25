@@ -49,11 +49,16 @@ function Build-DscConfigDocument
     # start by declaring the configuration document
     $configurationDocument = [ordered]@{
         "`$schema" = "https://aka.ms/dsc/schemas/v3/bundled/config/document.json"
-        resources  = $null
+        resources  = @()
     }
 
     # convert all objects to hashtables
     $dscObjects = ConvertTo-DscObject @PSBoundParameters -ErrorAction SilentlyContinue
+
+    if (-not $dscObjects -or $dscObjects.Count -eq 0)
+    {
+        Write-Warning "ConvertTo-DscObject returned no objects. Conversion may have failed."
+    }
 
     # store all resources in variables
     $resources = [System.Collections.Generic.List[object]]::new()
@@ -63,7 +68,7 @@ function Build-DscConfigDocument
         $resource = [PSCustomObject]@{
             name       = $dscObject.ResourceInstanceName
             type       = ("{0}/{1}" -f $dscObject.ModuleName, $dscObject.ResourceName)
-            properties = $null
+            properties = @()
         }
 
         $properties = [ordered]@{}
@@ -79,7 +84,7 @@ function Build-DscConfigDocument
         # add properties
         $resource.properties = $properties
 
-        if ($dscObject.ContainsKey('DependsOn'))
+        if ($dscObject.ContainsKey('DependsOn') -and $dscObject.DependsOn)
         {
             $dependsOnKeys = $dscObject.DependsOn.Split("]").Replace("[", "")
 
