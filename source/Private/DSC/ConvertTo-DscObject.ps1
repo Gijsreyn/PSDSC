@@ -123,6 +123,12 @@ function ConvertTo-DscObject
                     $moduleName = $statement.CommandElements[$i + 1].Value
                     $currentModule.Add('ModuleName', $moduleName)
                 }
+                elseif ($statement.CommandElements[$i].ParameterName -eq 'Module' -and `
+                    ($i + 1) -lt $statement.CommandElements.Count)
+                {
+                    $moduleName = $statement.CommandElements[$i + 1].Value
+                    $currentModule.Add('ModuleName', $moduleName)
+                }
                 elseif ($statement.CommandElements[$i].ParameterName -eq 'ModuleVersion' -and `
                     ($i + 1) -lt $statement.CommandElements.Count)
                 {

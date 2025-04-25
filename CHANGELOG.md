@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2025-04-25
+
+### Fixed
+
+- Fix when `-Module` is added in configuration document for convertion
+
 ## [1.2.2] - 2025-04-24
 
 ### Changed
