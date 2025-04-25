@@ -30,22 +30,23 @@ configuration MyConfiguration {
         It 'Should return valid JSON using file path' -Skip:(!$IsWindows) {
             $json = ConvertTo-PsDscJson -Path $filePath
             $out = $json | ConvertFrom-Json -Depth 10
-            $out.resources.name | Should -Be 'MyConfiguration'
-            $out.resources.type | Should -BeLike '*PowerShell*'
-            $out.resources.properties.resources.properties.Name | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Value | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Ensure | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Path | Should -Not -BeNullOrEmpty
+            $out.resources.name | Should -Be 'CreatePathEnvironmentVariable'
+            $out.resources.type | Should -Be 'PSDesiredStateConfiguration/Environment'
+            $out.resources.properties.Value | Should -Be 'TestValue'
+            $out.resources.properties.Name | Should -Be 'TestPathEnvironmentVariable'
+            $out.resources.properties.Ensure | Should -Be 'Present'
+            $out.resources.properties.Path | Should -BeTrue
         }
+
         It 'Should return valid JSON using content' -Skip:(!$IsWindows) {
             $json = ConvertTo-PsDscJson -Content $content
             $out = $json | ConvertFrom-Json -Depth 10
-            $out.resources.name | Should -Be 'MyConfiguration'
-            $out.resources.type | Should -BeLike '*PowerShell*'
-            $out.resources.properties.resources.properties.Name | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Value | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Ensure | Should -Not -BeNullOrEmpty
-            $out.resources.properties.resources.properties.Path | Should -Not -BeNullOrEmpty
+            $out.resources.name | Should -Be 'CreatePathEnvironmentVariable'
+            $out.resources.type | Should -Be 'PSDesiredStateConfiguration/Environment'
+            $out.resources.properties.Value | Should -Be 'TestValue'
+            $out.resources.properties.Name | Should -Be 'TestPathEnvironmentVariable'
+            $out.resources.properties.Ensure | Should -Be 'Present'
+            $out.resources.properties.Path | Should -BeTrue
         }
     }
 }

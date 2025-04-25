@@ -92,10 +92,20 @@ function ConvertTo-PsDscYaml
     end
     {
         Write-Verbose ("Ended: {0}" -f $MyInvocation.MyCommand.Name)
-        if (-not (Get-Module -ListAvailable yayaml -ErrorAction SilentlyContinue) -or (Get-Module -ListAvailable powershell-yaml))
+        $yamlCommand = Get-Command -Name ConvertTo-Yaml -ErrorAction SilentlyContinue
+        if ($yamlCommand)
         {
-            $inputObject = ConvertTo-Yaml -InputObject $configurationDocument -Depth 10
+            $yamlParams = @{}
+            if ($yamlCommand.Parameters.ContainsKey('Depth'))
+            {
+                $yamlParams = @{
+                    Depth = 10
+                }
+            }
+
+            return ($configurationDocument | ConvertTo-Yaml @yamlParams)
         }
-        return $inputObject
+
+        return $configurationDocument
     }
 }
