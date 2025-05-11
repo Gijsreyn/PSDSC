@@ -25,5 +25,9 @@ Describe 'Install-DscExe' -Tag Public, Integration {
         It 'Should install the executable with -Force on Windows' -Skip:(!$IsWindows) {
             Install-DscExe -Force | Should -Be $true
         }
+
+        It 'Should install the executable with -IncludePrerelease on Windows' -Skip:(!$IsWindows) {
+            Install-DscExe -IncludePrerelease | Should -Be $true
+        }
     }
 }
