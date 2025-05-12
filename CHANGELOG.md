@@ -5,6 +5,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.4] - 2025-05-12
+
 ### Added
 
 - `Install-DscExe` can now install latest prerelease when using parameter
