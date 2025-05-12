@@ -13,6 +13,9 @@ function Install-DscExe
     .PARAMETER Version
         The version of DSC to install.
 
+    .PARAMETER IncludePrerelease
+        This switch will allow latest pre-release version of DSC.
+
     .EXAMPLE
         PS C:\> Install-DscExe
 
@@ -37,7 +40,11 @@ function Install-DscExe
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
-        $Force
+        $Force,
+
+        [Parameter()]
+        [System.Management.Automation.SwitchParameter]
+        $IncludePrerelease
     )
 
     $dscInstalled = Test-DscExe
@@ -52,8 +59,23 @@ function Install-DscExe
     }
     else
     {
-        # TODO: no latest tag because no official release
-        $releaseUrl = ('{0}/latest' -f $base)
+        if ($IncludePrerelease.IsPresent)
+        {
+            $availableReleases = Invoke-RestMethod -Uri $base -Method 'Get' -ErrorAction 'Stop'
+            $prereleaseTag = $availableReleases |
+                Where-Object -FilterScript { -not $_.draft } |
+                    Sort-Object -Property 'created_at' -Descending |
+                        Select-Object -First 1 -ExpandProperty 'tag_name'
+
+            $releaseUrl = ('{0}/tags/{1}' -f $base, $prereleaseTag)
+
+            $UseVersion = $true
+        }
+        else
+        {
+            # TODO: no latest tag because no official release
+            $releaseUrl = ('{0}/latest' -f $base)
+        }
     }
 
     $releases = Invoke-RestMethod -Uri $releaseUrl
