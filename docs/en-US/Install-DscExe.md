@@ -2,9 +2,9 @@
 document type: cmdlet
 external help file: PSDSC-Help.xml
 HelpUri: ''
-Locale: en-US
+Locale: en-NL
 Module Name: PSDSC
-ms.date: 02/28/2025
+ms.date: 05/23/2025
 PlatyPS schema version: 2024-05-01
 title: Install-DscExe
 ---
@@ -20,7 +20,7 @@ Install DSC executable.
 ### __AllParameterSets
 
 ```
-Install-DscExe [[-Version] <string>] [-Force] [<CommonParameters>]
+Install-DscExe [[-Version] <string>] [-Force] [-IncludePrerelease] [<CommonParameters>]
 ```
 
 ## ALIASES
@@ -51,6 +51,28 @@ Install DSC and forces the installed if there is already a version installed.
 ### -Force
 
 This switch will force DSC to be installed, even if another installation is already in place.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+ParameterValue: []
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -IncludePrerelease
+
+This switch will allow latest pre-release version of DSC.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter
@@ -109,10 +131,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## NOTES
 
-For more details, go to module repository at: https://github.com/Gijsreyn/PSDSC.
-
+For more details, go to module repository at: <https://github.com/Gijsreyn/PSDSC>.
 
 ## RELATED LINKS
 
 {{ Fill in the related links here }}
-
