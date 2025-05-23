@@ -2,7 +2,7 @@
 document type: cmdlet
 external help file: PSDSC-Help.xml
 HelpUri: ''
-Locale: en-NL
+Locale: en-US
 Module Name: PSDSC
 ms.date: 05/23/2025
 PlatyPS schema version: 2024-05-01
