@@ -68,8 +68,6 @@ function Install-DscExe
                         Select-Object -First 1 -ExpandProperty 'tag_name'
 
             $releaseUrl = ('{0}/tags/{1}' -f $base, $prereleaseTag)
-
-            $UseVersion = $true
         }
         else
         {
@@ -163,17 +161,14 @@ function Install-DscExe
         # Create the target folder where powershell will be placed
         sudo mkdir -p /opt/microsoft/dsc
 
-        # Expand powershell to the target folder
+        # Expand downloaded file to the target folder
         sudo tar zxf $filePath -C /opt/microsoft/dsc
 
-        # Set execute permissions
-        sudo chmod +x /opt/microsoft/dsc
+        # Set execute permissions on the dsc executable
+        sudo chmod +x /opt/microsoft/dsc/dsc
 
-        # Create the symbolic link that points to pwsh
-        sudo ln -s /opt/microsoft/dsc /usr/bin/dsc
-
-        # Add to path
-        $env:PATH += [System.IO.Path]::PathSeparator + (Join-Path 'usr' 'bin' 'dsc')
+        # Create the symbolic link that points to dsc executable
+        sudo ln -fs /opt/microsoft/dsc/dsc /usr/bin/dsc
 
         return $true
     }
