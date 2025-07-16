@@ -170,7 +170,8 @@ function Install-DscExe
         sudo chmod +x /opt/microsoft/dsc/dsc
 
         # Create the symbolic link that points to dsc executable
-        sudo ln -fs /opt/microsoft/dsc/dsc /usr/bin/dsc
+        sudo mkdir -p /usr/local/bin
+        sudo ln -fs /opt/microsoft/dsc/dsc /usr/local/bin/dsc
 
         return $true
     }
@@ -201,8 +202,9 @@ function Install-DscExe
         # Set execute permissions on the dsc executable
         sudo chmod +x /usr/local/microsoft/dsc/dsc
 
-        # Create the symbolic link that points to dsc executable
-        sudo ln -fs /usr/local/microsoft/dsc/dsc /usr/bin/dsc
+        # Create the symbolic link that points to dsc executables
+        sudo mkdir -p /usr/local/bin
+        sudo ln -fs /usr/local/microsoft/dsc/dsc /usr/local/bin/dsc
 
         return $true
     }
