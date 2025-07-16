@@ -68,8 +68,6 @@ function Install-DscExe
                         Select-Object -First 1 -ExpandProperty 'tag_name'
 
             $releaseUrl = ('{0}/tags/{1}' -f $base, $prereleaseTag)
-
-            $UseVersion = $true
         }
         else
         {
@@ -145,69 +143,68 @@ function Install-DscExe
     }
     elseif ($IsLinux)
     {
+        $tmpdir = [System.IO.Path]::GetTempPath()
+
         if ($UseVersion)
         {
-            $filePath = [System.IO.Path]::Combine($env:TEMP, "DSC-$Version-x86_64-linux.tar.gz")
+            $filePath = [System.IO.Path]::Combine($tmpdir, "DSC-$Version-x86_64-linux.tar.gz")
             $uri = "https://github.com/PowerShell/DSC/releases/download/v$Version/DSC-$Version-x86_64-linux.tar.gz"
         }
         else
         {
             $fileName = 'DSC-*-x86_64-linux.tar.gz'
             $asset = $releases.assets | Where-Object -Property Name -Like $fileName
-            $filePath = [System.IO.Path]::Combine($env:TEMP, $asset.name)
+            $filePath = [System.IO.Path]::Combine($tmpdir, $asset.name)
             $uri = $asset.browser_download_url
         }
 
         Write-Verbose -Message "Using URI: $uri on path: $filePath"
         curl -L -o $filePath $uri
-        # Create the target folder where powershell will be placed
+        # Create the target folder where downloaded file will be extracted
         sudo mkdir -p /opt/microsoft/dsc
 
-        # Expand powershell to the target folder
+        # Expand downloaded file to the target folder
         sudo tar zxf $filePath -C /opt/microsoft/dsc
 
-        # Set execute permissions
-        sudo chmod +x /opt/microsoft/dsc
+        # Set execute permissions on the dsc executable
+        sudo chmod +x /opt/microsoft/dsc/dsc
 
-        # Create the symbolic link that points to pwsh
-        sudo ln -s /opt/microsoft/dsc /usr/bin/dsc
-
-        # Add to path
-        $env:PATH += [System.IO.Path]::PathSeparator + (Join-Path 'usr' 'bin' 'dsc')
+        # Create the symbolic link that points to dsc executable
+        sudo mkdir -p /usr/local/bin
+        sudo ln -fs /opt/microsoft/dsc/dsc /usr/local/bin/dsc
 
         return $true
     }
     elseif ($IsMacOS)
     {
+        $tmpdir = [System.IO.Path]::GetTempPath()
+
         if ($UseVersion)
         {
-            $filePath = [System.IO.Path]::Combine($env:TEMP, "DSC-$Version-x86_64-apple-darwin.tar.gz")
+            $filePath = [System.IO.Path]::Combine($tmpDir, "DSC-$Version-x86_64-apple-darwin.tar.gz")
             $uri = "https://github.com/PowerShell/DSC/releases/download/v$Version/DSC-$Version-x86_64-apple-darwin.tar.gz"
         }
         else
         {
             $fileName = 'DSC-*-x86_64-apple-darwin.tar.gz'
             $asset = $releases.assets | Where-Object -Property Name -Like $fileName
-            $filePath = [System.IO.Path]::Combine($env:TEMP, $asset.name)
+            $filePath = [System.IO.Path]::Combine($tmpDir, $asset.name)
             $uri = $asset.browser_download_url
         }
 
         curl -L -o $filePath $uri
-        # Create the target folder where powershell will be placed
+        # Create the target folder where downloaded file will be extracted
         sudo mkdir -p /usr/local/microsoft/dsc
 
-        # Expand powershell to the target folder
+        # Expand downloaded file to the target folder
         sudo tar zxf $filePath -C /usr/local/microsoft/dsc
 
-        # Set execute permissions
-        sudo chmod +x /usr/local/microsoft/dsc
+        # Set execute permissions on the dsc executable
+        sudo chmod +x /usr/local/microsoft/dsc/dsc
 
-        # Create the symbolic link that points to pwsh
-        sudo ln -s /usr/local/microsoft/dsc /usr/bin/dsc
-
-        Get-ChildItem -Path /usr/local/microsoft/dsc -Recurse
-        # Add to path
-        $env:PATH += [System.IO.Path]::PathSeparator + (Join-Path 'usr' 'local' 'microsoft' 'dsc')
+        # Create the symbolic link that points to dsc executables
+        sudo mkdir -p /usr/local/bin
+        sudo ln -fs /usr/local/microsoft/dsc/dsc /usr/local/bin/dsc
 
         return $true
     }
