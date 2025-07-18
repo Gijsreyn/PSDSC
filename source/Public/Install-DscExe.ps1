@@ -66,7 +66,7 @@ function Install-DscExe
     if ($PSBoundParameters.ContainsKey('Token'))
     {
         # Convert SecureString to plain text for the authorization header
-        $plainTextToken = Convert-SecureStringAsPlainText -SecureString $Token
+        $plainTextToken = ConvertFrom-SecureString -SecureString $Token -AsPlainText
 
         $headers.Authorization = "Bearer $plainTextToken"
     }
