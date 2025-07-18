@@ -16,6 +16,10 @@ function Install-DscExe
     .PARAMETER IncludePrerelease
         This switch will allow latest pre-release version of DSC.
 
+    .PARAMETER Token
+        The GitHub token to use for authentication when downloading the DSC executable.
+        If not provided, the function will attempt to download without authentication.
+
     .EXAMPLE
         PS C:\> Install-DscExe
 
@@ -44,12 +48,28 @@ function Install-DscExe
 
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
-        $IncludePrerelease
+        $IncludePrerelease,
+
+        [Parameter()]
+        [System.Security.SecureString]
+        $Token
     )
 
     $dscInstalled = Test-DscExe
 
     $base = 'https://api.github.com/repos/PowerShell/DSC/releases'
+
+    $headers = @{
+        Accept = 'application/vnd.github.v3+json'
+    }
+
+    if ($PSBoundParameters.ContainsKey('Token'))
+    {
+        # Convert SecureString to plain text for the authorization header
+        $plainTextToken = ConvertFrom-SecureString -SecureString $Token -AsPlainText
+
+        $headers.Authorization = "Bearer $plainTextToken"
+    }
 
     if ($PSBoundParameters.ContainsKey('Version'))
     {
@@ -61,7 +81,7 @@ function Install-DscExe
     {
         if ($IncludePrerelease.IsPresent)
         {
-            $availableReleases = Invoke-RestMethod -Uri $base -Method 'Get' -ErrorAction 'Stop'
+            $availableReleases = Invoke-RestMethod -Uri $base -Method 'Get' -Headers $headers -ErrorAction 'Stop'
             $prereleaseTag = $availableReleases |
                 Where-Object -FilterScript { -not $_.draft } |
                     Sort-Object -Property 'created_at' -Descending |
@@ -76,7 +96,7 @@ function Install-DscExe
         }
     }
 
-    $releases = Invoke-RestMethod -Uri $releaseUrl
+    $releases = Invoke-RestMethod -Uri $releaseUrl -Headers $headers
 
     if ($IsWindows)
     {

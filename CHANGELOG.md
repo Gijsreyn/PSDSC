@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- `Install-DscExe`
+  - Support authenticating against GitHub using a token when accessing
+    current release information.
+
 ## [1.2.5] - 2025-07-16
 
 ### Fixed
