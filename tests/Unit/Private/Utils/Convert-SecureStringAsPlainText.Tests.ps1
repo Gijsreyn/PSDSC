@@ -24,11 +24,6 @@ AfterAll {
 Describe 'Convert-SecureStringAsPlainText' {
     Context 'When converting a secure string to plain text' {
         BeforeAll {
-            # Get the localized string for the verbose message
-            $mockLocalizedConvertingMessage = InModuleScope -ScriptBlock {
-                $script:localizedData.Convert_SecureStringAsPlainText_Converting
-            }
-
             # Create a test secure string
             $testPlainText = 'P@ssw0rd'
             $testSecureString = ConvertTo-SecureString -String $testPlainText -AsPlainText -Force
