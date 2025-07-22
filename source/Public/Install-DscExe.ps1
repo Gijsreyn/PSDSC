@@ -73,7 +73,7 @@ function Install-DscExe
 
     if ($PSBoundParameters.ContainsKey('Version'))
     {
-        Assert-DscVersion -RequiredVersion $Version
+        Assert-DscVersion -Version $Version
 
         $releaseUrl = ('{0}/tags/v{1}' -f $base, $Version)
 

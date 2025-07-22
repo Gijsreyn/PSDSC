@@ -9,13 +9,13 @@ function Assert-DscVersion
         It uses the `VersionCompleter` class to retrieve all available versions and compares them
         against the specified required version. If the required version is not found, it throws an error.
 
-    .PARAMETER RequiredVersion
+    .PARAMETER Version
         The version of DSC that is required. This should be a string representing the version number.
 
     .EXAMPLE
         This example checks if the required DSC version '1.0.0' is available:
         ```powershell
-        Assert-DscVersion -RequiredVersion '1.0.0'
+        Assert-DscVersion -Version '1.0.0'
         ```
 
     .NOTES
@@ -24,7 +24,7 @@ function Assert-DscVersion
     [CmdletBinding()]
     param (
         [Parameter(Mandatory = $true)]
-        [string]$RequiredVersion
+        [string]$Version
     )
 
     # Use the VersionCompleter to get all available versions
@@ -33,8 +33,8 @@ function Assert-DscVersion
 
     $versionText = $allVersions | Select-Object -ExpandProperty CompletionText
 
-    if ($versionText -notcontains $RequiredVersion)
+    if ($versionText -notcontains $Version)
     {
-        throw "The required DSC version '$RequiredVersion' is not available. Available versions are: $($versionText -join ', ')"
+        throw "The required DSC version '$Version' is not available. Available versions are: $($versionText -join ', ')"
     }
 }
