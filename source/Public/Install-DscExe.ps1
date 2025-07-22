@@ -73,6 +73,8 @@ function Install-DscExe
 
     if ($PSBoundParameters.ContainsKey('Version'))
     {
+        Assert-DscVersion -RequiredVersion $Version
+
         $releaseUrl = ('{0}/tags/v{1}' -f $base, $Version)
 
         $UseVersion = $true
@@ -83,7 +85,7 @@ function Install-DscExe
         {
             $availableReleases = Invoke-RestMethod -Uri $base -Method 'Get' -Headers $headers -ErrorAction 'Stop'
             $prereleaseTag = $availableReleases |
-                Where-Object -FilterScript { -not $_.draft } |
+                Where-Object -FilterScript { -not $_.draft -and $_.prerelease -eq $true } |
                     Sort-Object -Property 'created_at' -Descending |
                         Select-Object -First 1 -ExpandProperty 'tag_name'
 
