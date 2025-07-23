@@ -84,11 +84,14 @@ function Install-DscExe
         if ($IncludePrerelease.IsPresent)
         {
             $availableReleases = Invoke-RestMethod -Uri $base -Method 'Get' -Headers $headers -ErrorAction 'Stop'
-            $prereleaseTag = $availableReleases |
-                Where-Object -FilterScript { -not $_.draft -and $_.prerelease -eq $true } |
-                    Sort-Object -Property 'created_at' -Descending |
-                        Select-Object -First 1 -ExpandProperty 'tag_name'
+            $highestVersionRelease = $availableReleases |
+                Where-Object { -not $_.draft } |
+                    Sort-Object {
+                        [System.Management.Automation.SemanticVersion]::Parse(($_.tag_name -replace '^v', ''))
+                    } -Descending |
+                        Select-Object -First 1
 
+            $prereleaseTag = $highestVersionRelease.tag_name
             $releaseUrl = ('{0}/tags/{1}' -f $base, $prereleaseTag)
         }
         else
