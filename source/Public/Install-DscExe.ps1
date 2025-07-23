@@ -88,8 +88,7 @@ function Install-DscExe
                 Where-Object { -not $_.draft } |
                     Sort-Object {
                         [System.Management.Automation.SemanticVersion]::Parse(($_.tag_name -replace '^v', ''))
-                    } -Descending |
-                        Select-Object -First 1
+                    } -Descending -Top 1
 
             $prereleaseTag = $highestVersionRelease.tag_name
             $releaseUrl = ('{0}/tags/{1}' -f $base, $prereleaseTag)
