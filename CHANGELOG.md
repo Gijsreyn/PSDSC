@@ -5,6 +5,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Assert if DSC versions are available from GitHub
+- Validate if `IncludePreRelease` is provided if it is an actual PreRelease version
+
+## [1.3.0] - 2025-07-18
+
 - `Install-DscExe`
   - Support authenticating against GitHub using a token when accessing
     current release information.
